@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Doctor Simulator - טיסות בעולם</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#e91e63">
+    <meta name="description" content="Doctor Simulator - מערכת ניהול טיסות אינטראקטיבית עם מפה בזמן אמת">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Doctor Simulator">
+    <meta name="application-name" content="Doctor Simulator">
+    <meta name="msapplication-TileColor" content="#e91e63">
+    <meta name="msapplication-config" content="browserconfig.xml">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Apple Touch Icon & Favicon -->
+    <link rel="apple-touch-icon" href="globe-icon.svg">
+    <link rel="icon" type="image/svg+xml" href="globe-icon.svg">
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f3e7ff, #e3f2fd);
+            color: #212121;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        header .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        header .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        header .title {
+            flex: 1;
+            text-align: center;
+            min-width: 200px;
+        }
+        h1 { color: #e91e63; margin-bottom: 5px; }
+        .main-layout {
+            display: flex;
+            gap: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .map-panel {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            min-height: 600px;
+        }
+        #map { width: 100%; height: 600px; border-radius: 8px; }
+        .routes-panel {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            max-height: 800px;
+            overflow-y: auto;
+        }
+        @media (max-width: 1024px) {
+            .main-layout {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .map-panel {
+                min-height: 400px;
+            }
+            #map { height: 400px; }
+            .routes-panel {
+                max-height: 600px;
+            }
+            header .logo {
+                width: 60px;
+                height: 60px;
+            }
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 8px;
+            }
+            header {
+                padding: 12px;
+                gap: 8px;
+            }
+            header .logo {
+                width: 50px;
+                height: 50px;
+            }
+            header .title {
+                min-width: 150px;
+            }
+            h1 {
+                font-size: 18px;
+            }
+            p {
+                font-size: 13px;
+            }
+            .main-layout {
+                gap: 10px;
+            }
+            .map-panel {
+                min-height: 250px;
+                padding: 8px;
+            }
+            #map { height: 250px; }
+            .routes-panel {
+                padding: 10px;
+                max-height: none;
+                overflow-y: visible;
+            }
+            .route {
+                padding: 10px;
+                gap: 8px;
+                flex-direction: column;
+            }
+            .route-right {
+                flex: 0 0 auto;
+                width: 100%;
+                align-items: flex-end;
+                order: -1;
+            }
+            .route-left {
+                flex: 0 0 auto;
+                width: 100%;
+            }
+            .route-left input {
+                min-height: 50px;
+                font-size: 14px;
+                padding: 6px 4px;
+                border-radius: 6px;
+            }
+            .route-label {
+                font-size: 16px;
+            }
+            .route-airports {
+                font-size: 13px;
+                gap: 4px;
+            }
+            .route-arrow {
+                width: 22px;
+                height: 22px;
+                font-size: 11px;
+            }
+            .route-cities {
+                font-size: 11px;
+                gap: 15px;
+            }
+            .route-duration {
+                font-size: 16px;
+            }
+            .flag-badge {
+                width: 20px;
+                height: 15px;
+            }
+            .route-bottom {
+                margin-top: 4px;
+                padding-top: 6px;
+            }
+            .controls {
+                gap: 6px;
+            }
+            .controls button {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-primary { background: #0288d1; color: white; }
+        .btn-primary:hover { background: #0277bd; }
+        .btn-success { background: #4caf50; color: white; }
+        .btn-success:hover { background: #45a049; }
+        .btn-danger { background: #f44336; color: white; }
+        .btn-danger:hover { background: #da190b; }
+        .stats {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 600;
+            color: #4caf50;
+            margin-bottom: 20px;
+        }
+        .message {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 999;
+            max-width: 400px;
+        }
+        .message.show { display: block; }
+        .message.success { background: #c8e6c9; color: #2e7d32; }
+        .message.error { background: #ffcdd2; color: #c62828; }
+        .routes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .route {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 0;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            align-items: flex-start;
+        }
+        .route > div:not(.metar-section) {
+            padding: 16px 16px 0 16px;
+            width: 100%;
+        }
+        .route > .route-left,
+        .route > .route-right,
+        .route > .route-bottom {
+            padding: 16px 16px 0 16px;
+        }
+        .route > .route-bottom {
+            padding: 8px 16px 16px 16px;
+        }
+        .route:hover { border-color: #7b1fa2; box-shadow: 0 2px 12px rgba(123,31,162,0.15); }
+        .route.active { border-color: #e91e63; background: #fce4ec; }
+        .route.done { opacity: 0.6; }
+
+        /* LEFT COLUMN - date/time boxes */
+        .route-left {
+            flex: 1 1 0;
+            min-width: 0;
+            display: flex;
+            gap: 8px;
+            align-items: stretch;
+        }
+        .route-left input {
+            flex: 1;
+            min-width: 0;
+            padding: 8px 4px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            background: #5c7a9a;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            direction: ltr;
+        }
+        .route-left input::-webkit-calendar-picker-indicator { filter: invert(1); }
+
+        /* RIGHT COLUMN - flight info */
+        .route-right {
+            flex: 1 1 0;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 5px;
+            text-align: right;
+        }
+        .route-label {
+            font-weight: 700;
+            color: #212121;
+            font-size: 20px;
+        }
+        .route-airports {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            direction: ltr;
+        }
+        .flag-badge {
+            width: 24px;
+            height: 18px;
+            border-radius: 3px;
+            flex-shrink: 0;
+            object-fit: cover;
+            border: 1px solid #ddd;
+        }
+        .route-arrow {
+            background: #7b1fa2;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .route-cities {
+            display: flex;
+            font-size: 12px;
+            color: #888;
+            justify-content: space-between;
+            direction: ltr;
+            width: 100%;
+            padding: 0 30px;
+        }
+        .route-cities span { text-align: center; }
+
+        /* METAR weather section */
+        .metar-section {
+            width: 100%;
+            margin-top: 0;
+            margin-left: 0;
+            margin-right: 0;
+            padding: 10px 16px;
+            background: linear-gradient(135deg, #f0f4ff, #f8f0ff);
+            border-radius: 0;
+            border: none;
+            border-top: 1px solid #e0d8f0;
+            direction: ltr;
+        }
+        .metar-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #7b1fa2;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        .metar-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 11px;
+            color: #555;
+            font-family: 'Courier New', monospace;
+            line-height: 1.8;
+            padding: 3px 0;
+            justify-content: space-between;
+        }
+        .metar-row + .metar-row {
+            border-top: 1px solid #e8e0f0;
+        }
+        .metar-icao {
+            font-weight: 700;
+            color: #0288d1;
+            min-width: 50px;
+            flex-shrink: 0;
+        }
+        .metar-data {
+            color: #333;
+            flex: 1;
+            text-align: right;
+        }
+        .metar-cat {
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+        }
+        .metar-cat.VFR { background: #c8e6c9; color: #2e7d32; }
+        .metar-cat.MVFR { background: #bbdefb; color: #1565c0; }
+        .metar-cat.IFR { background: #ffcdd2; color: #c62828; }
+        .metar-cat.LIFR { background: #f8bbd0; color: #880e4f; }
+        .metar-cat.CAVOK { background: #c8e6c9; color: #2e7d32; }
+        .route-duration {
+            font-size: 20px;
+            font-weight: 700;
+            color: #e91e63;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* BOTTOM ROW - checkbox */
+        .route-bottom {
+            flex: 0 0 100%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+            padding-top: 8px;
+            border-top: 1px solid #f0e0f5;
+        }
+        .route-bottom input[type="checkbox"] {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            accent-color: #7b1fa2;
+        }
+        .route-bottom label {
+            cursor: pointer;
+            font-size: 13px;
+            color: #666;
+            margin: 0;
+        }
+        /* unused old classes removed */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal.show { display: flex; align-items: center; justify-content: center; }
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+        .modal-content h2 { margin-bottom: 20px; color: #e91e63; }
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .modal-buttons button { flex: 1; }
+        @media (max-width: 1024px) {
+            .main-layout { flex-direction: column; }
+            .routes-panel { max-height: none; overflow-y: visible; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Doctor Simulator Logo">
+        </div>
+        <div class="title">
+            <h1>✈️ Doctor Simulator</h1>
+            <p>🌍 מסלול טיסות סביב העולם</p>
+        </div>
+        <button id="installBtn" class="btn-primary" style="display:none; white-space:nowrap;">📱 הוסף לבית</button>
+    </header>
+
+    <div id="message" class="message"></div>
+
+    <div class="main-layout">
+        <div class="map-panel">
+            <div id="map"></div>
+        </div>
+
+        <div class="routes-panel">
+            <div class="controls">
+                <button class="btn-primary" onclick="toggleShowDone()">הצג בוצע</button>
+                <button class="btn-success" onclick="saveToServer()">💾 שמור</button>
+                <button class="btn-primary" onclick="location.reload()">🔄 רענן</button>
+                <button class="btn-danger" onclick="showPasswordModal()">🔐 עריכה</button>
+                <span style="flex: 1; text-align: right; padding: 10px; font-weight: 600; color: #4caf50;" id="adminStatus"></span>
+            </div>
+
+            <div class="stats">
+                מסלולים שהושלמו: <span id="completed">0</span>/47
+            </div>
+
+            <div id="routesList" class="routes-list"></div>
+        </div>
+    </div>
+
+    <div id="passwordModal" class="modal">
+        <div class="modal-content">
+            <h2>🔐 סיסמה לעריכה</h2>
+            <input type="password" id="passwordInput" placeholder="הזן סיסמה" onkeypress="if(event.key==='Enter')checkPassword()">
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="checkPassword()">אישור</button>
+                <button class="btn-danger" onclick="closePasswordModal()">ביטול</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script>
+const ADMIN_PASSWORD = 'GayaAlma85';
+
+// ===== BUILT-IN AIRPORT DATABASE =====
+// Coordinates [lat, lon], city name, country code
+const AIRPORT_DB = {
+    // Israel
+    'LLBG': { coords: [32.0114, 34.8867], city: 'Tel Aviv', country: 'IL' },
+    // Romania
+    'LROP': { coords: [44.5711, 26.0850], city: 'Bucharest', country: 'RO' },
+    // Cyprus
+    'LCLK': { coords: [34.8751, 33.6249], city: 'Larnaca', country: 'CY' },
+    // Greece
+    'LGSR': { coords: [36.3992, 25.4793], city: 'Santorini', country: 'GR' },
+    'LGAV': { coords: [37.9364, 23.9445], city: 'Athens', country: 'GR' },
+    'LGKF': { coords: [38.1200, 20.5005], city: 'Kefalonia', country: 'GR' },
+    // Italy
+    'LIRF': { coords: [41.8003, 12.2389], city: 'Rome', country: 'IT' },
+    // France
+    'LFMN': { coords: [43.6584, 7.2159], city: 'Nice', country: 'FR' },
+    'LFPB': { coords: [48.9694, 2.4414], city: 'Paris', country: 'FR' },
+    // UK
+    'EGBB': { coords: [52.4539, -1.7480], city: 'Birmingham', country: 'GB' },
+    // Ireland
+    'EIDW': { coords: [53.4213, -6.2701], city: 'Dublin', country: 'IE' },
+    // Faroe Islands / Denmark
+    'EKVG': { coords: [62.0636, -7.2772], city: 'Vágar', country: 'FO' },
+    // Iceland
+    'BIKF': { coords: [63.9850, -22.6056], city: 'Keflavik', country: 'IS' },
+    // Canada
+    'CYYT': { coords: [47.6186, -52.7519], city: "St. John's", country: 'CA' },
+    'CYQX': { coords: [48.9369, -54.5681], city: 'Gander', country: 'CA' },
+    'CYGZ': { coords: [50.2819, -63.6114], city: 'Havre-Saint-Pierre', country: 'CA' },
+    'CYQB': { coords: [46.7911, -71.3933], city: 'Quebec City', country: 'CA' },
+    'CYYZ': { coords: [43.6772, -79.6306], city: 'Toronto', country: 'CA' },
+    // USA
+    'KDTW': { coords: [42.2124, -83.3534], city: 'Detroit', country: 'US' },
+    'KORD': { coords: [41.9742, -87.9073], city: 'Chicago', country: 'US' },
+    'KOMA': { coords: [41.3032, -95.8941], city: 'Omaha', country: 'US' },
+    'KDEN': { coords: [39.8561, -104.6737], city: 'Denver', country: 'US' },
+    'KSLC': { coords: [40.7884, -111.9778], city: 'Salt Lake City', country: 'US' },
+    'KRNO': { coords: [39.4991, -119.7681], city: 'Reno', country: 'US' },
+    'KSFO': { coords: [37.6213, -122.3790], city: 'San Francisco', country: 'US' },
+    'KPHX': { coords: [33.4373, -112.0078], city: 'Phoenix', country: 'US' },
+    'KLAS': { coords: [36.0840, -115.1537], city: 'Las Vegas', country: 'US' },
+    'KLAX': { coords: [33.9425, -118.4081], city: 'Los Angeles', country: 'US' },
+    'KSAN': { coords: [32.7336, -117.1897], city: 'San Diego', country: 'US' },
+    'KDFW': { coords: [32.8998, -97.0403], city: 'Dallas', country: 'US' },
+    'KHOU': { coords: [29.6454, -95.2789], city: 'Houston', country: 'US' },
+    'KMIA': { coords: [25.7959, -80.2870], city: 'Miami', country: 'US' },
+    // Mexico
+    'MMCN': { coords: [31.6303, -106.4290], city: 'Ciudad Juárez', country: 'MX' },
+    'MMMZ': { coords: [23.1614, -106.2661], city: 'Mazatlán', country: 'MX' },
+    'MMMX': { coords: [19.4363, -99.0721], city: 'Mexico City', country: 'MX' },
+    // Dominican Republic
+    'MDSSD': { coords: [18.4297, -69.6689], city: 'Santo Domingo', country: 'DO' },
+    'MDSD': { coords: [18.4297, -69.6689], city: 'Santo Domingo', country: 'DO' },
+    // Honduras
+    'MHTG': { coords: [14.0608, -87.2172], city: 'Tegucigalpa', country: 'HN' },
+    // Nicaragua
+    'MNMG': { coords: [12.1415, -86.1682], city: 'Managua', country: 'NI' },
+    // Costa Rica
+    'MROC': { coords: [10.0131, -84.2144], city: 'San José', country: 'CR' },
+    'MRPV': { coords: [9.9571, -84.1398], city: 'San José Pavas', country: 'CR' },
+    // Panama
+    'MPTO': { coords: [9.0714, -79.3835], city: 'Panama City', country: 'PA' },
+    'MPMG': { coords: [8.9734, -79.5556], city: 'Panama City', country: 'PA' },
+    // Colombia
+    'SKBO': { coords: [4.7016, -74.1469], city: 'Bogotá', country: 'CO' },
+    // Ecuador
+    'SEQU': { coords: [-0.1292, -78.3575], city: 'Quito', country: 'EC' },
+    // Peru
+    'SPIM': { coords: [-12.0219, -77.1143], city: 'Lima', country: 'PE' },
+    'SPJC': { coords: [-12.0219, -77.1143], city: 'Lima (Pisco)', country: 'PE' },
+    // Bolivia
+    'SLET': { coords: [-17.8111, -63.1714], city: 'Santa Cruz', country: 'BO' },
+    'SLLP': { coords: [-16.5133, -68.1923], city: 'La Paz', country: 'BO' },
+    // Argentina
+    'SABP': { coords: [-34.8222, -58.5358], city: 'Buenos Aires', country: 'AR' },
+    'SCAR': { coords: [-45.7853, -67.4656], city: 'Comodoro Rivadavia', country: 'AR' },
+    // Chile
+    'SCCI': { coords: [-53.0027, -70.8546], city: 'Punta Arenas', country: 'CL' },
+    'SCPQ': { coords: [-41.3489, -72.0069], city: 'Puerto Montt', country: 'CL' },
+    'SCLP': { coords: [-33.3931, -70.7858], city: 'Santiago', country: 'CL' },
+    'SCIP': { coords: [-27.1648, -109.4220], city: 'Easter Island', country: 'CL' },
+    // New Zealand
+    'NZCH': { coords: [-43.4894, 172.5322], city: 'Christchurch', country: 'NZ' },
+    'NZIR': { coords: [-43.8108, 172.5189], city: 'Christchurch West', country: 'NZ' },
+    // Australia
+    'YMML': { coords: [-37.6690, 144.8410], city: 'Melbourne', country: 'AU' },
+    'YSSY': { coords: [-33.9461, 151.1772], city: 'Sydney', country: 'AU' },
+    'YBBN': { coords: [-27.3842, 153.1175], city: 'Brisbane', country: 'AU' },
+    'YPDN': { coords: [-12.4147, 130.8767], city: 'Darwin', country: 'AU' },
+    // Indonesia
+    'WADD': { coords: [-8.7482, 115.1672], city: 'Bali', country: 'ID' },
+    // Malaysia
+    'WMKP': { coords: [5.2972, 100.2769], city: 'Penang', country: 'MY' },
+    // Thailand
+    'VTBS': { coords: [13.6900, 100.7501], city: 'Bangkok', country: 'TH' },
+    // India
+    'VOCI': { coords: [10.1520, 76.4019], city: 'Cochin', country: 'IN' },
+    // Japan
+    'RJTT': { coords: [35.5494, 139.7798], city: 'Tokyo', country: 'JP' },
+    // Philippines
+    'RPLL': { coords: [14.5086, 121.0198], city: 'Manila', country: 'PH' },
+    // Hong Kong
+    'VHHH': { coords: [22.3080, 113.9185], city: 'Hong Kong', country: 'HK' },
+    // China
+    'ZSSS': { coords: [31.1434, 121.8052], city: 'Shanghai', country: 'CN' },
+    // Oman
+    'OOMS': { coords: [23.5933, 58.2844], city: 'Muscat', country: 'OM' },
+    // Qatar
+    'OTHH': { coords: [25.2731, 51.6081], city: 'Doha', country: 'QA' },
+    // Greenland
+    'BGKK': { coords: [66.9914, -50.7116], city: 'Kangerlussuaq', country: 'GL' },
+    'BGBW': { coords: [64.1909, -51.6781], city: 'Nuuk', country: 'GL' },
+    // Antarctica (placeholder)
+    'AQBC': { coords: [-62.2000, -58.9667], city: 'Base Camp', country: 'AQ' }
+};
+
+let airports = {};
+let airportInfo = {};
+let airportSource = {};
+
+let routes = [];
+let dynamicAirports = {};
+
+// Load built-in airport data
+function loadBuiltInAirports() {
+    for (let icao in AIRPORT_DB) {
+        const ap = AIRPORT_DB[icao];
+        airports[icao] = ap.coords;
+        airportInfo[icao] = {
+            city: ap.city,
+            country: getFlagEmoji(ap.country),
+            flag: ap.country
+        };
+        airportSource[icao] = '📦 Built-in';
+    }
+    console.log(`✅ Loaded ${Object.keys(AIRPORT_DB).length} airports from built-in database`);
+}
+
+
+// Calculate flight time based on distance between airports
+function calculateFlightTime(from, to) {
+    const fromCoords = airports[from];
+    const toCoords = airports[to];
+
+    if (!fromCoords || !toCoords) {
+        return 90; // Default fallback
+    }
+
+    // Haversine formula to calculate distance between two points (lat/lon)
+    const R = 6371; // Earth's radius in km
+    const lat1 = fromCoords[0] * Math.PI / 180;
+    const lat2 = toCoords[0] * Math.PI / 180;
+    const dLat = (toCoords[0] - fromCoords[0]) * Math.PI / 180;
+    const dLon = (toCoords[1] - fromCoords[1]) * Math.PI / 180;
+
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1) * Math.cos(lat2) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c; // Distance in km
+
+    // Assume cruise speed of ~500 km/h for commercial aircraft
+    // Add 10% for taxi, climb, descent
+    const cruiseTime = (distance / 500) * 60; // Convert to minutes
+    const totalTime = Math.round(cruiseTime * 1.1);
+
+    return totalTime > 30 ? totalTime : 90; // Minimum 90 minutes
+}
+
+// Get or create airport info dynamically
+function getOrCreateAirportInfo(icao) {
+    // Check if in predefined list
+    if (airportInfo[icao]) {
+        return airportInfo[icao];
+    }
+
+    // Check if we've already created this airport dynamically
+    if (dynamicAirports[icao]) {
+        return dynamicAirports[icao];
+    }
+
+    // Create dynamic airport entry
+    const countryCode = getCountryCodeFromICAO(icao);
+    const flagEmoji = getFlagEmoji(countryCode);
+
+    const info = {
+        city: icao, // Use ICAO as fallback city name
+        country: flagEmoji,
+        flag: countryCode,
+        isDynamic: true
+    };
+
+    dynamicAirports[icao] = info;
+    return info;
+}
+
+// Get country code from ICAO code pattern
+function getCountryCodeFromICAO(icao) {
+    const prefixes = {
+        'LL': 'IL', 'LC': 'CY', 'LG': 'GR', 'LI': 'IT', 'LF': 'FR',
+        'EG': 'GB', 'EI': 'IE', 'EK': 'DK', 'BI': 'IS', 'BG': 'GL',
+        'CY': 'CA', 'K': 'US',
+        'MM': 'MX', 'MD': 'DO', 'MH': 'HN', 'MN': 'NI', 'MR': 'CR',
+        'MP': 'PA', 'SK': 'CO', 'SE': 'EC', 'SC': 'CL', 'SP': 'PE',
+        'SL': 'BO', 'SA': 'AR', 'S': 'BR',
+        'NZ': 'NZ', 'Y': 'AU', 'WA': 'ID', 'WM': 'MY', 'W': 'ID',
+        'VT': 'TH', 'VO': 'IN', 'VH': 'HK', 'V': 'IN',
+        'RJ': 'JP', 'RP': 'PH', 'ZS': 'CN', 'OO': 'OM', 'OT': 'QA',
+        'AQ': 'AQ'
+    };
+
+    // Sort prefixes by length (longest first) so specific matches take priority
+    const sortedPrefixes = Object.keys(prefixes).sort((a, b) => b.length - a.length);
+
+    for (let prefix of sortedPrefixes) {
+        if (icao.startsWith(prefix)) {
+            return prefixes[prefix];
+        }
+    }
+    return 'XX';
+}
+
+// Get flag emoji from country code
+function getFlagEmoji(countryCode) {
+    const flags = {
+        'IL': '🇮🇱', 'CY': '🇨🇾', 'GR': '🇬🇷', 'IT': '🇮🇹', 'FR': '🇫🇷',
+        'GB': '🇬🇧', 'IE': '🇮🇪', 'IS': '🇮🇸', 'CA': '🇨🇦', 'US': '🇺🇸',
+        'MX': '🇲🇽', 'DO': '🇩🇴', 'HN': '🇭🇳', 'NI': '🇳🇮', 'CR': '🇨🇷',
+        'PA': '🇵🇦', 'CO': '🇨🇴', 'EC': '🇪🇨', 'CL': '🇨🇱', 'PE': '🇵🇪',
+        'AR': '🇦🇷', 'NZ': '🇳🇿', 'AU': '🇦🇺', 'ID': '🇮🇩', 'IN': '🇮🇳',
+        'JP': '🇯🇵', 'PH': '🇵🇭', 'HK': '🇭🇰', 'CN': '🇨🇳', 'OM': '🇴🇲', 'QA': '🇶🇦',
+        'TH': '🇹🇭', 'MY': '🇲🇾', 'BO': '🇧🇴', 'BR': '🇧🇷', 'FO': '🇫🇴',
+        'DK': '🇩🇰', 'GL': '🇬🇱', 'AQ': '🇦🇶', 'RO': '🇷🇴', 'SG': '🇸🇬'
+    };
+    return flags[countryCode] || '🚩';
+}
+
+// Load routes from Google Sheet
+// Step 1: Load raw route data from sheet (without airport info)
+async function loadRawRoutesFromSheet() {
+    try {
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/1FxCamcUs_L8-IT3ea24x0DYCg7-dig7a1Tz5rlIjZxY/export?format=csv';
+        const response = await fetch(sheetUrl);
+        const csv = await response.text();
+        const lines = csv.trim().split('\n');
+
+        const rawRoutes = [];
+        const airportCodes = new Set();
+
+        // Skip header (row 0)
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+
+            const cols = line.split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+            if (cols.length >= 3) {
+                const num = parseInt(cols[0]) || i;
+                const from = cols[1].toUpperCase().trim();
+                const to = cols[2].toUpperCase().trim();
+
+                // Collect airport codes
+                airportCodes.add(from);
+                airportCodes.add(to);
+
+                // Store raw route data (airport info will be added later)
+                rawRoutes.push({ num, from, to });
+            }
+        }
+
+        if (rawRoutes.length > 0) {
+            console.log('📋 Loaded ' + rawRoutes.length + ' raw routes from Google Sheet');
+            console.log(`📍 Found ${airportCodes.size} unique airports`);
+            return { rawRoutes, airportCodes: Array.from(airportCodes) };
+        } else {
+            throw new Error('No routes parsed from Sheet');
+        }
+    } catch(e) {
+        console.log('❌ Failed to load from Sheet:', e.message);
+        loadFallbackRoutes();
+        return { rawRoutes: [], airportCodes: [] };
+    }
+}
+
+// Step 2: Build routes with airport info (after airports are loaded)
+function buildRoutesWithAirportInfo(rawRoutes) {
+    routes = [];
+    for (let rawRoute of rawRoutes) {
+        const fromInfo = getOrCreateAirportInfo(rawRoute.from);
+        const toInfo = getOrCreateAirportInfo(rawRoute.to);
+        const time = calculateFlightTime(rawRoute.from, rawRoute.to);
+
+        routes.push({
+            id: rawRoute.num,
+            num: rawRoute.num,
+            from: rawRoute.from,
+            fromCity: (fromInfo && fromInfo.city) ? fromInfo.city : rawRoute.from,
+            fromCountry: (fromInfo && fromInfo.country) ? fromInfo.country : '🌍',
+            to: rawRoute.to,
+            toCity: (toInfo && toInfo.city) ? toInfo.city : rawRoute.to,
+            toCountry: (toInfo && toInfo.country) ? toInfo.country : '🌍',
+            name: (toInfo && toInfo.city) ? toInfo.city : rawRoute.to,
+            time: time
+        });
+    }
+    console.log('✅ Built ' + routes.length + ' routes with airport info');
+}
+
+// Helper: get country code from country name
+function getCountryCode(name) {
+    const map = {
+        'קפריסין': 'CY', 'יוון': 'GR', 'איטליה': 'IT', 'צרפת': 'FR',
+        'בריטניה': 'GB', 'אירלנד': 'IE', 'איסלנד': 'IS', 'קנדה': 'CA',
+        'ארה"ב': 'US', 'מקסיקו': 'MX', 'ברזיל': 'BR', 'פרו': 'PE',
+        'צ\'ילה': 'CL', 'ארגנטינה': 'AR', 'אוסטרליה': 'AU', 'ניו זילנד': 'NZ',
+        'יפן': 'JP', 'סינגפור': 'SG', 'תאילנד': 'TH', 'אינדונזיה': 'ID',
+        'הודו': 'IN', 'בעקע המדינות': 'AE', 'עומאן': 'OM', 'קטאר': 'QA'
+    };
+    return map[name] || 'XX';
+}
+
+// Helper: get emoji from airport code
+function getCountryEmojiFromAirport(icao) {
+    const map = {
+        'LLBG': '🇮🇱', 'LCLK': '🇨🇾', 'LGSR': '🇬🇷', 'LGAV': '🇬🇷', 'LGKF': '🇬🇷',
+        'LIRF': '🇮🇹', 'LFMN': '🇫🇷', 'LFPB': '🇫🇷', 'EGBB': '🇬🇧', 'EIDW': '🇮🇪',
+        'EKVG': '🇫🇴', 'BIKF': '🇮🇸', 'CYYT': '🇨🇦', 'CYGZ': '🇨🇦', 'CYQX': '🇨🇦'
+    };
+    return map[icao] || '🌍';
+}
+
+// Fallback routes if Sheet fails
+function loadFallbackRoutes() {
+    routes = [
+{id:1,num:1,from:"LLBG",fromCity:"תל אביב",fromCountry:"🇮🇱",to:"LCLK",toCity:"לרנקה",toCountry:"🇨🇾",name:"לרנקה",time:65},
+{id:2,num:2,from:"LCLK",fromCity:"לרנקה",fromCountry:"🇨🇾",to:"LGSR",toCity:"רודוס",toCountry:"🇬🇷",name:"רודוס",time:60},
+{id:3,num:3,from:"LGSR",fromCity:"רודוס",fromCountry:"🇬🇷",to:"LGKF",toCity:"קורפו",toCountry:"🇬🇷",name:"קורפו",time:100},
+{id:4,num:4,from:"LGKF",fromCity:"קורפו",fromCountry:"🇬🇷",to:"LIRF",toCity:"רומא",toCountry:"🇮🇹",name:"רומא",time:95},
+{id:5,num:5,from:"LIRF",fromCity:"רומא",fromCountry:"🇮🇹",to:"LFMN",toCity:"ניס",toCountry:"🇫🇷",name:"ניס",time:70},
+{id:6,num:6,from:"LFMN",fromCity:"ניס",fromCountry:"🇫🇷",to:"LFPB",toCity:"פריז",toCountry:"🇫🇷",name:"פריז",time:95},
+{id:7,num:7,from:"LFPB",fromCity:"פריז",fromCountry:"🇫🇷",to:"EGBB",toCity:"בירמינגהם",toCountry:"🇬🇧",name:"בירמינגהם",time:80},
+{id:8,num:8,from:"EGBB",fromCity:"בירמינגהם",fromCountry:"🇬🇧",to:"EIDW",toCity:"דבלין",toCountry:"🇮🇪",name:"דבלין",time:70},
+{id:9,num:9,from:"EIDW",fromCity:"דבלין",fromCountry:"🇮🇪",to:"EKVG",toCity:"ווגאר",toCountry:"🇫🇴",name:"איי פארו",time:100},
+{id:10,num:10,from:"EKVG",fromCity:"ווגאר",fromCountry:"🇫🇴",to:"BIKF",toCity:"קפלאוויק",toCountry:"🇮🇸",name:"אייסלנד",time:105},
+{id:11,num:11,from:"BIKF",fromCity:"קפלאוויק",fromCountry:"🇮🇸",to:"CYYT",toCity:"סנט ג'ונס",toCountry:"🇨🇦",name:"ניופאונדלנד",time:255},
+{id:12,num:12,from:"CYYT",fromCity:"סנט ג'ונס",fromCountry:"🇨🇦",to:"CYQX",toCity:"גנדר",toCountry:"🇨🇦",name:"גנדר",time:60},
+{id:13,num:13,from:"CYQX",fromCity:"גנדר",fromCountry:"🇨🇦",to:"CYGZ",toCity:"גוס בע",toCountry:"🇨🇦",name:"לברדור",time:100},
+{id:14,num:14,from:"CYGZ",fromCity:"גוס בי",fromCountry:"🇨🇦",to:"CYQB",toCity:"קוויבק סיטי",toCountry:"🇨🇦",name:"קוויבק",time:85},
+{id:15,num:15,from:"CYQB",fromCity:"קוויבק סיטי",fromCountry:"🇨🇦",to:"CYYZ",toCity:"טורונטו",toCountry:"🇨🇦",name:"טורונטו",time:90},
+{id:16,num:16,from:"CYYZ",fromCity:"טורונטו",fromCountry:"🇨🇦",to:"KDTW",toCity:"דטרויט",toCountry:"🇺🇸",name:"דטרויט",time:65},
+{id:17,num:17,from:"KDTW",fromCity:"דטרויט",fromCountry:"🇺🇸",to:"KORD",toCity:"שיקגו",toCountry:"🇺🇸",name:"שיקגו",time:80},
+{id:18,num:18,from:"KORD",fromCity:"שיקגו",fromCountry:"🇺🇸",to:"KOMA",toCity:"אומהה",toCountry:"🇺🇸",name:"אומהה",time:95},
+{id:19,num:19,from:"KOMA",fromCity:"אומהה",fromCountry:"🇺🇸",to:"KDEN",toCity:"דנוור",toCountry:"🇺🇸",name:"דנוור",time:105},
+{id:20,num:20,from:"KDEN",fromCity:"דנוור",fromCountry:"🇺🇸",to:"KSLC",toCity:"סולט לייק סיטי",toCountry:"🇺🇸",name:"סולט לייק סיטי",time:85},
+{id:21,num:21,from:"KSLC",fromCity:"סולט לייק סיטי",fromCountry:"🇺🇸",to:"KRNO",toCity:"רנו",toCountry:"🇺🇸",name:"רנו",time:70},
+{id:22,num:22,from:"KRNO",fromCity:"רנו",fromCountry:"🇺🇸",to:"KSFO",toCity:"סן פרנסיסקו",toCountry:"🇺🇸",name:"סן פרנסיסקו",time:75},
+{id:23,num:23,from:"KSFO",fromCity:"סן פרנסיסקו",fromCountry:"🇺🇸",to:"KPHX",toCity:"פיניקס",toCountry:"🇺🇸",name:"פיניקס",time:90},
+{id:24,num:24,from:"KPHX",fromCity:"פיניקס",fromCountry:"🇺🇸",to:"MMCN",toCity:"הרמוסיו",toCountry:"🇲🇽",name:"הרמוסיו",time:70},
+{id:25,num:25,from:"MMCN",fromCity:"הרמוסיו",fromCountry:"🇲🇽",to:"MMMZ",toCity:"מזטלן",toCountry:"🇲🇽",name:"מזטלן",time:65},
+{id:26,num:26,from:"MMMZ",fromCity:"מזטלן",fromCountry:"🇲🇽",to:"MMMX",toCity:"מקסיקו סיטי",toCountry:"🇲🇽",name:"מקסיקו סיטי",time:90},
+{id:27,num:27,from:"MMMX",fromCity:"מקסיקו סיטי",fromCountry:"🇲🇽",to:"MROC",toCity:"סן חוסה",toCountry:"🇨🇷",name:"סן חוסה",time:105},
+{id:28,num:28,from:"MROC",fromCity:"סן חוסה",fromCountry:"🇨🇷",to:"MPTO",toCity:"פנמה סיטי",toCountry:"🇵🇦",name:"פנמה סיטי",time:70},
+{id:29,num:29,from:"MPTO",fromCity:"פנמה סיטי",fromCountry:"🇵🇦",to:"SKBO",toCity:"בוגוטה",toCountry:"🇨🇴",name:"בוגוטה",time:95},
+{id:30,num:30,from:"SKBO",fromCity:"בוגוטה",fromCountry:"🇨🇴",to:"SEQM",toCity:"קיטו",toCountry:"🇪🇨",name:"קיטו",time:65},
+{id:31,num:31,from:"SEQM",fromCity:"קיטו",fromCountry:"🇪🇨",to:"SPJC",toCity:"לימה",toCountry:"🇵🇪",name:"לימה",time:105},
+{id:32,num:32,from:"SPJC",fromCity:"לימה",fromCountry:"🇵🇪",to:"SCLP",toCity:"סנטיאגו",toCountry:"🇨🇱",name:"סנטיאגו",time:105},
+{id:33,num:33,from:"SCLP",fromCity:"סנטיאגו",fromCountry:"🇨🇱",to:"SCIP",toCity:"פונטה ארנס",toCountry:"🇨🇱",name:"פונטה ארנס",time:120},
+{id:34,num:34,from:"SCIP",fromCity:"פונטה ארנס",fromCountry:"🇨🇱",to:"SCAR",toCity:"ריו גלאנדה",toCountry:"🇦🇷",name:"ריו גלאנדה",time:60},
+{id:35,num:35,from:"SCAR",fromCity:"ריו גלאנדה",fromCountry:"🇦🇷",to:"NZIR",toCity:"מקמורדו",toCountry:"🇦🇶",name:"אנטארקטיקה",time:105},
+{id:36,num:36,from:"NZIR",fromCity:"מקמורדו",fromCountry:"🇦🇶",to:"NZCH",toCity:"כריסטצ'רץ'",toCountry:"🇳🇿",name:"כריסטצ'רץ'",time:270},
+{id:37,num:37,from:"NZCH",fromCity:"כריסטצ'רץ'",fromCountry:"🇳🇿",to:"YMML",toCity:"מלבורן",toCountry:"🇦🇺",name:"מלבורן",time:130},
+{id:38,num:38,from:"YMML",fromCity:"מלבורן",fromCountry:"🇦🇺",to:"YSSY",toCity:"סידני",toCountry:"🇦🇺",name:"סידני",time:65},
+{id:39,num:39,from:"YSSY",fromCity:"סידני",fromCountry:"🇦🇺",to:"YBBN",toCity:"בריסביין",toCountry:"🇦🇺",name:"בריסביין",time:95},
+{id:40,num:40,from:"YBBN",fromCity:"בריסביין",fromCountry:"🇦🇺",to:"YPDN",toCity:"דרווין",toCountry:"🇦🇺",name:"דרווין",time:135},
+{id:41,num:41,from:"YPDN",fromCity:"דרווין",fromCountry:"🇦🇺",to:"WADD",toCity:"דנפסר",toCountry:"🇮🇩",name:"באלי",time:100},
+{id:42,num:42,from:"WADD",fromCity:"דנפסר",fromCountry:"🇮🇩",to:"WMKP",toCity:"קואלה לומפור",toCountry:"🇲🇾",name:"קואלה לומפור",time:125},
+{id:43,num:43,from:"WMKP",fromCity:"קואלה לומפור",fromCountry:"🇲🇾",to:"VTBS",toCity:"בנגקוק",toCountry:"🇹🇭",name:"בנגקוק",time:110},
+{id:44,num:44,from:"VTBS",fromCity:"בנגקוק",fromCountry:"🇹🇭",to:"VOCI",toCity:"כוצ'ין",toCountry:"🇮🇳",name:"כוצ'ין",time:135},
+{id:45,num:45,from:"VOCI",fromCity:"כוצ'ין",fromCountry:"🇮🇳",to:"OOMS",toCity:"מסקט",toCountry:"🇴🇲",name:"מסקט",time:120},
+{id:46,num:46,from:"OOMS",fromCity:"מסקט",fromCountry:"🇴🇲",to:"OTHH",toCity:"דוחא",toCountry:"🇶🇦",name:"דוחא",time:75},
+{id:47,num:47,from:"OTHH",fromCity:"דוחא",fromCountry:"🇶🇦",to:"LLBG",toCity:"תל אביב",toCountry:"🇮🇱",name:"תל אביב",time:135}
+    ];
+    render();
+    loadAllMetar();
+    initMap();
+}
+
+let isAdmin = false;
+let showDone = false;
+let completed = {};
+let routeDates = {};
+let map = null;
+let drawnRoutes = [];
+let selectedRoute = null;
+let metarCache = {};
+let metarPending = {};
+
+function showMessage(text, type) {
+    const msg = document.getElementById('message');
+    msg.textContent = text;
+    msg.className = 'message show ' + type;
+    setTimeout(() => msg.classList.remove('show'), 3000);
+}
+
+function updateAdminStatus() {
+    document.getElementById('adminStatus').textContent = isAdmin ? '✅ מצב עריכה' : '';
+}
+
+function loadFromServer() {
+    fetch('save-data.php')
+        .then(r => r.json())
+        .then(data => {
+            completed = data.completed || {};
+            routeDates = data.dates || {};
+            render();
+        })
+        .catch(() => render());
+}
+
+function saveToServer() {
+    fetch('save-data.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({completed, dates: routeDates})
+    })
+    .then(r => r.json())
+    .then(data => {
+        showMessage('✅ נשמר בהצלחה!', 'success');
+    })
+    .catch(err => {
+        // Silently fail during local testing (PHP not available)
+        console.log('Save error:', err);
+    });
+}
+
+// Convert country code to emoji flag
+function getEmojiFromCountry(code) {
+    const codeMap = {
+        'IL': '🇮🇱', 'CY': '🇨🇾', 'GR': '🇬🇷', 'IT': '🇮🇹', 'FR': '🇫🇷',
+        'IE': '🇮🇪', 'DK': '🇩🇰', 'IS': '🇮🇸', 'CA': '🇨🇦', 'US': '🇺🇸',
+        'MX': '🇲🇽', 'BR': '🇧🇷', 'PE': '🇵🇪', 'CL': '🇨🇱', 'AR': '🇦🇷',
+        'AU': '🇦🇺', 'NZ': '🇳🇿', 'JP': '🇯🇵', 'SG': '🇸🇬', 'TH': '🇹🇭',
+        'ID': '🇮🇩', 'IN': '🇮🇳', 'AE': '🇦🇪', 'OM': '🇴🇲', 'QA': '🇶🇦'
+    };
+    return codeMap[code?.toUpperCase()] || '🌍';
+}
+
+function getFlag(emoji) {
+    const emojiToCode = {
+        '🇮🇱': 'il', '🇨🇾': 'cy', '🇬🇷': 'gr', '🇮🇹': 'it', '🇫🇷': 'fr',
+        '🇬🇧': 'gb', '🇮🇪': 'ie', '🇫🇴': 'fo', '🇮🇸': 'is', '🇨🇦': 'ca',
+        '🇺🇸': 'us', '🇲🇽': 'mx', '🇨🇷': 'cr', '🇵🇦': 'pa', '🇨🇴': 'co',
+        '🇪🇨': 'ec', '🇵🇪': 'pe', '🇨🇱': 'cl', '🇦🇷': 'ar', '🇦🇶': 'aq',
+        '🇳🇿': 'nz', '🇦🇺': 'au', '🇮🇩': 'id', '🇲🇾': 'my', '🇹🇭': 'th',
+        '🇮🇳': 'in', '🇴🇲': 'om', '🇶🇦': 'qa', '🇷🇴': 'ro', '🇩🇴': 'do',
+        '🇭🇳': 'hn', '🇳🇮': 'ni', '🇧🇴': 'bo', '🇭🇰': 'hk', '🇨🇳': 'cn',
+        '🇯🇵': 'jp', '🇵🇭': 'ph', '🇧🇷': 'br', '🇩🇰': 'dk', '🇬🇱': 'gl',
+        '🇸🇬': 'sg'
+    };
+    const code = emojiToCode[emoji] || 'xx';
+    if (code === 'xx') return emoji || '🌍';
+    return '<img class="flag-badge" src="https://flagcdn.com/w40/' + code + '.png" alt="' + code.toUpperCase() + '">';
+}
+
+function parseMetarRaw(raw) {
+    if (!raw || raw === 'N/A' || raw.length < 10) return null;
+    const parts = raw.trim().split(/\s+/);
+    let temp = '', wind = '', conditions = '', qnh = '';
+
+    for (const p of parts) {
+        // Temperature: M05/M10 or 25/15
+        if (/^M?\d{2}\/M?\d{2,}$/.test(p)) {
+            let t = p.split('/')[0];
+            if (t.startsWith('M')) t = '-' + t.slice(1);
+            temp = parseInt(t) + '°C';
+        }
+        // Wind: 29010KT or VRB05KT
+        if (/^(\d{3}|VRB)\d{2,3}(G\d{2,3})?KT$/.test(p)) {
+            const match = p.match(/(\d{3}|VRB)(\d{2,3})/);
+            if (match) {
+                const dir = match[1] === 'VRB' ? 'VRB' : match[1] + '°';
+                wind = dir + '/' + match[2] + 'kt';
+            }
+        }
+        // CAVOK
+        if (p === 'CAVOK') conditions = 'CAVOK';
+        // QNH
+        if (/^Q\d{4}$/.test(p)) qnh = p;
+    }
+
+    // Visibility-based category if no CAVOK
+    if (!conditions) {
+        for (const p of parts) {
+            if (/^\d{4}$/.test(p) && !/^\d{4}Z$/.test(p)) {
+                const vis = parseInt(p);
+                if (vis >= 5000) conditions = 'VFR';
+                else if (vis >= 1500) conditions = 'MVFR';
+                else if (vis >= 500) conditions = 'IFR';
+                else conditions = 'LIFR';
+                break;
+            }
+        }
+    }
+
+    return { raw: raw.trim(), temp, wind, conditions: conditions || '', qnh };
+}
+
+function formatMetar(data) {
+    if (!data || !data.temp) return '<span style="color:#999">טוען...</span>';
+    const parts = [];
+    if (data.temp) parts.push('🌡️' + data.temp);
+    if (data.wind) parts.push('💨' + data.wind);
+    if (data.qnh) parts.push('📊' + data.qnh);
+    let cat = '';
+    if (data.conditions) {
+        cat = ' <span class="metar-cat ' + data.conditions + '">' + data.conditions + '</span>';
+    }
+    return parts.join(' | ') + cat;
+}
+
+async function fetchMetar(icao) {
+    if (metarCache[icao] !== undefined) return metarCache[icao];
+    if (metarPending[icao]) return metarPending[icao];
+
+    const promise = (async () => {
+        // Try PHP backend first (works on InfinityFree with VATSIM)
+        try {
+            const r1 = await fetch('fetch-metar.php?icao=' + icao);
+            if (r1.ok) {
+                const text = await r1.text();
+                if (text && !text.includes('<!DOCTYPE') && !text.includes('<html')) {
+                    const data = JSON.parse(text);
+                    if (data.raw && data.raw !== 'N/A') {
+                        metarCache[icao] = parseMetarRaw(data.raw) || { raw: 'N/A', temp: '', wind: '', conditions: '', qnh: '' };
+                        delete metarPending[icao];
+                        return metarCache[icao];
+                    }
+                }
+            }
+        } catch(e) { /* PHP not available */ }
+
+        metarCache[icao] = { raw: 'N/A', temp: 'N/A', wind: '', conditions: '', qnh: '' };
+        delete metarPending[icao];
+        return metarCache[icao];
+    })();
+
+    metarPending[icao] = promise;
+    return promise;
+}
+
+function toggleRoute(id) {
+    if (!isAdmin) { showPasswordModal(); return; }
+    completed[id] = !completed[id];
+    // Update all polylines on map to reflect completion state
+    drawnRoutes.forEach(dr => {
+        dr.polyline.setStyle({
+            color: completed[dr.id] ? '#4caf50' : '#e91e63'
+        });
+    });
+    saveToServer();
+    render();
+}
+
+function updateDate(id, value) {
+    if (!isAdmin) return;
+    if (!routeDates[id]) routeDates[id] = {};
+    routeDates[id].date = value;
+    saveToServer();
+}
+
+function updateTime(id, value) {
+    if (!isAdmin) return;
+    if (!routeDates[id]) routeDates[id] = {};
+    routeDates[id].time = value;
+    saveToServer();
+}
+
+function toggleShowDone() {
+    showDone = !showDone;
+    render();
+}
+
+function showPasswordModal() {
+    document.getElementById('passwordModal').classList.add('show');
+    document.getElementById('passwordInput').focus();
+}
+
+function closePasswordModal() {
+    document.getElementById('passwordModal').classList.remove('show');
+    document.getElementById('passwordInput').value = '';
+}
+
+function checkPassword() {
+    const pwd = document.getElementById('passwordInput').value;
+    if (pwd === ADMIN_PASSWORD) {
+        isAdmin = true;
+        closePasswordModal();
+        updateAdminStatus();
+        showMessage('✅ הצלחת! עכשיו אתה יכול לערוך!', 'success');
+        render();
+    } else {
+        showMessage('❌ סיסמה שגויה!', 'error');
+        document.getElementById('passwordInput').value = '';
+    }
+}
+
+function getOrCreateCoordinates(icao) {
+    // Check if coordinates exist
+    if (airports[icao]) {
+        return airports[icao];
+    }
+
+    // Generate default coordinates based on country code pattern
+    const countryCode = getCountryCodeFromICAO(icao);
+    const defaultCoords = {
+        'IL': [31.9, 35.2], 'CY': [34.9, 33.4], 'GR': [38.0, 23.7], 'IT': [41.9, 12.5],
+        'FR': [46.2, 2.2], 'GB': [51.5, -0.1], 'IE': [53.3, -6.3], 'IS': [64.1, -21.9],
+        'CA': [45.4, -75.7], 'US': [37.8, -95.6], 'MX': [19.4, -99.1], 'DO': [18.5, -69.9],
+        'HN': [14.0, -87.2], 'NI': [12.1, -86.2], 'CR': [10.0, -84.2], 'PA': [8.9, -79.5],
+        'CO': [4.7, -74.0], 'EC': [0.9, -75.5], 'CL': [-33.4, -70.7], 'PE': [-12.0, -77.0],
+        'AR': [-34.6, -58.4], 'NZ': [-41.3, 174.8], 'AU': [-33.9, 151.2], 'ID': [-6.2, 106.8],
+        'IN': [28.7, 77.1], 'JP': [35.7, 139.7], 'PH': [14.6, 121.0], 'HK': [22.3, 114.2],
+        'CN': [39.9, 116.4], 'OM': [23.6, 58.3], 'QA': [25.3, 51.5], 'TH': [13.8, 100.5],
+        'MY': [3.1, 101.7], 'BO': [-16.5, -68.1], 'BR': [-15.7, -47.9], 'FO': [61.9, -6.9]
+    };
+
+    const coords = defaultCoords[countryCode];
+    if (coords) {
+        // Add slight randomization to avoid exact overlap
+        return [coords[0] + (Math.random() - 0.5), coords[1] + (Math.random() - 0.5)];
+    }
+
+    // Absolute fallback - center of map
+    return [20, 0];
+}
+
+function drawMapRoute(routeId) {
+    const route = routes.find(r => r.id === routeId);
+    if (!route) return;
+
+    const from = getOrCreateCoordinates(route.from);
+    const to = getOrCreateCoordinates(route.to);
+
+    const polyline = L.polyline([from, to], {
+        color: completed[routeId] ? '#4caf50' : '#e91e63',
+        weight: 3,
+        opacity: 0.8
+    }).addTo(map);
+
+    // Add tooltip to polyline (LEG info)
+    polyline.bindTooltip(
+        `<strong style="color:#333">LEG #${route.num}</strong><br>${route.from} → ${route.to}<br>${route.time} דקות`,
+        {permanent: false, direction: 'center', sticky: true}
+    );
+
+    // Add markers with tooltips (airport info)
+    const fromMarker = L.circleMarker(from, {radius: 5, color: '#0288d1', fillOpacity: 0.8}).addTo(map);
+    const toMarker = L.circleMarker(to, {radius: 5, color: '#0288d1', fillOpacity: 0.8}).addTo(map);
+
+    fromMarker.bindTooltip(`<strong>${route.from}</strong><br>${route.fromCity || ''}<br>${route.fromCountry || ''}`,
+        {permanent: false, direction: 'top', offset: [0, -10]});
+
+    toMarker.bindTooltip(`<strong>${route.to}</strong><br>${route.toCity || ''}<br>${route.toCountry || ''}`,
+        {permanent: false, direction: 'top', offset: [0, -10]});
+
+    drawnRoutes.push({id: routeId, polyline: polyline, fromMarker: fromMarker, toMarker: toMarker});
+}
+
+function zoomToRoute(routeId) {
+    const route = routes.find(r => r.id === routeId);
+    if (!route) return;
+
+    const from = getOrCreateCoordinates(route.from);
+    const to = getOrCreateCoordinates(route.to);
+
+    if (!from || !to) return;
+
+    selectedRoute = routeId;
+
+    drawnRoutes.forEach(r => {
+        if (r.polyline) {
+            r.polyline.setStyle({
+                weight: r.id === routeId ? 5 : 3,
+                opacity: r.id === routeId ? 1 : 0.6
+            });
+        }
+    });
+
+    const bounds = L.latLngBounds([from, to]);
+    map.fitBounds(bounds, {padding: [50, 50], maxZoom: 8});
+
+    render();
+}
+
+function render() {
+    let list = showDone ? routes : routes.filter(r => !completed[r.id]);
+
+    document.getElementById('routesList').innerHTML = list.map(r => {
+        const date = routeDates[r.id]?.date || '';
+        const time = routeDates[r.id]?.time || '';
+        return `
+            <div class="route ${completed[r.id] ? 'done' : ''} ${selectedRoute === r.id ? 'active' : ''}" onclick="zoomToRoute(${r.id})">
+                <div class="route-left" onclick="event.stopPropagation()">
+                    <input type="time" value="${time}" onchange="updateTime(${r.id}, this.value)" ${!isAdmin ? 'disabled' : ''}>
+                    <input type="date" value="${date}" onchange="updateDate(${r.id}, this.value)" ${!isAdmin ? 'disabled' : ''}>
+                </div>
+                <div class="route-right">
+                    <div class="route-label">LEG #${r.num}</div>
+                    <div class="route-airports">
+                        ${getFlag(r.fromCountry)}
+                        <span>${r.from}</span>
+                        <span class="route-arrow">➜</span>
+                        <span>${r.to}</span>
+                        ${getFlag(r.toCountry)}
+                    </div>
+                    <div class="route-cities">
+                        <span>${r.fromCity || ''}</span>
+                        <span>${r.toCity || ''}</span>
+                    </div>
+                    <div class="route-duration">⏱️ ${r.time} דקות</div>
+                    <div class="metar-section">
+                        <div class="metar-title">📡 METAR</div>
+                        <div class="metar-row">
+                            <span class="metar-icao">${r.from}</span>
+                            <span class="metar-data">${formatMetar(metarCache[r.from])}</span>
+                        </div>
+                        <div class="metar-row">
+                            <span class="metar-icao">${r.to}</span>
+                            <span class="metar-data">${formatMetar(metarCache[r.to])}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="route-bottom" onclick="event.stopPropagation()">
+                    <input type="checkbox" ${completed[r.id] ? 'checked' : ''} onchange="toggleRoute(${r.id})" ${!isAdmin ? 'disabled' : ''}>
+                    <label>סימון בוצע</label>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    const count = Object.values(completed).filter(Boolean).length;
+    document.getElementById('completed').textContent = count;
+}
+
+function initMap() {
+    try {
+        console.log(`🗺️ initMap called, routes.length=${routes.length}, map=${map ? 'exists' : 'null'}`);
+        if (typeof L !== 'undefined') {
+            if (map) {
+                refreshMapRoutes();
+                return;
+            }
+            map = L.map('map').setView([20, 0], 3);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            drawnRoutes = [];
+            console.log(`🗺️ Drawing ${routes.length} routes on map...`);
+            routes.forEach(route => {
+                const fromCoords = getOrCreateCoordinates(route.from);
+                const toCoords = getOrCreateCoordinates(route.to);
+                console.log(`  Route ${route.id}: ${route.from}${JSON.stringify(fromCoords)} → ${route.to}${JSON.stringify(toCoords)}`);
+                drawMapRoute(route.id);
+            });
+            console.log(`✅ Map initialized with ${drawnRoutes.length} routes drawn`);
+        } else {
+            console.error('❌ Leaflet (L) is not loaded!');
+        }
+    } catch(e) {
+        console.error('❌ Map initialization failed:', e);
+    }
+}
+
+function refreshMapRoutes() {
+    if (!map) return;
+    // Clear existing routes from map
+    drawnRoutes.forEach(r => {
+        if (r.polyline) map.removeLayer(r.polyline);
+        if (r.fromMarker) map.removeLayer(r.fromMarker);
+        if (r.toMarker) map.removeLayer(r.toMarker);
+    });
+    drawnRoutes = [];
+    // Redraw all routes with updated data
+    routes.forEach(route => drawMapRoute(route.id));
+    console.log('🗺️ Map refreshed with updated airport data');
+}
+
+async function loadAllMetar() {
+    const allAirports = new Set();
+    routes.forEach(r => {
+        allAirports.add(r.from);
+        allAirports.add(r.to);
+    });
+
+    const icaoList = Array.from(allAirports);
+    // Fetch in batches of 5 to avoid overwhelming the server
+    for (let i = 0; i < icaoList.length; i += 5) {
+        const batch = icaoList.slice(i, i + 5);
+        await Promise.all(batch.map(icao => fetchMetar(icao)));
+        render(); // Re-render after each batch
+    }
+}
+
+window.onload = async () => {
+    console.log('🚀 Starting application...');
+
+    // Step 1: Load built-in airport database
+    loadBuiltInAirports();
+
+    // Step 2: Load raw routes from Google Sheet
+    const { rawRoutes, airportCodes } = await loadRawRoutesFromSheet();
+
+    // Step 3: Check for airports not in built-in DB
+    if (airportCodes) {
+        const missing = airportCodes.filter(code => !airports[code]);
+        if (missing.length > 0) {
+            console.warn('⚠️ Airports not in built-in DB:', missing.join(', '));
+        }
+    }
+
+    // Step 4: Build routes with airport data
+    if (rawRoutes && rawRoutes.length > 0) {
+        buildRoutesWithAirportInfo(rawRoutes);
+    }
+
+    // Step 5: Render and show map
+    render();
+    initMap();
+    loadAllMetar();
+    updateAdminStatus();
+    loadFromServer();
+
+    // Step 6: Register Service Worker for PWA support
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js')
+            .then(registration => {
+                console.log('✅ Service Worker registered:', registration);
+            })
+            .catch(error => {
+                console.warn('⚠️ Service Worker registration failed:', error);
+            });
+    }
+
+    // Step 7: Setup PWA install button
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.style.display = 'block';
+        console.log('📱 Install prompt available');
+    });
+
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`📱 User response to install: ${outcome}`);
+            deferredPrompt = null;
+            installBtn.style.display = 'none';
+        }
+    });
+
+    window.addEventListener('appinstalled', () => {
+        console.log('✅ PWA installed successfully!');
+        installBtn.style.display = 'none';
+    });
+};
+    </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(ls -lh \"C:/Users/maor5/Downloads/\"*.xlsx)",
+      "Bash(/c/Users/maor5/AppData/Local/Programs/Python/Python312/python:*)",
+      "Bash(PYTHONIOENCODING=utf-8 /c/Users/maor5/AppData/Local/Programs/Python/Python312/python << 'EOF':*)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(python create_routes.py)",
+      "WebFetch(domain:docs.google.com)",
+      "Bash(grep -E \"\\\\.\\(json|html|php\\)$\")",
+      "Bash(\"C:\\\\cluade\\\\world travel\\\\metar_updates.txt\":*)",
+      "WebSearch",
+      "WebFetch(domain:doc-08-4g-sheets.googleusercontent.com)",
+      "WebFetch(domain:opennav.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(\"C:\\\\cluade\\\\world travel\\\\browserconfig.xml\":*)",
+      "Bash(\"C:\\\\cluade\\\\world travel\\\\FILES_TO_UPLOAD.txt\":*)",
+      "Bash(/tmp/pwa_summary.txt:*)",
+      "Read(//tmp/**)",
+      "WebFetch(domain:www.google.com)",
+      "Bash(/tmp/github_setup.md:*)",
+      "Bash(/tmp/vercel_deployment_guide.txt:*)",
+      "Bash(grep -E \"\\\\.\\(html|json|js|svg|md|xml|php|gitignore\\)$\")",
+      "mcp__Control_Chrome__open_url"
+    ]
+  }
+}
