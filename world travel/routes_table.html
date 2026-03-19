@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>טבלת כל המסלולים</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+        }
+        th {
+            padding: 15px;
+            text-align: right;
+            border: 1px solid #ddd;
+        }
+        td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: right;
+        }
+        tbody tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        tbody tr:hover {
+            background: #f0f0f0;
+            transition: 0.2s;
+        }
+        .leg-num {
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .airport-code {
+            background: #e3f2fd;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+        .time {
+            background: #fff3e0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stat-box h3 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        .stat-box p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✈️ טבלת כל המסלולים</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>LEG #</th>
+                    <th>שדה המראה</th>
+                    <th>שדה נחיתה</th>
+                    <th>זמן טיסה (דקות)</th>
+                    <th>שם שדה המראה</th>
+                    <th>שם שדה נחיתה</th>
+                </tr>
+            </thead>
+            <tbody id="routesTable">
+            </tbody>
+        </table>
+
+        <div class="stats">
+            <div class="stat-box">
+                <h3 id="totalRoutes">47</h3>
+                <p>סך הכל מסלולים</p>
+            </div>
+            <div class="stat-box">
+                <h3 id="totalTime">0</h3>
+                <p>סך הזמן בשעות</p>
+            </div>
+            <div class="stat-box">
+                <h3 id="avgTime">0</h3>
+                <p>ממוצע זמן טיסה</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let airports = {};
+        let airportInfo = {};
+
+        async function loadAirportsFromCSV() {
+            try {
+                const sheetUrl = 'https://docs.google.com/spreadsheets/d/1xjwpIwAHoz-fLTNEck1gCsPxv8jSVM50FrnGK5new3M/export?format=csv';
+                const response = await fetch(sheetUrl);
+                const csv = await response.text();
+                const lines = csv.trim().split('\n');
+                const header = lines[0].split(',').map(h => h.replace(/^"|"$/g, '').trim());
+
+                const icaoIdx = header.indexOf('icao_code');
+                const nameIdx = header.indexOf('name');
+                const latIdx = header.indexOf('latitude_deg');
+                const lonIdx = header.indexOf('longitude_deg');
+                const municipalityIdx = header.indexOf('municipality');
+
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i];
+                    if (!line.trim()) continue;
+
+                    const fields = [];
+                    let current = '';
+                    let inQuotes = false;
+                    for (let j = 0; j < line.length; j++) {
+                        const char = line[j];
+                        if (char === '"') {
+                            inQuotes = !inQuotes;
+                        } else if (char === ',' && !inQuotes) {
+                            fields.push(current.trim().replace(/^"|"$/g, ''));
+                            current = '';
+                        } else {
+                            current += char;
+                        }
+                    }
+                    fields.push(current.trim().replace(/^"|"$/g, ''));
+
+                    const icao = fields[icaoIdx];
+                    if (!icao || !icao.trim()) continue;
+
+                    const lat = parseFloat(fields[latIdx]);
+                    const lon = parseFloat(fields[lonIdx]);
+
+                    if (icao && !isNaN(lat) && !isNaN(lon)) {
+                        airports[icao] = [lat, lon];
+                        const municipality = fields[municipalityIdx];
+                        const airportName = fields[nameIdx];
+                        const cityName = municipality || airportName || icao;
+                        airportInfo[icao] = cityName;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading airports.csv:', error);
+            }
+        }
+
+        // Dummy old const to be replaced
+        const airportsOld = {
+            'LLBG': [32.0055, 34.8728], 'LCLK': [34.8747, 33.6257], 'LGSR': [36.4069, 28.0269], 'LGAV': [37.9258, 23.9473],
+            'LGKF': [39.5669, 19.9186], 'LIRF': [41.8002, 12.2348], 'LFMN': [43.6584, 7.2120], 'LFPB': [48.8566, 2.3522],
+            'EGBB': [52.5086, -1.8783], 'EIDW': [53.3248, -6.2275], 'EKVG': [64.1466, -21.9426], 'BIKF': [64.1466, -21.9426],
+            'CYYT': [47.5689, -52.8125], 'CYQX': [47.4211, -61.5181], 'CYGZ': [64.1750, -51.6789], 'CYQB': [46.8139, -71.2080],
+            'CYYZ': [43.6777, -79.6248], 'KDTW': [42.2115, -83.3534], 'KORD': [41.8781, -87.6298], 'KOMA': [41.2619, -95.9402],
+            'KDEN': [39.7392, -104.9903], 'KSLC': [40.7608, -111.8910], 'KRNO': [39.5501, -119.8143], 'KSFO': [37.7749, -122.4194],
+            'KPHX': [33.4484, -112.0742], 'KLAS': [36.1699, -115.1398], 'KLAX': [34.0522, -118.2437], 'KSAN': [32.7157, -117.1611],
+            'KDFW': [32.7767, -96.7970], 'KMIA': [25.7617, -80.1918], 'KHOU': [29.7604, -95.3698], 'MMCN': [16.8674, -99.7674],
+            'MMMZ': [23.2345, -106.4170], 'MMMX': [19.4326, -99.1332], 'MDSSD': [18.4861, -69.9312], 'MHTG': [14.0723, -87.1921],
+            'MHTG': [14.0723, -87.1921], 'MNMG': [12.1150, -86.2362], 'MROC': [9.7489, -84.7915], 'MRPV': [9.7489, -84.7915],
+            'MPTO': [8.9824, -79.5199], 'SKBO': [4.7110, -74.0721], 'SEQU': [-0.2298, -78.5249], 'SLET': [-0.2298, -78.5249],
+            'SCPQ': [-13.5928, -71.9385], 'SPIM': [-18.3442, -70.3305], 'SCCI': [-29.9027, -71.3387], 'SPJC': [-12.0464, -77.0428],
+            'SCLP': [-33.4489, -70.6693], 'SCIP': [-53.1638, -67.7097], 'SCAR': [-53.7873, -67.7550], 'NZIR': [-77.8400, 166.6673],
+            'NZCH': [-43.5321, 172.6362], 'YMML': [-37.8136, 144.9631], 'YSSY': [-33.8688, 151.2093], 'YBBN': [-27.3842, 152.9834],
+            'YPDN': [-12.6501, 131.1837], 'WADD': [-6.2088, 106.6553], 'WMKP': [3.1390, 101.6869], 'VTBS': [13.7563, 100.5018],
+            'VOCI': [8.6500, 100.5000], 'RJTT': [35.6762, 139.6503], 'RPLL': [14.1995, 121.0187], 'VHHH': [22.3193, 114.1694],
+            'ZSSS': [31.2304, 121.4737], 'OOMS': [23.6100, 58.2919], 'OTHH': [25.2808, 51.6032]
+        };
+
+        const airportInfo = {
+            'LLBG': 'תל אביב', 'LCLK': 'לרנקה', 'LGSR': 'רודוס', 'LGAV': 'אתונה',
+            'LGKF': 'קורפו', 'LIRF': 'רומא', 'LFMN': 'ניס', 'LFPB': 'פריז',
+            'EGBB': 'בירמינגהם', 'EIDW': 'דבלין', 'EKVG': 'ווגאר', 'BIKF': 'קפלאוויק',
+            'CYYT': 'סנט ג\'ונס', 'CYQX': 'גנדר', 'CYGZ': 'גרינלנד', 'CYQB': 'קוויבק',
+            'CYYZ': 'טורונטו', 'KDTW': 'דטרויט', 'KORD': 'שיקגו', 'KOMA': 'אומהה',
+            'KDEN': 'דנבר', 'KSLC': 'סולט לייק', 'KRNO': 'רנו', 'KSFO': 'סן פרנסיסקו',
+            'KPHX': 'פיניקס', 'KLAS': 'לאס וגאס', 'KLAX': 'לוס אנג\'לס', 'KSAN': 'סן דיאגו',
+            'KDFW': 'דלאס', 'KMIA': 'מיאמי', 'KHOU': 'יוסטון', 'MMCN': 'הרמוסיו',
+            'MMMZ': 'מאזאטלאן', 'MMMX': 'מקסיקו סיטי', 'MDSSD': 'סנטו דומינגו',
+            'MHTG': 'טגוציגלפה', 'MNMG': 'מנגואה', 'MROC': 'סן חוסה', 'MRPV': 'סן חוסה',
+            'MPTO': 'פנמה סיטי', 'SKBO': 'בוגוטה', 'SEQU': 'קיטו', 'SLET': 'קיטו',
+            'SCPQ': 'קוצשה', 'SPIM': 'אריקה', 'SCCI': 'קוקימבו', 'SPJC': 'לימה',
+            'SCLP': 'סנטיאגו', 'SCIP': 'פונטה ארנס', 'SCAR': 'ריו גראנדה',
+            'NZIR': 'מקרמרדו', 'NZCH': 'קרייסטצ\'רץ', 'YMML': 'מלבורן', 'YSSY': 'סידני',
+            'YBBN': 'בריסביין', 'YPDN': 'דרווין', 'WADD': 'בלי', 'WMKP': 'קואלה לומפור',
+            'VTBS': 'בנגคอก', 'VOCI': 'קוצ\'י', 'RJTT': 'טוקיו', 'RPLL': 'מנילה',
+            'VHHH': 'הונג קונג', 'ZSSS': 'שנגחאי', 'OOMS': 'מאסקט', 'OTHH': 'דוחא',
+            'MPMG': 'פנמה סיטי', 'SABP': 'בואנוס איירס'
+        };
+
+        function calculateFlightTime(from, to) {
+            const fromCoords = airports[from];
+            const toCoords = airports[to];
+            if (!fromCoords || !toCoords) return 90;
+            const R = 6371;
+            const lat1 = fromCoords[0] * Math.PI / 180;
+            const lat2 = toCoords[0] * Math.PI / 180;
+            const dLat = (toCoords[0] - fromCoords[0]) * Math.PI / 180;
+            const dLon = (toCoords[1] - fromCoords[1]) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            const distance = R * c;
+            const cruiseTime = (distance / 500) * 60;
+            return Math.round(cruiseTime * 1.1) > 30 ? Math.round(cruiseTime * 1.1) : 90;
+        }
+
+        async function loadRoutesFromSheet() {
+            const sheetUrl = 'https://docs.google.com/spreadsheets/d/1FxCamcUs_L8-IT3ea24x0DYCg7-dig7a1Tz5rlIjZxY/export?format=csv';
+            const response = await fetch(sheetUrl);
+            const csv = await response.text();
+            const lines = csv.trim().split('\n');
+
+            let totalTime = 0;
+            let legNum = 1;
+            const tbody = document.getElementById('routesTable');
+            let routeCount = 0;
+
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                const cols = line.split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+                if (cols.length >= 3) {
+                    const from = cols[1].toUpperCase().trim();
+                    const to = cols[2].toUpperCase().trim();
+                    const time = calculateFlightTime(from, to);
+                    totalTime += time;
+
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td><div class="leg-num">#${legNum}</div></td>
+                        <td><div class="airport-code">${from}</div></td>
+                        <td><div class="airport-code">${to}</div></td>
+                        <td><div class="time">${time}</div></td>
+                        <td>${airportInfo[from] || from}</td>
+                        <td>${airportInfo[to] || to}</td>
+                    `;
+                    legNum++;
+                    routeCount++;
+                }
+            }
+
+            // Update statistics
+            document.getElementById('totalTime').textContent = (totalTime / 60).toFixed(1);
+            document.getElementById('avgTime').textContent = routeCount > 0 ? Math.round(totalTime / routeCount) : 0;
+        }
+
+        (async () => {
+            await loadAirportsFromCSV();
+            loadRoutesFromSheet();
+        })();
+    </script>
+</body>
+</html>

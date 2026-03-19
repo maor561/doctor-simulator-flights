@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<browserconfig>
+    <msapplication>
+        <tile>
+            <square150x150logo src="globe-icon.svg"/>
+            <TileColor>#e91e63</TileColor>
+        </tile>
+        <notification>
+            <frequency_ms>604800</frequency_ms>
+            <polling_uri>notification.xml</polling_uri>
+        </notification>
+    </msapplication>
+</browserconfig>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מקורות הנתונים</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+        .legend-item {
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-right: 4px solid #667eea;
+        }
+        .legend-item h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .legend-item p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+        }
+        th {
+            padding: 12px;
+            text-align: right;
+            border: 1px solid #ddd;
+        }
+        td {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            text-align: right;
+        }
+        tbody tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        tbody tr:hover {
+            background: #f0f0f0;
+            transition: 0.2s;
+        }
+        .code {
+            background: #e3f2fd;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        .source-sheet {
+            background: #c8e6c9;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .source-builtin {
+            background: #b2dfdb;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .source-dynamic {
+            background: #ffccbc;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .source-fallback {
+            background: #e0e0e0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .source-calculated {
+            background: #b3e5fc;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 מקורות הנתונים - Doctor Simulator</h1>
+
+        <div class="legend">
+            <div class="legend-item">
+                <h3>🟢 Google Sheet</h3>
+                <p>קודים ICAO של שדה המראה ושדה נחיתה - מתוך Google Sheet של המסלולים</p>
+            </div>
+            <div class="legend-item">
+                <h3>📦 Built-in Database</h3>
+                <p>קואורדינטות, שמות ערים ודגלים - מוטמעים ישירות בקוד האפליקציה לכל ~70 שדות תעופה בעולם</p>
+            </div>
+            <div class="legend-item">
+                <h3>📐 Calculated (Haversine)</h3>
+                <p>זמן טיסה מחושב - בהסתמך על המרחק בין השדות בנוסחת Haversine בחישוב של 500 קמ״ש + 10% overhead</p>
+            </div>
+            <div class="legend-item">
+                <h3>🌍 Fallback Coordinates</h3>
+                <p>קואורדינטות חלופיות - מרכז המדינה (לשדות שלא בתוך מסד הנתונים המובנה)</p>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>LEG #</th>
+                    <th>קוד המראה</th>
+                    <th>קוד נחיתה</th>
+                    <th>זמן טיסה (דקות)</th>
+                    <th>שם שדה המראה</th>
+                    <th>שם שדה נחיתה</th>
+                    <th>📌 מקור קודים</th>
+                    <th>⏱️ מקור זמן</th>
+                    <th>📍 מקור שמות</th>
+                </tr>
+            </thead>
+            <tbody id="dataTable">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Built-in airport database with coordinates, city names, and country codes
+        const AIRPORT_DB = {
+            'LLBG': { coords: [32.0114, 34.8867], city: 'Tel Aviv', country: 'IL' },
+            'LROP': { coords: [44.5711, 26.0850], city: 'Bucharest', country: 'RO' },
+            'LCLK': { coords: [34.8751, 33.6249], city: 'Larnaca', country: 'CY' },
+            'LGSR': { coords: [36.3992, 25.4793], city: 'Santorini', country: 'GR' },
+            'LGAV': { coords: [37.9364, 23.9445], city: 'Athens', country: 'GR' },
+            'LGKF': { coords: [38.1200, 20.5005], city: 'Kefalonia', country: 'GR' },
+            'LIRF': { coords: [41.8003, 12.2389], city: 'Rome', country: 'IT' },
+            'LFMN': { coords: [43.6584, 7.2159], city: 'Nice', country: 'FR' },
+            'LFPB': { coords: [48.9694, 2.4414], city: 'Paris', country: 'FR' },
+            'EGBB': { coords: [52.4539, -1.7480], city: 'Birmingham', country: 'GB' },
+            'EIDW': { coords: [53.4213, -6.2701], city: 'Dublin', country: 'IE' },
+            'EKVG': { coords: [62.0636, -7.2772], city: 'Vágar', country: 'FO' },
+            'BIKF': { coords: [63.9850, -22.6056], city: 'Keflavik', country: 'IS' },
+            'CYYT': { coords: [47.6186, -52.7519], city: "St. John's", country: 'CA' },
+            'CYQX': { coords: [48.9369, -54.5681], city: 'Gander', country: 'CA' },
+            'CYGZ': { coords: [50.2819, -63.6114], city: 'Havre-Saint-Pierre', country: 'CA' },
+            'CYQB': { coords: [46.7911, -71.3933], city: 'Quebec City', country: 'CA' },
+            'CYYZ': { coords: [43.6772, -79.6306], city: 'Toronto', country: 'CA' },
+            'KDTW': { coords: [42.2124, -83.3534], city: 'Detroit', country: 'US' },
+            'KORD': { coords: [41.9742, -87.9073], city: 'Chicago', country: 'US' },
+            'KOMA': { coords: [41.3032, -95.8941], city: 'Omaha', country: 'US' },
+            'KDEN': { coords: [39.8561, -104.6737], city: 'Denver', country: 'US' },
+            'KSLC': { coords: [40.7884, -111.9778], city: 'Salt Lake City', country: 'US' },
+            'KRNO': { coords: [39.4991, -119.7681], city: 'Reno', country: 'US' },
+            'KSFO': { coords: [37.6213, -122.3790], city: 'San Francisco', country: 'US' },
+            'KPHX': { coords: [33.4373, -112.0078], city: 'Phoenix', country: 'US' },
+            'KLAS': { coords: [36.0840, -115.1537], city: 'Las Vegas', country: 'US' },
+            'KLAX': { coords: [33.9425, -118.4081], city: 'Los Angeles', country: 'US' },
+            'KSAN': { coords: [32.7336, -117.1897], city: 'San Diego', country: 'US' },
+            'KDFW': { coords: [32.8998, -97.0403], city: 'Dallas', country: 'US' },
+            'KHOU': { coords: [29.6454, -95.2789], city: 'Houston', country: 'US' },
+            'KMIA': { coords: [25.7959, -80.2870], city: 'Miami', country: 'US' },
+            'MMCN': { coords: [31.6303, -106.4290], city: 'Ciudad Juárez', country: 'MX' },
+            'MMMZ': { coords: [23.1614, -106.2661], city: 'Mazatlán', country: 'MX' },
+            'MMMX': { coords: [19.4363, -99.0721], city: 'Mexico City', country: 'MX' },
+            'MDSSD': { coords: [18.4297, -69.6689], city: 'Santo Domingo', country: 'DO' },
+            'MHTG': { coords: [14.0608, -87.2172], city: 'Tegucigalpa', country: 'HN' },
+            'MNMG': { coords: [12.1415, -86.1682], city: 'Managua', country: 'NI' },
+            'MROC': { coords: [10.0131, -84.2144], city: 'San José', country: 'CR' },
+            'MRPV': { coords: [9.9571, -84.1398], city: 'San José Pavas', country: 'CR' },
+            'MPTO': { coords: [9.0714, -79.3835], city: 'Panama City', country: 'PA' },
+            'MPMG': { coords: [8.9734, -79.5556], city: 'Panama City', country: 'PA' },
+            'SKBO': { coords: [4.7016, -74.1469], city: 'Bogotá', country: 'CO' },
+            'SEQU': { coords: [-0.1292, -78.3575], city: 'Quito', country: 'EC' },
+            'SPIM': { coords: [-12.0219, -77.1143], city: 'Lima', country: 'PE' },
+            'SPJC': { coords: [-12.0219, -77.1143], city: 'Lima (Pisco)', country: 'PE' },
+            'SLET': { coords: [-17.8111, -63.1714], city: 'Santa Cruz', country: 'BO' },
+            'SABP': { coords: [-34.8222, -58.5358], city: 'Buenos Aires', country: 'AR' },
+            'SCAR': { coords: [-45.7853, -67.4656], city: 'Comodoro Rivadavia', country: 'AR' },
+            'SCCI': { coords: [-53.0027, -70.8546], city: 'Punta Arenas', country: 'CL' },
+            'SCPQ': { coords: [-41.3489, -72.0069], city: 'Puerto Montt', country: 'CL' },
+            'SCLP': { coords: [-33.3931, -70.7858], city: 'Santiago', country: 'CL' },
+            'SCIP': { coords: [-27.1648, -109.4220], city: 'Easter Island', country: 'CL' },
+            'NZCH': { coords: [-43.4894, 172.5322], city: 'Christchurch', country: 'NZ' },
+            'NZIR': { coords: [-43.8108, 172.5189], city: 'Christchurch West', country: 'NZ' },
+            'YMML': { coords: [-37.6690, 144.8410], city: 'Melbourne', country: 'AU' },
+            'YSSY': { coords: [-33.9461, 151.1772], city: 'Sydney', country: 'AU' },
+            'YBBN': { coords: [-27.3842, 153.1175], city: 'Brisbane', country: 'AU' },
+            'YPDN': { coords: [-12.4147, 130.8767], city: 'Darwin', country: 'AU' },
+            'WADD': { coords: [-8.7482, 115.1672], city: 'Bali', country: 'ID' },
+            'WMKP': { coords: [5.2972, 100.2769], city: 'Penang', country: 'MY' },
+            'VTBS': { coords: [13.6900, 100.7501], city: 'Bangkok', country: 'TH' },
+            'VOCI': { coords: [10.1520, 76.4019], city: 'Cochin', country: 'IN' },
+            'RJTT': { coords: [35.5494, 139.7798], city: 'Tokyo', country: 'JP' },
+            'RPLL': { coords: [14.5086, 121.0198], city: 'Manila', country: 'PH' },
+            'VHHH': { coords: [22.3080, 113.9185], city: 'Hong Kong', country: 'HK' },
+            'ZSSS': { coords: [31.1434, 121.8052], city: 'Shanghai', country: 'CN' },
+            'OOMS': { coords: [23.5933, 58.2844], city: 'Muscat', country: 'OM' },
+            'OTHH': { coords: [25.2731, 51.6081], city: 'Doha', country: 'QA' },
+            'BGKK': { coords: [66.9914, -50.7116], city: 'Kangerlussuaq', country: 'GL' },
+            'BGBW': { coords: [64.1909, -51.6781], city: 'Nuuk', country: 'GL' },
+            'AQBC': { coords: [-62.2000, -58.9667], city: 'Base Camp', country: 'AQ' }
+        };
+
+        let airports = {};
+        let airportInfo = {};
+        let dynamicAirports = {};
+        let airportSource = {};
+
+        // Load built-in airport database
+        function loadBuiltInAirports() {
+            for (let icao in AIRPORT_DB) {
+                const ap = AIRPORT_DB[icao];
+                airports[icao] = ap.coords;
+                airportInfo[icao] = ap.city;
+                airportSource[icao] = '📦 Built-in Database';
+            }
+        }
+
+        function calculateFlightTime(from, to) {
+            const fromCoords = airports[from];
+            const toCoords = airports[to];
+            if (!fromCoords || !toCoords) return 90;
+            const R = 6371;
+            const lat1 = fromCoords[0] * Math.PI / 180;
+            const lat2 = toCoords[0] * Math.PI / 180;
+            const dLat = (toCoords[0] - fromCoords[0]) * Math.PI / 180;
+            const dLon = (toCoords[1] - fromCoords[1]) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            const distance = R * c;
+            const cruiseTime = (distance / 500) * 60;
+            return Math.round(cruiseTime * 1.1) > 30 ? Math.round(cruiseTime * 1.1) : 90;
+        }
+
+        function getOrCreateAirportInfo(icao) {
+            if (airportInfo[icao]) return airportInfo[icao];
+            if (dynamicAirports[icao]) return dynamicAirports[icao];
+            dynamicAirports[icao] = icao;
+            return icao;
+        }
+
+        async function loadRoutesFromSheet() {
+            const sheetUrl = 'https://docs.google.com/spreadsheets/d/1FxCamcUs_L8-IT3ea24x0DYCg7-dig7a1Tz5rlIjZxY/export?format=csv';
+            const response = await fetch(sheetUrl);
+            const csv = await response.text();
+            const lines = csv.trim().split('\n');
+            const tbody = document.getElementById('dataTable');
+            let legNum = 1;
+
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                const cols = line.split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+                if (cols.length >= 3) {
+                    const from = cols[1].toUpperCase().trim();
+                    const to = cols[2].toUpperCase().trim();
+                    const fromName = getOrCreateAirportInfo(from);
+                    const toName = getOrCreateAirportInfo(to);
+                    const time = calculateFlightTime(from, to);
+
+                    const codesSource = '<span class="source-sheet">🟢 Google Sheet</span>';
+                    const timeSource = '<span class="source-calculated">📐 Calculated</span>';
+                    const namesSource = (airportSource[from] && airportSource[from].includes('Built-in'))
+                        ? '<span class="source-builtin">📦 Built-in</span>'
+                        : '<span class="source-fallback">🌍 Fallback</span>';
+
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td><strong>#${legNum}</strong></td>
+                        <td><span class="code">${from}</span></td>
+                        <td><span class="code">${to}</span></td>
+                        <td><strong>${time}</strong></td>
+                        <td>${fromName}</td>
+                        <td>${toName}</td>
+                        <td>${codesSource}</td>
+                        <td>${timeSource}</td>
+                        <td>${namesSource}</td>
+                    `;
+                    legNum++;
+                }
+            }
+        }
+
+        (async () => {
+            loadBuiltInAirports();
+            loadRoutesFromSheet();
+        })();
+    </script>
+</body>
+</html>

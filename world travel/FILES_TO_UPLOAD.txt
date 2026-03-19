@@ -1,0 +1,82 @@
+🚀 קבצים להעלות לשרver - Doctor Simulator
+
+═══════════════════════════════════════════════════
+
+✅ עדכונים ב-קבצים קיימים:
+
+1. index.html (עדכון)
+   - הוסיף PWA meta tags בראש הקובץ
+   - הוסיף כפתור "הוסף לבית" בheader
+   - הוסיף Service Worker registration
+   - הוסיף beforeinstallprompt event handling
+
+2. data_sources.html (עדכון קודם - בעדכון חדש)
+   - שונה מ-AirLabs API ל-Built-in Database
+
+═══════════════════════════════════════════════════
+
+✨ קבצים חדשים:
+
+3. manifest.json (חדש)
+   - PWA metadata
+   - Application name, icons, colors
+   - Shortcuts for quick access
+
+4. service-worker.js (חדש)
+   - Offline support
+   - Caching strategy
+   - Background sync support
+   - Push notifications
+
+5. browserconfig.xml (חדש)
+   - Windows tile configuration
+   - Theme colors for Windows Start menu
+
+6. PWA-README.md (חדש - optional)
+   - Documentation עבור PWA features
+   - Troubleshooting guide
+
+═══════════════════════════════════════════════════
+
+📋 סדר העלאה המומלץ:
+
+1. manifest.json
+2. service-worker.js
+3. browserconfig.xml
+4. index.html (עדכון)
+5. data_sources.html (בדוק שהעדכון מעדכן)
+6. logo.png (אם עדיין אין)
+
+═══════════════════════════════════════════════════
+
+🔍 בדיקה אחרי העלאה:
+
+1. פתח את האתר HTTPS://doctor-simulator-world-travel.infinityfreeapp.com
+2. אתה צריך לראות:
+   - ✅ כפתור "📱 הוסף לבית" בחלק העליון
+   - ✅ אפליקציה בChrome DevTools > Manifest tab
+   - ✅ Service Worker בChrome DevTools > Application > Service Workers
+
+3. בדוק Offline:
+   - DevTools > Network > Offline
+   - אתר צריך להיות פעיל עדיין
+
+═══════════════════════════════════════════════════
+
+📌 הערות חשובות:
+
+- PWA דורש HTTPS (infinityfreeapp.com הוא HTTPS ✅)
+- Service Worker יכול לקחת דקות ליהיות פעיל
+- Clear cache אם יש בעיות (DevTools > Shift+Click Refresh)
+- Logo.png משומש עבור icons (כנראה שקיים)
+
+═══════════════════════════════════════════════════
+
+🎯 תוצאה:
+
+משתמש יוכל:
+✅ להתקין את האפליקציה בבית
+✅ להשתמש בה ללא אינטרנט
+✅ להקבל push notifications
+✅ קיבול background sync
+
