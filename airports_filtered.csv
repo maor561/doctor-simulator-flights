@@ -1,0 +1,63 @@
+icao_code,name,municipality,latitude_deg,longitude_deg,iso_country
+BIKF,Keflavik International Airport,Reykjavík,63.985001,-22.6056,IS
+CYGZ,Grise Fiord Airport,Grise Fiord,76.425823,-82.908583,CA
+CYQB,Quebec Jean Lesage International Airport,Quebec,46.7911,-71.393303,CA
+CYQX,Gander International Airport,Gander,48.936258,-54.567719,CA
+CYYT,St. John's International Airport,St. John's,47.618599,-52.7519,CA
+CYYZ,Toronto Pearson International Airport,Toronto,43.675935,-79.629421,CA
+EGBB,Birmingham Airport,"Birmingham, West Midlands",52.453899,-1.74803,GB
+EIDW,Dublin Airport,Dublin,53.428713,-6.262121,IE
+EKVG,Vágar Airport,Vágar,62.063256,-7.275782,FO
+KDEN,Denver International Airport,Denver,39.860027,-104.673792,US
+KDFW,Dallas Fort Worth International Airport,Dallas-Fort Worth,32.896801,-97.038002,US
+KDTW,Detroit Metropolitan Wayne County Airport,Detroit,42.21377,-83.353786,US
+KHOU,William P. Hobby Airport,Houston,29.645336,-95.276812,US
+KLAS,Harry Reid International Airport,Las Vegas,36.083361,-115.151817,US
+KLAX,Los Angeles International Airport,Los Angeles,33.942501,-118.407997,US
+KMIA,Miami International Airport,Miami,25.796011,-80.289751,US
+KOMA,Eppley Airfield,Omaha,41.3032,-95.894096,US
+KORD,Chicago O'Hare International Airport,Chicago,41.9786,-87.9048,US
+KPHX,Phoenix Sky Harbor International Airport,Phoenix,33.435302,-112.005905,US
+KRNO,Reno Tahoe International Airport,Reno,39.4991,-119.767998,US
+KSAN,San Diego International Airport,San Diego,32.733601,-117.190002,US
+KSFO,San Francisco International Airport,San Francisco,37.619806,-122.374821,US
+KSLC,Salt Lake City International Airport,Salt Lake City,40.78886,-111.979866,US
+LCLK,Larnaca International Airport,Larnaca,34.875099,33.624901,CY
+LFMN,Nice-Côte d'Azur Airport,"Nice, Alpes-Maritimes",43.658401,7.21587,FR
+LFPB,Paris-Le Bourget International Airport,Paris,48.962276,2.436539,FR
+LGAV,Athens Eleftherios Venizelos International Airport,Spata-Artemida,37.936401,23.9445,GR
+LGKF,Kefallinia Airport,Kefallinia Island,38.12009811401367,20.500499725341797,GR
+LGSR,Santorini International Airport,Santorini Island,36.400045,25.478638,GR
+LIRF,Rome–Fiumicino Leonardo da Vinci International Airport,Rome,41.804532,12.251998,IT
+LLBG,Ben Gurion International Airport,Tel Aviv,32.011398,34.8867,IL
+MHTG,Toncontín Airport,Tegucigalpa,14.0609,-87.217201,HN
+MMCN,Ciudad Obregón International Airport,Ciudad Obregón,27.39259910583496,-109.83300018310547,MX
+MMMX,Mexico City Benito Juárez International Airport,Mexico City,19.435822,-99.07033,MX
+MMMZ,General Rafael Buelna International Airport,Mazatlàn,23.162823,-106.264517,MX
+MNMG,Augusto C. Sandino (Managua) International Airport,Managua,12.1415,-86.168198,NI
+MPMG,Marcos A. Gelabert International Airport,Albrook,8.97334,-79.555603,PA
+MPTO,Tocumen International Airport,Tocumen,9.07136,-79.383499,PA
+MROC,Juan Santamaría International Airport,San José (Alajuela),9.99386,-84.208801,CR
+MRPV,Tobías Bolaños International Airport,San Jose,9.95705,-84.139801,CR
+NZCH,Christchurch International Airport,Christchurch,-43.489029,172.532065,NZ
+OOMS,Muscat International Airport,Muscat/Seeb,23.600218,58.285268,OM
+OTHH,Hamad International Airport,Doha,25.273056,51.608056,QA
+RJTT,Tokyo Haneda International Airport,Tokyo,35.549678,139.786958,JP
+RPLL,Ninoy Aquino International Airport,Manila (Pasay),14.5086,121.019997,PH
+SCAR,Chacalluta International Airport,Arica,-18.348499,-70.338699,CL
+SCCI,President Carlos Ibáñez International Airport,Punta Arenas,-53.002602,-70.854599,CL
+SCIP,Mataveri International Airport,Isla De Pascua,-27.165411,-109.421027,CL
+SCPQ,Mocopulli Airport,Dalcahue,-42.340388,-73.715693,CL
+SKBO,El Dorado International Airport,Bogota,4.70159,-74.1469,CO
+SLET,El Trompillo Airport,Santa Cruz,-17.8115997314,-63.1715011597,BO
+SPJC,Jorge Chávez International Airport,Lima,-12.0219,-77.114305,PE
+VHHH,Hong Kong International Airport,Hong Kong,22.31184,113.914862,HK
+VOCI,Cochin International Airport,Kochi,10.151047,76.400838,IN
+VTBS,Suvarnabhumi Airport,Bangkok,13.6811,100.747002,TH
+WADD,Denpasar I Gusti Ngurah Rai International Airport,"Kuta, Badung",-8.748409,115.167123,ID
+WMKP,Penang International Airport,Penang,5.296303,100.276185,MY
+YBBN,Brisbane International Airport,Brisbane,-27.384199142456055,153.11700439453125,AU
+YMML,Melbourne Airport,Melbourne,-37.670732,144.837898,AU
+YPDN,Darwin International Airport / RAAF Darwin,Darwin,-12.41497,130.88185,AU
+YSSY,Sydney Kingsford Smith International Airport,Sydney (Mascot),-33.946098,151.177002,AU
+ZSSS,Shanghai Hongqiao International Airport,Shanghai (Minhang),31.198104,121.33426,CN
