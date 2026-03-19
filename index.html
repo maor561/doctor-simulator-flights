@@ -1388,12 +1388,14 @@ window.onload = async () => {
         buildRoutesWithAirportInfo(rawRoutes);
     }
 
+    // Step 4.5: Load saved data from localStorage BEFORE rendering
+    loadFromServer();
+
     // Step 5: Render and show map
     render();
     initMap();
     await loadAllMetar();
     updateAdminStatus();
-    loadFromServer();
 
     // Step 6: Register Service Worker for PWA support
     if ('serviceWorker' in navigator) {
