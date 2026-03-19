@@ -1,0 +1,26 @@
+{
+  "name": "doctor-simulator-flights",
+  "version": "2.0.0",
+  "description": "Doctor Simulator - Interactive flight management system with PWA support",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build needed for static site'",
+    "start": "echo 'Use vercel dev for local development'"
+  },
+  "keywords": [
+    "flight-simulator",
+    "aviation",
+    "pwa",
+    "real-time",
+    "leaflet",
+    "vatsim"
+  ],
+  "author": "Doctor Simulator Team",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": "18.x || 20.x"
+  }
+}

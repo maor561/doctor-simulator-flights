@@ -1,0 +1,45 @@
+LGSR: 21°C, בהיר
+LGKF: 19°C, גשום
+LIRF: 18°C, בהיר
+LFMN: 16°C, עננים
+LFPB: 12°C, גשום
+EGBB: 11°C, גשום
+EIDW: 10°C, גשום
+EKVG: 8°C, רוח חזקה
+BIKF: 2°C, קר
+CYYT: -5°C, שלג
+CYQX: -8°C, קר
+CYGZ: -15°C, קר מאוד
+CYQB: -10°C, שלג
+CYYZ: -5°C, עננים
+KDTW: 0°C, בהיר
+KORD: 2°C, בהיר
+KOMA: 5°C, עננים
+KDEN: 8°C, בהיר
+KSLC: 10°C, בהיר
+KRNO: 15°C, בהיר
+KSFO: 18°C, ערפל
+KPHX: 28°C, בהיר
+MMCN: 30°C, בהיר
+MMMZ: 28°C, עננים
+MMMX: 22°C, גשום
+MROC: 26°C, גשום
+MPTO: 28°C, חם רטוב
+SKBO: 18°C, גשום
+SEQM: 15°C, בהיר
+SPJC: 20°C, ערפל
+SCLP: 18°C, בהיר
+SCIP: 10°C, קור
+SCAR: 8°C, קור
+NZIR: -30°C, קר קיצוני
+NZCH: 12°C, בהיר
+YMML: 20°C, בהיר
+YSSY: 22°C, בהיר
+YBBN: 25°C, בהיר
+YPDN: 28°C, חם
+WADD: 27°C, גשום
+WMKP: 28°C, חם רטוב
+VTBS: 32°C, חם רטוב
+VOCI: 28°C, גשום
+OOMS: 35°C, בהיר
+OTHH: 38°C, בהיר
