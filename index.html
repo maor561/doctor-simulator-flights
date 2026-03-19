@@ -961,25 +961,37 @@ function updateAdminStatus() {
 }
 
 function loadFromServer() {
-    // Data is primarily stored in localStorage
-    // Server sync is optional for this PWA
-    render();
+    // Load from localStorage (primary storage for PWA)
+    try {
+        const savedCompleted = localStorage.getItem('doctor-simulator-completed');
+        const savedDates = localStorage.getItem('doctor-simulator-dates');
+
+        if (savedCompleted) {
+            completed = JSON.parse(savedCompleted);
+        }
+        if (savedDates) {
+            routeDates = JSON.parse(savedDates);
+        }
+        console.log('✅ Data loaded from localStorage');
+    } catch (e) {
+        console.log('Could not load from localStorage:', e.message);
+    }
 }
 
 function saveToServer() {
+    // Save to localStorage first (primary storage)
+    localStorage.setItem('doctor-simulator-completed', JSON.stringify(completed));
+    localStorage.setItem('doctor-simulator-dates', JSON.stringify(routeDates));
+
+    showMessage('✅ נשמר בהצלחה!', 'success');
+
+    // Also try to sync with server (optional)
     fetch('/api/save-data', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({completed, dates: routeDates})
     })
-    .then(r => r.json())
-    .then(data => {
-        showMessage('✅ נשמר בהצלחה!', 'success');
-    })
-    .catch(err => {
-        // Silently fail during local testing (PHP not available)
-        console.log('Save error:', err);
-    });
+    .catch(err => console.log('Server sync error:', err));
 }
 
 // Convert country code to emoji flag
