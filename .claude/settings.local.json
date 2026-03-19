@@ -31,7 +31,8 @@
       "WebFetch(domain:doc-0c-4g-sheets.googleusercontent.com)",
       "WebFetch(domain:vercel.com)",
       "Bash(curl -s \"https://doctor-simulator-flights.vercel.app/api/metar?icao=LCEN\")",
-      "Bash(curl -s \"https://doctor-simulator-flights.vercel.app/api/metar?icao=LGSR\")"
+      "Bash(curl -s \"https://doctor-simulator-flights.vercel.app/api/metar?icao=LGSR\")",
+      "Bash(curl -s \"https://doctor-simulator-flights.vercel.app/api/metar?icao=LCEN&v=2\")"
     ]
   }
 }

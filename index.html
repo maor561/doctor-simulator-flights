@@ -960,8 +960,24 @@ function updateAdminStatus() {
     document.getElementById('adminStatus').textContent = isAdmin ? '✅ מצב עריכה' : '';
 }
 
-function loadFromServer() {
-    // Load from localStorage (primary storage for PWA)
+async function loadFromServer() {
+    // Try to load from server first (for sync across devices/sessions)
+    try {
+        const response = await fetch('/api/save-data');
+        if (response.ok) {
+            const result = await response.json();
+            if (result.data && result.data.completed) {
+                completed = result.data.completed;
+                routeDates = result.data.dates || {};
+                console.log('✅ Data loaded from server');
+                return;
+            }
+        }
+    } catch (e) {
+        console.log('⚠️ Could not load from server:', e.message);
+    }
+
+    // Fallback to localStorage (for offline support)
     try {
         const savedCompleted = localStorage.getItem('doctor-simulator-completed');
         const savedDates = localStorage.getItem('doctor-simulator-dates');
@@ -1388,8 +1404,8 @@ window.onload = async () => {
         buildRoutesWithAirportInfo(rawRoutes);
     }
 
-    // Step 4.5: Load saved data from localStorage BEFORE rendering
-    loadFromServer();
+    // Step 4.5: Load saved data from server/localStorage BEFORE rendering
+    await loadFromServer();
 
     // Step 5: Render and show map
     render();
