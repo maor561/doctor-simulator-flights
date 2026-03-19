@@ -1079,7 +1079,7 @@ async function fetchMetar(icao) {
     const promise = (async () => {
         // Try Vercel API endpoint first
         try {
-            const response = await fetch(`/api/metar?icao=${icao}`);
+            const response = await fetch(`/api/metar?icao=${icao}&v=2`);
             if (response.ok) {
                 const data = await response.json();
                 if (data.metar && data.metar !== 'N/A') {
