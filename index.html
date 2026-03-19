@@ -513,7 +513,7 @@
             </div>
 
             <div class="stats">
-                מסלולים שהושלמו: <span id="completed">0</span>/47
+                מסלולים שהושלמו: <span id="completed">0</span>/<span id="totalRoutes">0</span>
             </div>
 
             <div id="routesList" class="routes-list"></div>
@@ -1077,21 +1077,20 @@ async function fetchMetar(icao) {
     if (metarPending[icao]) return metarPending[icao];
 
     const promise = (async () => {
-        // Try PHP backend first (works on InfinityFree with VATSIM)
+        // Try Vercel API endpoint first
         try {
-            const r1 = await fetch('fetch-metar.php?icao=' + icao);
-            if (r1.ok) {
-                const text = await r1.text();
-                if (text && !text.includes('<!DOCTYPE') && !text.includes('<html')) {
-                    const data = JSON.parse(text);
-                    if (data.raw && data.raw !== 'N/A') {
-                        metarCache[icao] = parseMetarRaw(data.raw) || { raw: 'N/A', temp: '', wind: '', conditions: '', qnh: '' };
-                        delete metarPending[icao];
-                        return metarCache[icao];
-                    }
+            const response = await fetch(`/api/metar?icao=${icao}`);
+            if (response.ok) {
+                const data = await response.json();
+                if (data.metar && data.metar !== 'N/A') {
+                    metarCache[icao] = parseMetarRaw(data.metar) || { raw: 'N/A', temp: '', wind: '', conditions: '', qnh: '' };
+                    delete metarPending[icao];
+                    return metarCache[icao];
                 }
             }
-        } catch(e) { /* PHP not available */ }
+        } catch(e) {
+            console.warn(`⚠️ METAR fetch failed for ${icao}:`, e.message);
+        }
 
         metarCache[icao] = { raw: 'N/A', temp: 'N/A', wind: '', conditions: '', qnh: '' };
         delete metarPending[icao];
@@ -1248,6 +1247,9 @@ function zoomToRoute(routeId) {
 
 function render() {
     let list = showDone ? routes : routes.filter(r => !completed[r.id]);
+
+    // Update total routes count
+    document.getElementById('totalRoutes').textContent = routes.length;
 
     document.getElementById('routesList').innerHTML = list.map(r => {
         const date = routeDates[r.id]?.date || '';
