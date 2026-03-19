@@ -22,7 +22,16 @@
       "Bash(/tmp/github_setup.md:*)",
       "Bash(/tmp/vercel_deployment_guide.txt:*)",
       "Bash(grep -E \"\\\\.\\(html|json|js|svg|md|xml|php|gitignore\\)$\")",
-      "mcp__Control_Chrome__open_url"
+      "mcp__Control_Chrome__open_url",
+      "Bash(cat:*)",
+      "Bash(cd \"/c/cluade/world travel\" __NEW_LINE_828e960cab298007__ git add CHANGELOG.md git commit -m \"Docs: Add CHANGELOG.md for v1.0\" git push origin main __NEW_LINE_828e960cab298007__ echo \"\" echo \"════════════════════════════════════════════════════════════════\" echo \"                   ✨ v1.0 RELEASE COMPLETE ✨\" echo \"════════════════════════════════════════════════════════════════\" echo \"\" echo \"📌 Release Details:\" echo \"   Version: v1.0\" echo \"   Date: 2026-03-19\" echo \"   Status: ✅ Production Ready\" echo \"\" echo \"🔗 GitHub Release:\" git log --oneline -1 echo \"\" echo \"📊 Release Info:\" git tag -l -n 5)",
+      "Bash(iconv -f UTF-8 -t UTF-8 -c)",
+      "Bash(powershell -Command \":*)",
+      "Bash(curl -s \"https://docs.google.com/spreadsheets/d/1FxCamcUs_L8-IT3ea24x0DYCg7-dig7a1Tz5rlIjZxY/export?format=csv\")",
+      "WebFetch(domain:doc-0c-4g-sheets.googleusercontent.com)",
+      "WebFetch(domain:vercel.com)",
+      "Bash(curl -s \"https://doctor-simulator-flights.vercel.app/api/metar?icao=LCEN\")",
+      "Bash(curl -s \"https://doctor-simulator-flights.vercel.app/api/metar?icao=LGSR\")"
     ]
   }
 }

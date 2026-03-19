@@ -43,6 +43,12 @@ self.addEventListener('fetch', (event) => {
 
     if (request.method !== 'GET') return;
 
+    // Skip caching for API calls
+    if (url.pathname.startsWith('/api/')) {
+        event.respondWith(fetch(request));
+        return;
+    }
+
     if (request.headers.get('accept').includes('text/html')) {
         event.respondWith(
             fetch(request)
