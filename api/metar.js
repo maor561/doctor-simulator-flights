@@ -24,23 +24,39 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Fetch from VATSIM METAR API
-        const response = await fetch(`https://metar.vatsim.net/${icao}.json`);
+        // Fetch from VATSIM METAR API with timeout
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000);
+
+        const response = await fetch(`https://metar.vatsim.net/${icao}.json`, {
+            signal: controller.signal
+        });
+
+        clearTimeout(timeout);
+
+        if (!response.ok) {
+            throw new Error(`VATSIM API returned ${response.status}`);
+        }
+
         const data = await response.json();
 
         // Cache response for 1 hour
         res.setHeader('Cache-Control', 'public, max-age=3600');
-        
+
         return res.status(200).json({
             icao: icao.toUpperCase(),
             metar: data.metar || null,
             time: new Date().toISOString()
         });
     } catch (error) {
-        console.error(`Error fetching METAR for ${icao}:`, error);
-        return res.status(500).json({ 
-            error: 'Failed to fetch METAR data',
-            icao: icao.toUpperCase()
+        console.error(`Error fetching METAR for ${icao}:`, error.message);
+
+        // Return graceful error with empty METAR
+        return res.status(200).json({
+            icao: icao.toUpperCase(),
+            metar: null,
+            error: 'METAR data unavailable',
+            time: new Date().toISOString()
         });
     }
 }
