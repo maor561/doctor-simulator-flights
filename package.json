@@ -2,6 +2,7 @@
   "name": "doctor-simulator-flights",
   "version": "2.0.0",
   "description": "Doctor Simulator - Interactive flight management system with PWA support",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "vercel dev",
