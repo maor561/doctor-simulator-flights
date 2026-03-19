@@ -961,18 +961,13 @@ function updateAdminStatus() {
 }
 
 function loadFromServer() {
-    fetch('save-data.php')
-        .then(r => r.json())
-        .then(data => {
-            completed = data.completed || {};
-            routeDates = data.dates || {};
-            render();
-        })
-        .catch(() => render());
+    // Data is primarily stored in localStorage
+    // Server sync is optional for this PWA
+    render();
 }
 
 function saveToServer() {
-    fetch('save-data.php', {
+    fetch('/api/save-data', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({completed, dates: routeDates})
