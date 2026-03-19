@@ -831,7 +831,7 @@ async function loadRawRoutesFromSheet() {
         }
     } catch(e) {
         console.log('❌ Failed to load from Sheet:', e.message);
-        loadFallbackRoutes();
+        await loadFallbackRoutes();
         return { rawRoutes: [], airportCodes: [] };
     }
 }
@@ -884,7 +884,7 @@ function getCountryEmojiFromAirport(icao) {
 }
 
 // Fallback routes if Sheet fails
-function loadFallbackRoutes() {
+async function loadFallbackRoutes() {
     routes = [
 {id:1,num:1,from:"LLBG",fromCity:"תל אביב",fromCountry:"🇮🇱",to:"LCLK",toCity:"לרנקה",toCountry:"🇨🇾",name:"לרנקה",time:65},
 {id:2,num:2,from:"LCLK",fromCity:"לרנקה",fromCountry:"🇨🇾",to:"LGSR",toCity:"רודוס",toCountry:"🇬🇷",name:"רודוס",time:60},
@@ -935,7 +935,7 @@ function loadFallbackRoutes() {
 {id:47,num:47,from:"OTHH",fromCity:"דוחא",fromCountry:"🇶🇦",to:"LLBG",toCity:"תל אביב",toCountry:"🇮🇱",name:"תל אביב",time:135}
     ];
     render();
-    loadAllMetar();
+    await loadAllMetar();
     initMap();
 }
 
