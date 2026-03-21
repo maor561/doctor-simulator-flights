@@ -4,6 +4,43 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [v2.0] - 2026-03-21 🔄 MAJOR UPDATE - Cross-Device Data Sync
+
+### ✨ New Features
+
+#### Data Persistence & Synchronization
+- 💾 **Server-side data storage** - Routes data now syncs across devices
+- 📱 **Multi-device sync** - Save on desktop, access on mobile
+- 🔐 **Persistent storage** - Data saved to server (`/tmp/doctor-simulator-data.json`)
+- 🌐 **Incognito & new tabs** - Data accessible everywhere
+
+#### Enhanced API
+- 🔄 Updated `/api/save-data` endpoint with GET/POST support
+- 📡 Automatic server fallback - Works offline with localStorage
+
+### 🐛 Bug Fixes
+
+- ✅ Fixed date/time not persisting after page refresh
+- ✅ Fixed data not syncing across tabs/devices/sessions
+- ✅ Fixed initialization order (loadFromServer before render)
+- ✅ Fixed METAR data not displaying on initial load
+
+### ⚙️ Improvements
+
+- 📊 Better error handling in data loading
+- 🔄 Async data loading with proper await chains
+- 💪 Fallback mechanism: Server → localStorage → empty
+- 🧹 Cleaner initialization sequence
+
+### 📋 Technical Details
+
+- Made `loadFromServer()` async
+- Added server-side file storage for cross-device persistence
+- Updated initialization to call `loadFromServer()` before `render()`
+- Added comprehensive fallback chain for offline support
+
+---
+
 ## [v1.0] - 2026-03-19 ✨ RELEASE
 
 ### ✅ Features
