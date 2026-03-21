@@ -843,7 +843,7 @@ function getFlagEmoji(countryCode) {
 // Step 1: Load raw route data from sheet (without airport info)
 async function loadRawRoutesFromSheet() {
     try {
-        const sheetUrl = 'https://docs.google.com/spreadsheets/d/1FxCamcUs_L8-IT3ea24x0DYCg7-dig7a1Tz5rlIjZxY/export?format=csv';
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/1FxCamcUs_L8-IT3ea24x0DYCg7-dig7a1Tz5rlIjZxY/export?format=csv&t=' + Date.now();
         const response = await fetch(sheetUrl);
         const csv = await response.text();
         const lines = csv.trim().split('\n');
