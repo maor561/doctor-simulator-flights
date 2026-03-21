@@ -1,5 +1,5 @@
-const CACHE_NAME = 'doctor-simulator-v2';
-const RUNTIME_CACHE = 'doctor-simulator-runtime-v2';
+const CACHE_NAME = 'doctor-simulator-v3';
+const RUNTIME_CACHE = 'doctor-simulator-runtime-v3';
 
 const STATIC_ASSETS = [
     '/',
@@ -46,6 +46,12 @@ self.addEventListener('fetch', (event) => {
     // Skip caching for API calls
     if (url.pathname.startsWith('/api/')) {
         event.respondWith(fetch(request));
+        return;
+    }
+
+    // Skip caching for external URLs (Google Sheets, etc.)
+    if (url.origin !== self.location.origin) {
+        event.respondWith(fetch(request).catch(() => new Response('Offline', { status: 503 })));
         return;
     }
 

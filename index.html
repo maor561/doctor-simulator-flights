@@ -665,7 +665,52 @@ const AIRPORT_DB = {
     'SCTE': { coords: [-41.438889, -73.093889], city: 'Puerto Montt', country: 'CL' },
     'SCBA': { coords: [-45.916, -71.68950], city: 'Balmaceda', country: 'CL' },
     // Argentina - New
-    'SAWH': { coords: [-54.8433, -68.2958], city: 'Ushuaia', country: 'AR' }
+    'SAWH': { coords: [-54.8433, -68.2958], city: 'Ushuaia', country: 'AR' },
+    'SAWC': { coords: [-50.2803, -72.0531], city: 'El Calafate', country: 'AR' },
+    'SAWG': { coords: [-51.6089, -69.3126], city: 'Río Gallegos', country: 'AR' },
+    // USA - New
+    'KBGR': { coords: [44.8074, -68.8281], city: 'Bangor', country: 'US' },
+    'KBOS': { coords: [42.3656, -71.0096], city: 'Boston', country: 'US' },
+    'KJFK': { coords: [40.6413, -73.7781], city: 'New York', country: 'US' },
+    'KIAD': { coords: [38.9531, -77.4565], city: 'Washington', country: 'US' },
+    'KCLT': { coords: [35.2144, -80.9473], city: 'Charlotte', country: 'US' },
+    'KJAX': { coords: [30.4941, -81.6879], city: 'Jacksonville', country: 'US' },
+    'KIAH': { coords: [29.9844, -95.3414], city: 'Houston', country: 'US' },
+    'KSEA': { coords: [47.4502, -122.3088], city: 'Seattle', country: 'US' },
+    'PANC': { coords: [61.1743, -149.9962], city: 'Anchorage', country: 'US' },
+    'PAOM': { coords: [64.5122, -165.4453], city: 'Nome', country: 'US' },
+    // Mexico - New
+    'MMUN': { coords: [21.0365, -86.8771], city: 'Cancún', country: 'MX' },
+    // Belize
+    'MZBZ': { coords: [17.5391, -88.3082], city: 'Belize City', country: 'BZ' },
+    // Guatemala
+    'MGGT': { coords: [14.5833, -90.5275], city: 'Guatemala City', country: 'GT' },
+    // El Salvador
+    'MSLP': { coords: [13.4409, -89.0557], city: 'San Salvador', country: 'SV' },
+    // Colombia - New
+    'SKCL': { coords: [3.5432, -76.3816], city: 'Cali', country: 'CO' },
+    // Ecuador - New
+    'SEGU': { coords: [-2.1574, -79.8837], city: 'Guayaquil', country: 'EC' },
+    'SEMT': { coords: [-0.9461, -80.6788], city: 'Manta', country: 'EC' },
+    // Peru - New
+    'SPQT': { coords: [-3.7847, -73.3088], city: 'Iquitos', country: 'PE' },
+    'SPZO': { coords: [-13.5357, -71.9388], city: 'Cusco', country: 'PE' },
+    // Chile - New
+    'SCDA': { coords: [-18.3485, -70.3387], city: 'Arica', country: 'CL' },
+    'SCEL': { coords: [-33.3931, -70.7858], city: 'Santiago', country: 'CL' },
+    // Russia - New
+    'UHMA': { coords: [64.7350, 177.7414], city: 'Anadyr', country: 'RU' },
+    'UHPP': { coords: [53.1679, 158.4536], city: 'Petropavlovsk-Kamchatsky', country: 'RU' },
+    'UHMM': { coords: [59.9101, 150.7204], city: 'Magadan', country: 'RU' },
+    'UESO': { coords: [64.5500, 143.1100], city: 'Ust-Nera', country: 'RU' },
+    'UEEE': { coords: [62.0933, 129.7708], city: 'Yakutsk', country: 'RU' },
+    'UNAA': { coords: [53.7401, 91.3853], city: 'Abakan', country: 'RU' },
+    // Azerbaijan
+    'UBBB': { coords: [40.4675, 50.0467], city: 'Baku', country: 'AZ' },
+    // Georgia
+    'UGGG': { coords: [41.6692, 44.9547], city: 'Tbilisi', country: 'GE' },
+    // Turkey
+    'LTBA': { coords: [41.2753, 28.7519], city: 'Istanbul', country: 'TR' }
 };
 
 let airports = {};
@@ -753,11 +798,15 @@ function getOrCreateAirportInfo(icao) {
 function getCountryCodeFromICAO(icao) {
     const prefixes = {
         'LL': 'IL', 'LC': 'CY', 'LG': 'GR', 'LI': 'IT', 'LF': 'FR',
+        'LT': 'TR',
         'EG': 'GB', 'EI': 'IE', 'EK': 'DK', 'BI': 'IS', 'BG': 'GL',
-        'CY': 'CA', 'K': 'US',
+        'CY': 'CA', 'K': 'US', 'PA': 'US',
         'MM': 'MX', 'MD': 'DO', 'MH': 'HN', 'MN': 'NI', 'MR': 'CR',
-        'MP': 'PA', 'SK': 'CO', 'SE': 'EC', 'SC': 'CL', 'SP': 'PE',
+        'MP': 'PA', 'MZ': 'BZ', 'MG': 'GT', 'MS': 'SV',
+        'SK': 'CO', 'SE': 'EC', 'SC': 'CL', 'SP': 'PE',
         'SL': 'BO', 'SA': 'AR', 'S': 'BR',
+        'UH': 'RU', 'UE': 'RU', 'UN': 'RU',
+        'UB': 'AZ', 'UG': 'GE',
         'NZ': 'NZ', 'Y': 'AU', 'WA': 'ID', 'WM': 'MY', 'W': 'ID',
         'VT': 'TH', 'VO': 'IN', 'VH': 'HK', 'V': 'IN',
         'RJ': 'JP', 'RP': 'PH', 'ZS': 'CN', 'OO': 'OM', 'OT': 'QA',
@@ -1197,7 +1246,10 @@ function getOrCreateCoordinates(icao) {
         'AR': [-34.6, -58.4], 'NZ': [-41.3, 174.8], 'AU': [-33.9, 151.2], 'ID': [-6.2, 106.8],
         'IN': [28.7, 77.1], 'JP': [35.7, 139.7], 'PH': [14.6, 121.0], 'HK': [22.3, 114.2],
         'CN': [39.9, 116.4], 'OM': [23.6, 58.3], 'QA': [25.3, 51.5], 'TH': [13.8, 100.5],
-        'MY': [3.1, 101.7], 'BO': [-16.5, -68.1], 'BR': [-15.7, -47.9], 'FO': [61.9, -6.9]
+        'MY': [3.1, 101.7], 'BO': [-16.5, -68.1], 'BR': [-15.7, -47.9], 'FO': [61.9, -6.9],
+        'GL': [64.2, -51.7], 'DK': [55.7, 12.6],
+        'RU': [55.75, 37.62], 'AZ': [40.4, 49.9], 'GE': [41.7, 44.8], 'TR': [39.9, 32.9],
+        'BZ': [17.2, -88.5], 'GT': [14.6, -90.5], 'SV': [13.7, -89.2]
     };
 
     const coords = defaultCoords[countryCode];
