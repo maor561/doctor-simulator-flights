@@ -1,6 +1,6 @@
 {
   "name": "doctor-simulator-flights",
-  "version": "2.0.0-released",
+  "version": "2.1.0-dev",
   "description": "Doctor Simulator - Interactive flight management system with PWA support",
   "type": "module",
   "private": true,

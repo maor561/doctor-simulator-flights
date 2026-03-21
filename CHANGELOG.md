@@ -4,6 +4,36 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [v2.1] - 2026-03-21 🚀 IN DEVELOPMENT
+
+### 🎯 Planned Features
+
+#### User Interface Enhancements
+- [ ] Dark mode support
+- [ ] Route filtering & search
+- [ ] Statistics dashboard
+- [ ] Route history view
+
+#### Data & Storage
+- [ ] User authentication system
+- [ ] Cloud backup feature
+- [ ] Data export/import (JSON, CSV)
+- [ ] Automatic daily backups
+
+#### Advanced Features
+- [ ] Real-time flight tracking
+- [ ] Route recommendations based on weather
+- [ ] Multi-user support
+- [ ] Custom route creation
+
+#### Performance
+- [ ] Optimize bundle size
+- [ ] Image compression
+- [ ] Caching improvements
+- [ ] Database migration (from file to proper DB)
+
+---
+
 ## [v2.0] - 2026-03-21 🔄 MAJOR UPDATE - Cross-Device Data Sync
 
 ### ✨ New Features
