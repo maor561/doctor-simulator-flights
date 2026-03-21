@@ -1,5 +1,5 @@
-const CACHE_NAME = 'doctor-simulator-v4';
-const RUNTIME_CACHE = 'doctor-simulator-runtime-v4';
+const CACHE_NAME = 'doctor-simulator-v5';
+const RUNTIME_CACHE = 'doctor-simulator-runtime-v5';
 
 const STATIC_ASSETS = [
     '/',
