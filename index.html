@@ -710,7 +710,27 @@ const AIRPORT_DB = {
     // Georgia
     'UGGG': { coords: [41.6692, 44.9547], city: 'Tbilisi', country: 'GE' },
     // Turkey
-    'LTBA': { coords: [41.2753, 28.7519], city: 'Istanbul', country: 'TR' }
+    'LTBA': { coords: [41.2753, 28.7519], city: 'Istanbul', country: 'TR' },
+    // Dominican Republic
+    'MDPC': { coords: [18.4297, -69.6689], city: 'Santo Domingo', country: 'DO' },
+    // Nicaragua - New
+    'MYNN': { coords: [12.1415, -86.1682], city: 'Managua', country: 'NI' },
+    // Brazil
+    'SBBE': { coords: [-1.3794, -48.4764], city: 'Belém', country: 'BR' },
+    'SBCF': { coords: [-3.8644, -38.5825], city: 'Fortaleza', country: 'BR' },
+    'SBFL': { coords: [-27.0050, -48.8033], city: 'Florianópolis', country: 'BR' },
+    'SBGR': { coords: [-23.4356, -46.4731], city: 'São Paulo', country: 'BR' },
+    'SBIL': { coords: [-23.4245, -46.4667], city: 'São Paulo (Congonhas)', country: 'BR' },
+    'SBPA': { coords: [-29.9917, -51.1711], city: 'Porto Alegre', country: 'BR' },
+    'SBPS': { coords: [-23.2237, -45.6581], city: 'São José dos Campos', country: 'BR' },
+    'SBRE': { coords: [-8.1270, -34.9250], city: 'Recife', country: 'BR' },
+    'SBRJ': { coords: [-22.9068, -43.1729], city: 'Rio de Janeiro', country: 'BR' },
+    'SBSL': { coords: [-29.6956, -56.0754], city: 'Salto de Guairá', country: 'BR' },
+    'SBVT': { coords: [-20.2601, -40.2831], city: 'Vitória', country: 'BR' },
+    // Puerto Rico
+    'TJSJ': { coords: [18.4386, -66.0019], city: 'San Juan', country: 'PR' },
+    // Saint Martin
+    'TNCM': { coords: [18.0424, -63.1119], city: 'Philipsburg', country: 'SX' }
 };
 
 let airports = {};
@@ -807,6 +827,7 @@ function getCountryCodeFromICAO(icao) {
         'SL': 'BO', 'SA': 'AR', 'S': 'BR',
         'UH': 'RU', 'UE': 'RU', 'UN': 'RU',
         'UB': 'AZ', 'UG': 'GE',
+        'SB': 'BR', 'TJ': 'PR', 'TN': 'SX',
         'NZ': 'NZ', 'Y': 'AU', 'WA': 'ID', 'WM': 'MY', 'W': 'ID',
         'VT': 'TH', 'VO': 'IN', 'VH': 'HK', 'V': 'IN',
         'RJ': 'JP', 'RP': 'PH', 'ZS': 'CN', 'OO': 'OM', 'OT': 'QA',
@@ -1249,7 +1270,8 @@ function getOrCreateCoordinates(icao) {
         'MY': [3.1, 101.7], 'BO': [-16.5, -68.1], 'BR': [-15.7, -47.9], 'FO': [61.9, -6.9],
         'GL': [64.2, -51.7], 'DK': [55.7, 12.6],
         'RU': [55.75, 37.62], 'AZ': [40.4, 49.9], 'GE': [41.7, 44.8], 'TR': [39.9, 32.9],
-        'BZ': [17.2, -88.5], 'GT': [14.6, -90.5], 'SV': [13.7, -89.2]
+        'BZ': [17.2, -88.5], 'GT': [14.6, -90.5], 'SV': [13.7, -89.2],
+        'BR': [-14.2, -51.9], 'PR': [18.2, -66.1], 'SX': [18.0, -63.1], 'DO': [18.5, -69.9]
     };
 
     const coords = defaultCoords[countryCode];

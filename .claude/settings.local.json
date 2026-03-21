@@ -32,7 +32,10 @@
       "WebFetch(domain:vercel.com)",
       "Bash(curl -s \"https://doctor-simulator-flights.vercel.app/api/metar?icao=LCEN\")",
       "Bash(curl -s \"https://doctor-simulator-flights.vercel.app/api/metar?icao=LGSR\")",
-      "Bash(curl -s \"https://doctor-simulator-flights.vercel.app/api/metar?icao=LCEN&v=2\")"
+      "Bash(curl -s \"https://doctor-simulator-flights.vercel.app/api/metar?icao=LCEN&v=2\")",
+      "Bash(curl -sL \"https://docs.google.com/spreadsheets/d/1FxCamcUs_L8-IT3ea24x0DYCg7-dig7a1Tz5rlIjZxY/export?format=csv\")",
+      "Bash(curl -sL https://docs.google.com/spreadsheets/d/1FxCamcUs_L8-IT3ea24x0DYCg7-dig7a1Tz5rlIjZxY/export?format=csv)",
+      "Bash(grep -E '^[A-Z]{4}$')"
     ]
   }
 }
