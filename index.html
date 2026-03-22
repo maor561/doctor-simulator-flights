@@ -730,7 +730,36 @@ const AIRPORT_DB = {
     // Puerto Rico
     'TJSJ': { coords: [18.4386, -66.0019], city: 'San Juan', country: 'PR' },
     // Saint Martin
-    'TNCM': { coords: [18.0424, -63.1119], city: 'Philipsburg', country: 'SX' }
+    'TNCM': { coords: [18.0424, -63.1119], city: 'Philipsburg', country: 'SX' },
+    // Trinidad & Tobago
+    'TTPP': { coords: [10.5895, -61.2872], city: 'Port of Spain', country: 'TT' },
+    // Guyana (assumed for SMJP)
+    'SMJP': { coords: [6.8186, -58.9501], city: 'Georgetown', country: 'GY' },
+    // Suriname (assumed for SOCA)
+    'SOCA': { coords: [4.0397, -55.1894], city: 'Paramaribo', country: 'SR' },
+    // Brazil - additional airports
+    'SBSL': { coords: [-29.6956, -56.0754], city: 'Salto de Guairá', country: 'BR' },
+    'SBRF': { coords: [-15.7975, -47.8919], city: 'Brasília', country: 'BR' },
+    'SBSV': { coords: [-12.9064, -38.3406], city: 'Salvador', country: 'BR' },
+    'SBGL': { coords: [-15.8267, -48.9560], city: 'Goiânia', country: 'BR' },
+    // Argentina - additional airport
+    'SAEZ': { coords: [-34.8222, -58.5358], city: 'Buenos Aires (Ezeiza)', country: 'AR' },
+    // Chile - additional airports
+    'SCEL': { coords: [-33.3931, -70.7858], city: 'Santiago', country: 'CL' },
+    'SCAT': { coords: [-13.5942, -76.1261], city: 'Cataño', country: 'PE' },
+    // Peru - additional airports
+    'SPQU': { coords: [-8.3854, -74.5735], city: 'Pucallpa', country: 'PE' },
+    'SPTU': { coords: [-3.5671, -80.3805], city: 'Tumbes', country: 'PE' },
+    // Dominican Republic - additional
+    'MDST': { coords: [19.9433, -70.2691], city: 'Santo Domingo', country: 'DO' },
+    // Mexico - additional airports
+    'MMSD': { coords: [26.9972, -109.6359], city: 'Ciudad Obregón', country: 'MX' },
+    'MMPR': { coords: [26.0194, -109.4524], city: 'Mazatlán', country: 'MX' },
+    'MMML': { coords: [20.9624, -87.0704], city: 'Mérida', country: 'MX' },
+    // Costa Rica - additional
+    'MRLB': { coords: [10.5906, -85.5427], city: 'Liberia', country: 'CR' },
+    // Nicaragua - additional (MYNN variant)
+    'MYNN': { coords: [12.1415, -86.1682], city: 'Managua', country: 'NI' }
 };
 
 let airports = {};
@@ -827,7 +856,7 @@ function getCountryCodeFromICAO(icao) {
         'SL': 'BO', 'SA': 'AR', 'S': 'BR',
         'UH': 'RU', 'UE': 'RU', 'UN': 'RU',
         'UB': 'AZ', 'UG': 'GE',
-        'SB': 'BR', 'TJ': 'PR', 'TN': 'SX',
+        'SB': 'BR', 'SM': 'GY', 'SO': 'SR', 'TJ': 'PR', 'TN': 'SX', 'TT': 'TT',
         'NZ': 'NZ', 'Y': 'AU', 'WA': 'ID', 'WM': 'MY', 'W': 'ID',
         'VT': 'TH', 'VO': 'IN', 'VH': 'HK', 'V': 'IN',
         'RJ': 'JP', 'RP': 'PH', 'ZS': 'CN', 'OO': 'OM', 'OT': 'QA',
@@ -855,7 +884,8 @@ function getFlagEmoji(countryCode) {
         'AR': '🇦🇷', 'NZ': '🇳🇿', 'AU': '🇦🇺', 'ID': '🇮🇩', 'IN': '🇮🇳',
         'JP': '🇯🇵', 'PH': '🇵🇭', 'HK': '🇭🇰', 'CN': '🇨🇳', 'OM': '🇴🇲', 'QA': '🇶🇦',
         'TH': '🇹🇭', 'MY': '🇲🇾', 'BO': '🇧🇴', 'BR': '🇧🇷', 'FO': '🇫🇴',
-        'DK': '🇩🇰', 'GL': '🇬🇱', 'AQ': '🇦🇶', 'RO': '🇷🇴', 'SG': '🇸🇬'
+        'DK': '🇩🇰', 'GL': '🇬🇱', 'AQ': '🇦🇶', 'RO': '🇷🇴', 'SG': '🇸🇬',
+        'TT': '🇹🇹', 'GY': '🇬🇾', 'SR': '🇸🇷'
     };
     return flags[countryCode] || '🚩';
 }

@@ -170,7 +170,43 @@ export default async function handler(req, res) {
             // Puerto Rico
             'TJSJ': 'TJSJ 201720Z 13058KT 9999 SCT042 28/21 Q1000',
             // Saint Martin
-            'TNCM': 'TNCM 201720Z 14059KT 9999 BKN040 27/20 Q1002'
+            'TNCM': 'TNCM 201720Z 14059KT 9999 BKN040 27/20 Q1002',
+            // Trinidad & Tobago
+            'TTPP': 'TTPP 201720Z 15060KT 9999 FEW042 29/22 Q0999',
+            // Guyana
+            'SMJP': 'SMJP 201720Z 16061KT 9999 SCT044 28/21 Q0998',
+            // Suriname
+            'SOCA': 'SOCA 201720Z 17062KT 9999 BKN046 27/20 Q0997',
+            // Dominican Republic - additional
+            'MDST': 'MDST 201720Z 11056KT 9999 BKN035 27/20 Q1002',
+            'MDSD': 'MDSD 201720Z 12057KT 9999 FEW040 26/19 Q1001',
+            // Brazil - additional airports
+            'SBRF': 'SBRF 201720Z 09044KT 9999 SCT035 21/13 Q1012',
+            'SBSV': 'SBSV 201720Z 10043KT 9999 FEW033 23/15 Q1010',
+            'SBGL': 'SBGL 201720Z 11042KT 9999 BKN034 22/14 Q1011',
+            // Argentina - additional
+            'SAEZ': 'SAEZ 201720Z 29037KT 9999 SCT028 16/08 Q1014',
+            // Peru - additional airports
+            'SCAT': 'SCAT 201720Z 28038KT 9999 BKN030 18/10 Q1013',
+            'SPQU': 'SPQU 201720Z 27039KT 9999 FEW032 19/11 Q1012',
+            'SPTU': 'SPTU 201720Z 26040KT 9999 SCT034 17/09 Q1013',
+            // Mexico - additional airports
+            'MMSD': 'MMSD 201720Z 14045KT 9999 FEW048 28/20 Q1006',
+            'MMPR': 'MMPR 201720Z 15046KT 9999 SCT050 29/21 Q1005',
+            'MMML': 'MMML 201720Z 16047KT 9999 BKN052 30/22 Q1004',
+            // Costa Rica - additional
+            'MRLB': 'MRLB 201720Z 13058KT 9999 FEW041 27/20 Q1003',
+            // Canada - additional airports
+            'CYQX': 'CYQX 201720Z 27012KT 9999 FEW035 04/M03 Q1021',
+            'CYQB': 'CYQB 201720Z 25009KT 9999 SCT045 02/M05 Q1019',
+            'CYGZ': 'CYGZ 201720Z 26011KT 9999 BKN040 03/M04 Q1020',
+            // Cyprus - additional
+            'LCEN': 'LCEN 201720Z 05010KT 9999 SCT040 24/15 Q1011',
+            // Greece - additional
+            'LGKF': 'LGKF 201720Z 33009KT 9999 SCT045 24/14 Q1016',
+            'LGAV': 'LGAV 201720Z 35011KT 9999 FEW042 25/16 Q1015',
+            // Greenland
+            'BGKK': 'BGKK 201720Z 28014KT 9999 BKN032 M08/M18 Q1012'
         };
 
         const metar = mockMetarData[icao.toUpperCase()] || null;
