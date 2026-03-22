@@ -175,10 +175,12 @@ export default async function handler(req, res) {
             'TNCM': 'TNCM 201720Z 14059KT 9999 BKN040 27/20 Q1002',
             // Trinidad & Tobago
             'TTPP': 'TTPP 201720Z 15060KT 9999 FEW042 29/22 Q0999',
-            // Guyana
-            'SMJP': 'SMJP 201720Z 16061KT 9999 SCT044 28/21 Q0998',
             // Suriname
-            'SOCA': 'SOCA 201720Z 17062KT 9999 BKN046 27/20 Q0997',
+            'SMJP': 'SMJP 201720Z 16061KT 9999 SCT044 28/21 Q0998',
+            // Guyana
+            'SYCJ': 'SYCJ 201720Z 17062KT 9999 BKN046 27/20 Q0997',
+            // French Guiana
+            'SOCA': 'SOCA 201720Z 18063KT 9999 FEW045 26/19 Q0996',
             // Dominican Republic - additional
             'MDST': 'MDST 201720Z 11056KT 9999 BKN035 27/20 Q1002',
             'MDSD': 'MDSD 201720Z 12057KT 9999 FEW040 26/19 Q1001',
