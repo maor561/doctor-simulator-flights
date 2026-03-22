@@ -167,8 +167,8 @@ export default async function handler(req, res) {
             'SBVT': 'SBVT 201720Z 10043KT 9999 FEW035 24/17 Q1008',
             // Dominican Republic
             'MDPC': 'MDPC 201720Z 11056KT 9999 BKN035 27/20 Q1002',
-            // Nicaragua
-            'MYNN': 'MYNN 201720Z 12057KT 9999 FEW040 26/19 Q1001',
+            // Bahamas
+            'MYNN': 'MYNN 201720Z 12015KT 9999 FEW040 28/22 Q1014',
             // Puerto Rico
             'TJSJ': 'TJSJ 201720Z 13058KT 9999 SCT042 28/21 Q1000',
             // Saint Martin
@@ -186,14 +186,16 @@ export default async function handler(req, res) {
             'MDSD': 'MDSD 201720Z 12057KT 9999 FEW040 26/19 Q1001',
             // Argentina - additional
             'SAEZ': 'SAEZ 201720Z 29037KT 9999 SCT028 16/08 Q1014',
+            // Chile - Copiapó
+            'SCAT': 'SCAT 201720Z 20012KT 9999 FEW040 22/14 Q1016',
             // Peru - additional airports
-            'SCAT': 'SCAT 201720Z 28038KT 9999 BKN030 18/10 Q1013',
-            'SPQU': 'SPQU 201720Z 27039KT 9999 FEW032 19/11 Q1012',
-            'SPTU': 'SPTU 201720Z 26040KT 9999 SCT034 17/09 Q1013',
-            // Mexico - additional airports
-            'MMSD': 'MMSD 201720Z 14045KT 9999 FEW048 28/20 Q1006',
-            'MMPR': 'MMPR 201720Z 15046KT 9999 SCT050 29/21 Q1005',
-            'MMML': 'MMML 201720Z 16047KT 9999 BKN052 30/22 Q1004',
+            'SPQU': 'SPQU 201720Z 18010KT 9999 FEW035 18/08 Q1015',
+            'SPJC': 'SPJC 201720Z 19011KT 9999 SCT030 20/14 Q1012',
+            'SPTU': 'SPTU 201720Z 08015KT 9999 FEW040 26/18 Q1008',
+            // Mexico - additional airports (Los Cabos, Puerto Vallarta, Mexicali)
+            'MMSD': 'MMSD 201720Z 14012KT 9999 FEW048 28/20 Q1006',
+            'MMPR': 'MMPR 201720Z 15014KT 9999 SCT050 29/21 Q1005',
+            'MMML': 'MMML 201720Z 22018KT 9999 FEW045 35/18 Q1004',
             // Costa Rica - additional
             'MRLB': 'MRLB 201720Z 13058KT 9999 FEW041 27/20 Q1003',
             // Canada - additional airports

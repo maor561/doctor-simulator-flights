@@ -564,7 +564,7 @@ const AIRPORT_DB = {
     // Canada
     'CYYT': { coords: [47.6186, -52.7519], city: "St. John's", country: 'CA' },
     'CYQX': { coords: [48.9369, -54.5681], city: 'Gander', country: 'CA' },
-    'CYGZ': { coords: [50.2819, -63.6114], city: 'Havre-Saint-Pierre', country: 'CA' },
+    'CYGZ': { coords: [76.4232, -82.9038], city: 'Grise Fiord', country: 'CA' },
     'CYQB': { coords: [46.7911, -71.3933], city: 'Quebec City', country: 'CA' },
     'CYYZ': { coords: [43.6772, -79.6306], city: 'Toronto', country: 'CA' },
     // USA
@@ -605,7 +605,7 @@ const AIRPORT_DB = {
     'SEQU': { coords: [-0.1292, -78.3575], city: 'Quito', country: 'EC' },
     // Peru
     'SPIM': { coords: [-12.0219, -77.1143], city: 'Lima', country: 'PE' },
-    'SPJC': { coords: [-12.0219, -77.1143], city: 'Lima (Pisco)', country: 'PE' },
+    'SPJC': { coords: [-12.0296, -77.1162], city: 'Lima (Jorge Chávez)', country: 'PE' },
     // Bolivia
     'SLET': { coords: [-17.8111, -63.1714], city: 'Santa Cruz', country: 'BO' },
     'SLLP': { coords: [-16.5133, -68.1923], city: 'La Paz', country: 'BO' },
@@ -702,7 +702,7 @@ const AIRPORT_DB = {
     'UHMA': { coords: [64.7350, 177.7414], city: 'Anadyr', country: 'RU' },
     'UHPP': { coords: [53.1679, 158.4536], city: 'Petropavlovsk-Kamchatsky', country: 'RU' },
     'UHMM': { coords: [59.9101, 150.7204], city: 'Magadan', country: 'RU' },
-    'UESO': { coords: [64.5500, 143.1100], city: 'Ust-Nera', country: 'RU' },
+    'UESO': { coords: [70.7548, 147.8604], city: 'Chokurdakh', country: 'RU' },
     'UEEE': { coords: [62.0933, 129.7708], city: 'Yakutsk', country: 'RU' },
     'UNAA': { coords: [53.7401, 91.3853], city: 'Abakan', country: 'RU' },
     // Azerbaijan
@@ -713,8 +713,8 @@ const AIRPORT_DB = {
     'LTBA': { coords: [41.2753, 28.7519], city: 'Istanbul', country: 'TR' },
     // Dominican Republic
     'MDPC': { coords: [18.4297, -69.6689], city: 'Santo Domingo', country: 'DO' },
-    // Nicaragua - New
-    'MYNN': { coords: [12.1415, -86.1682], city: 'Managua', country: 'NI' },
+    // Bahamas
+    'MYNN': { coords: [25.0504, -77.4659], city: 'Nassau', country: 'BS' },
     // Brazil
     'SBBE': { coords: [-1.3793, -48.4762], city: 'Belém (Val de Cans)', country: 'BR' },
     'SBCF': { coords: [-19.6357, -43.9669], city: 'Belo Horizonte (Tancredo Neves)', country: 'BR' },
@@ -745,20 +745,20 @@ const AIRPORT_DB = {
     'SAEZ': { coords: [-34.8222, -58.5358], city: 'Buenos Aires (Ezeiza)', country: 'AR' },
     // Chile - additional airports
     'SCEL': { coords: [-33.3931, -70.7858], city: 'Santiago', country: 'CL' },
-    'SCAT': { coords: [-13.5942, -76.1261], city: 'Cataño', country: 'PE' },
+    'SCAT': { coords: [-27.2643, -70.7742], city: 'Copiapó', country: 'CL' },
     // Peru - additional airports
-    'SPQU': { coords: [-8.3854, -74.5735], city: 'Pucallpa', country: 'PE' },
-    'SPTU': { coords: [-3.5671, -80.3805], city: 'Tumbes', country: 'PE' },
+    'SPQU': { coords: [-16.3444, -71.5677], city: 'Arequipa', country: 'PE' },
+    'SPTU': { coords: [-12.6036, -69.2213], city: 'Puerto Maldonado', country: 'PE' },
     // Dominican Republic - additional
-    'MDST': { coords: [19.9433, -70.2691], city: 'Santo Domingo', country: 'DO' },
+    'MDST': { coords: [19.4024, -70.6017], city: 'Santiago de los Caballeros', country: 'DO' },
     // Mexico - additional airports
-    'MMSD': { coords: [26.9972, -109.6359], city: 'Ciudad Obregón', country: 'MX' },
-    'MMPR': { coords: [26.0194, -109.4524], city: 'Mazatlán', country: 'MX' },
-    'MMML': { coords: [20.9624, -87.0704], city: 'Mérida', country: 'MX' },
+    'MMSD': { coords: [23.1458, -109.7174], city: 'Los Cabos', country: 'MX' },
+    'MMPR': { coords: [20.7237, -105.2561], city: 'Puerto Vallarta', country: 'MX' },
+    'MMML': { coords: [32.6285, -115.2481], city: 'Mexicali', country: 'MX' },
     // Costa Rica - additional
     'MRLB': { coords: [10.5906, -85.5427], city: 'Liberia', country: 'CR' },
-    // Nicaragua - additional (MYNN variant)
-    'MYNN': { coords: [12.1415, -86.1682], city: 'Managua', country: 'NI' }
+    // Bahamas (duplicate kept for safety)
+    'MYNN': { coords: [25.0504, -77.4659], city: 'Nassau', country: 'BS' }
 };
 
 let airports = {};
@@ -850,7 +850,7 @@ function getCountryCodeFromICAO(icao) {
         'EG': 'GB', 'EI': 'IE', 'EK': 'DK', 'BI': 'IS', 'BG': 'GL',
         'CY': 'CA', 'K': 'US', 'PA': 'US',
         'MM': 'MX', 'MD': 'DO', 'MH': 'HN', 'MN': 'NI', 'MR': 'CR',
-        'MP': 'PA', 'MZ': 'BZ', 'MG': 'GT', 'MS': 'SV',
+        'MP': 'PA', 'MZ': 'BZ', 'MG': 'GT', 'MS': 'SV', 'MY': 'BS',
         'SK': 'CO', 'SE': 'EC', 'SC': 'CL', 'SP': 'PE',
         'SL': 'BO', 'SA': 'AR', 'S': 'BR',
         'UH': 'RU', 'UE': 'RU', 'UN': 'RU',
@@ -884,7 +884,9 @@ function getFlagEmoji(countryCode) {
         'JP': '🇯🇵', 'PH': '🇵🇭', 'HK': '🇭🇰', 'CN': '🇨🇳', 'OM': '🇴🇲', 'QA': '🇶🇦',
         'TH': '🇹🇭', 'MY': '🇲🇾', 'BO': '🇧🇴', 'BR': '🇧🇷', 'FO': '🇫🇴',
         'DK': '🇩🇰', 'GL': '🇬🇱', 'AQ': '🇦🇶', 'RO': '🇷🇴', 'SG': '🇸🇬',
-        'TT': '🇹🇹', 'GY': '🇬🇾', 'SR': '🇸🇷', 'GF': '🇬🇫'
+        'TT': '🇹🇹', 'GY': '🇬🇾', 'SR': '🇸🇷', 'GF': '🇬🇫',
+        'BS': '🇧🇸', 'TR': '🇹🇷', 'RU': '🇷🇺', 'AZ': '🇦🇿', 'GE': '🇬🇪',
+        'BZ': '🇧🇿', 'GT': '🇬🇹', 'SV': '🇸🇻', 'PR': '🇵🇷', 'SX': '🇸🇽'
     };
     return flags[countryCode] || '🚩';
 }
