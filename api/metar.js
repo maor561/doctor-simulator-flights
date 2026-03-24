@@ -70,7 +70,7 @@ export default async function handler(req, res) {
             'LFPB': 'LFPB 201720Z 32006KT 9999 FEW040 20/11 Q1019',
             'EGBB': 'EGBB 201720Z 31005KT 9999 BKN035 19/10 Q1020',
             'EIDW': 'EIDW 201720Z 30004KT 9999 SCT040 18/10 Q1021',
-            'EKVG': 'EKVG 201720Z 29012KT 9999 FEW050 15/08 Q1015',
+            'EKVG': 'EKVG 201720Z 28015KT 9999 BKN040 12/05 Q1013',
             'BIKF': 'BIKF 201720Z 28015KT 9999 BKN030 12/06 Q1010',
             'CYYT': 'CYYT 201720Z 28010KT 9999 SCT030 05/M02 Q1022',
             'CYQX': 'CYQX 201720Z 27012KT 9999 FEW035 04/M03 Q1021',
@@ -176,7 +176,7 @@ export default async function handler(req, res) {
             // Trinidad & Tobago
             'TTPP': 'TTPP 201720Z 15060KT 9999 FEW042 29/22 Q0999',
             // Suriname
-            'SMJP': 'SMJP 201720Z 16061KT 9999 SCT044 28/21 Q0998',
+            'SMJP': 'SMJP 201720Z 15062KT 9999 FEW043 29/22 Q0997',
             // Guyana
             'SYCJ': 'SYCJ 201720Z 17062KT 9999 BKN046 27/20 Q0997',
             // French Guiana
@@ -187,7 +187,7 @@ export default async function handler(req, res) {
             // Argentina - additional
             'SAEZ': 'SAEZ 201720Z 29037KT 9999 SCT028 16/08 Q1014',
             // Chile - Copiapó
-            'SCAT': 'SCAT 201720Z 20012KT 9999 FEW040 22/14 Q1016',
+            'SCAT': 'SCAT 201720Z 19011KT 9999 SCT042 21/13 Q1015',
             // Peru - additional airports
             'SPQU': 'SPQU 201720Z 18010KT 9999 FEW035 18/08 Q1015',
             'SPJC': 'SPJC 201720Z 19011KT 9999 SCT030 20/14 Q1012',
