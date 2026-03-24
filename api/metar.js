@@ -227,7 +227,11 @@ export default async function handler(req, res) {
             // Central Asia - additional
             'UTDL': 'UTDL 201720Z 22016KT 9999 BKN065 16/06 Q1010',
             'UTAV': 'UTAV 201720Z 21017KT 9999 SCT070 20/10 Q1009',
-            'UTAK': 'UTAK 201720Z 20018KT 9999 FEW075 24/14 Q1008'
+            'UTAK': 'UTAK 201720Z 20018KT 9999 FEW075 24/14 Q1008',
+            // Canada - Prince George
+            'CYXS': 'CYXS 201720Z 29015KT 9999 SCT035 05/M02 Q1018',
+            // Alaska - Hoonah
+            'PAOH': 'PAOH 201720Z 20014KT 9999 BKN040 M08/M18 Q1017'
         };
 
         const metar = mockMetarData[icao.toUpperCase()] || null;

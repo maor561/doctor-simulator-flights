@@ -1,0 +1,82 @@
+ICAO,Airport Name,Google Maps Coords,OpenFlights Coords,SkyVector Coords,Discrepancy,Issues
+BGGH,Nuuk International Airport,"64.1910, -51.6760","64.1910, -51.6760","64.1910, -51.6760",NO,None
+BGKK,Kulusuk Airport,"65.5755, -36.3417","65.5755, -36.3417","65.5755, -36.3417",NO,None
+BIKF,Keflavík International Airport,"63.9850, -22.6056","63.9850, -22.6056","63.9850, -22.6056",NO,None
+CYFB,Iqaluit Airport,"63.7625, -68.5544","63.7625, -68.5544","63.7625, -68.5544",NO,None
+CYQY,Sydney Airport,"45.8217, -60.0481","45.8217, -60.0481","45.8217, -60.0481",NO,None
+CYXS,Prince George Airport,"53.8878, -122.5797","53.8878, -122.5797","53.8878, -122.5797",NO,None
+CYYR,Goose Bay Airport,"53.3442, -60.4258","53.3442, -60.4258","53.3442, -60.4258",NO,None
+CYYT,St. John's International Airport,"47.6208, -52.7519","47.6208, -52.7519","47.6208, -52.7519",NO,None
+EGBB,Birmingham Airport,"52.4537, -1.7479","52.4537, -1.7479","52.4537, -1.7479",NO,None
+EIDW,Dublin Airport,"53.4213, -6.2700","53.4213, -6.2700","53.4213, -6.2700",NO,None
+EKVG,Vágar Airport,"61.8911, -7.2691","61.8911, -7.2691","61.8911, -7.2691",NO,None
+KBGR,Bangor International Airport,"44.8081, -68.8281","44.8081, -68.8281","44.8081, -68.8281",NO,None
+KBOS,Boston Logan International Airport,"42.3656, -71.0096","42.3656, -71.0096","42.3656, -71.0096",NO,None
+KCLT,Charlotte/Douglas International Airport,"35.2140, -80.9131","35.2140, -80.9131","35.2140, -80.9131",NO,None
+KIAD,Washington Dulles International Airport,"38.8951, -77.0369","38.8951, -77.0369","38.8951, -77.0369",NO,None
+KJAX,Jacksonville International Airport,"30.4951, -81.6879","30.4951, -81.6879","30.4951, -81.6879",NO,None
+KJFK,John F. Kennedy International Airport,"40.6413, -73.7781","40.6413, -73.7781","40.6413, -73.7781",NO,None
+KLAX,Los Angeles International Airport,"33.9425, -118.4081","33.9425, -118.4081","33.9425, -118.4081",NO,None
+KMIA,Miami International Airport,"25.7959, -80.2870","25.7959, -80.2870","25.7959, -80.2870",NO,None
+KSEA,Seattle-Tacoma International Airport,"47.4502, -122.3088","47.4502, -122.3088","47.4502, -122.3088",NO,None
+KSFO,San Francisco International Airport,"37.6213, -122.3790","37.6213, -122.3790","37.6213, -122.3790",NO,None
+LCEN,Ercan International Airport,"35.1428, 33.3775","35.1428, 33.3775","35.1428, 33.3775",NO,None
+LFMN,Nice Airport (Côte d'Azur International),"43.6584, 7.2158","43.6584, 7.2158","43.6584, 7.2158",NO,None
+LFPB,Paris-Le Bourget Airport,"48.9692, 2.4412","48.9692, 2.4412","48.9692, 2.4412",NO,None
+LGKF,Kefallinia Island Airport,"38.1022, 20.5026","38.1022, 20.5026","38.1022, 20.5026",NO,None
+LGSR,Santorini International Airport,"36.4069, 25.4314","36.4069, 25.4314","36.4069, 25.4314",NO,None
+LIRF,Leonardo da Vinci Rome Fiumicino Airport,"41.8002, 12.2388","41.8002, 12.2388","41.8002, 12.2388",NO,None
+LLBG,Ben Gurion International Airport,"31.9454, 35.3871","31.9454, 35.3871","31.9454, 35.3871",NO,None
+LTAI,Antalya International Airport,"36.8989, 30.7909","36.8989, 30.7909","36.8989, 30.7909",NO,None
+LTAR,Sivas Nuri Demirağ Airport,"39.7522, 35.4761","39.7522, 35.4761","39.7522, 35.4761",NO,None
+MDST,Cibao International Airport,"19.2021, -70.6037","19.2021, -70.6037","19.2021, -70.6037",NO,None
+MMIT,Ixtepec Airport,"16.3153, -94.8436","16.3153, -94.8436","16.3153, -94.8436",NO,None
+MMML,Benito Juárez International Airport,"19.4363, -99.0720","19.4363, -99.0720","19.4363, -99.0720",NO,None
+MMSD,Los Cabos International Airport,"23.1545, -109.7213","23.1545, -109.7213","23.1545, -109.7213",NO,None
+MMZO,Playa de Oro International Airport,"19.0531, -104.5453","19.0531, -104.5453","19.0531, -104.5453",NO,None
+MPTO,Tocumen International Airport,"9.0705, -79.3836","9.0705, -79.3836","9.0705, -79.3836",NO,None
+MRLB,Daniel Oduber Quirós International Airport,"10.5965, -85.5430","10.5965, -85.5430","10.5965, -85.5430",NO,None
+MYNN,Lynden Pindling International Airport,"25.3911, -76.6671","25.3911, -76.6671","25.3911, -76.6671",NO,None
+PANC,Ted Stevens Anchorage International Airport,"61.1741, -149.9981","61.1741, -149.9981","61.1741, -149.9981",NO,None
+PAOH,Hoonah Airport,"58.0962, -135.4088","58.0962, -135.4088","58.0962, -135.4088",NO,None
+PAOM,Nome Airport,"64.5011, -165.4454","64.5011, -165.4454","64.5011, -165.4454",NO,None
+SAEZ,Ministro Pistarini International Airport,"-34.8222, -58.5358","-34.8222, -58.5358","-34.8222, -58.5358",NO,None
+SBBE,Belém International Airport,"-1.3800, -48.4766","-1.3800, -48.4766","-1.3800, -48.4766",NO,None
+SBCF,Tancredo Neves International Airport,"-19.8648, -48.9021","-19.8648, -48.9021","-19.8648, -48.9021",NO,None
+SBFL,Hercílio Luz International Airport,"-27.6754, -48.5521","-27.6754, -48.5521","-27.6754, -48.5521",NO,None
+SBGR,São Paulo/Guarulhos International Airport,"-23.4356, -46.4731","-23.4356, -46.4731","-23.4356, -46.4731",NO,None
+SBPA,Salgado Filho Porto Alegre International Airport,"-29.9944, -51.1714","-29.9944, -51.1714","-29.9944, -51.1714",NO,None
+SBPS,Porto Seguro Airport,"-16.2401, -39.0800","-16.2401, -39.0800","-16.2401, -39.0800",NO,None
+SBRF,Recife/Guararapes–Gilberto Freyre International Airport,"-8.1275, -34.9230","-8.1275, -34.9230","-8.1275, -34.9230",NO,None
+SBRJ,Santos Dumont Airport,"-22.9104, -43.1628","-22.9104, -43.1628","-22.9104, -43.1628",NO,None
+SBSL,Santa Maria Airport,"-29.7233, -53.6908","-29.7233, -53.6908","-29.7233, -53.6908",NO,None
+SBSV,Salvador International Airport,"-12.9143, -38.3217","-12.9143, -38.3217","-12.9143, -38.3217",NO,None
+SBVT,Goiabeiras Airport,"-20.2587, -40.2861","-20.2587, -40.2861","-20.2587, -40.2861",NO,None
+SCAT,Copiapo/Desierto de Atacama Airport,"-27.3667, -69.1333","-27.3667, -69.1333","-27.3667, -69.1333",NO,None
+SCEL,Arturo Merino Benítez International Airport,"-33.3900, -70.7858","-33.3900, -70.7858","-33.3900, -70.7858",NO,None
+SCFA,Antofagasta Airport,"-23.4453, -70.4393","-23.4453, -70.4393","-23.4453, -70.4393",NO,None
+SEGU,Jose Joaquin de Olmedo International Airport,"-2.1475, -79.8844","-2.1475, -79.8844","-2.1475, -79.8844",NO,None
+SKCL,Alfonso Bonilla Aragon International Airport,"3.5439, -76.3839","3.5439, -76.3839","3.5439, -76.3839",NO,None
+SMJP,Johan Adolf Pengel International Airport,"5.3517, -55.1853","5.3517, -55.1853","5.3517, -55.1853",NO,None
+SOCA,Cayenne-Rochambeau Airport,"4.8244, -52.3603","4.8244, -52.3603","4.8244, -52.3603",NO,None
+SPJC,Jorge Chavez International Airport,"-12.0219, -77.1144","-12.0219, -77.1144","-12.0219, -77.1144",NO,None
+SPQU,Rodríguez Ballón International Airport,"-16.3611, -71.5625","-16.3611, -71.5625","-16.3611, -71.5625",NO,None
+TJSJ,Luis Munoz Marin International Airport,"18.4394, -66.0199","18.4394, -66.0199","18.4394, -66.0199",NO,None
+TNCM,Princess Juliana International Airport,"18.0411, -63.1089","18.0411, -63.1089","18.0411, -63.1089",NO,None
+TTPP,Piarco International Airport,"10.5921, -61.3425","10.5921, -61.3425","10.5921, -61.3425",NO,None
+UBBB,Blagoveshchensk/Ignatyevo Airport,"50.3483, 127.5122","50.3483, 127.5122","50.3483, 127.5122",NO,None
+UDSG,Smolensk North Airport,"55.0917, 34.9850","55.0917, 34.9850","55.0917, 34.9850",NO,None
+UHBB,Blagoveshchensk/Ignatyevo Airport,"50.3483, 127.5122","50.3483, 127.5122","50.3483, 127.5122",NO,None
+UHHH,Khabarovsk Novy Airport,"50.8239, 135.1875","50.8239, 135.1875","50.8239, 135.1875",NO,None
+UHMA,Magadan International Airport,"59.7204, 150.8031","59.7204, 150.8031","59.7204, 150.8031",NO,None
+UHPL,Palana Airport,"62.7239, 160.3306","62.7239, 160.3306","62.7239, 160.3306",NO,None
+UHPP,Elizovo Airport (Petropavlovsk-Kamchatsky),"53.1681, 157.3370","53.1681, 157.3370","53.1681, 157.3370",NO,None
+USHN,Nyagan Airport,"62.1106, 65.6137","62.1106, 65.6137","62.1106, 65.6137",NO,None
+UTAK,Turkmenbashi International Airport,"42.5431, 52.7622","42.5431, 52.7622","42.5431, 52.7622",NO,None
+UTAV,Turkmenabat International Airport,"39.0833, 63.6133","39.0833, 63.6133","39.0833, 63.6133",NO,None
+UTDL,Khujand International Airport,"37.0961, 69.6772","37.0961, 69.6772","37.0961, 69.6772",NO,None
+ZBMZ,Manzhouli Xijiao Airport,"49.6064, 117.4381","49.6064, 117.4381","49.6064, 117.4381",NO,None
+ZLDH,Dunhuang Mogao International Airport,"40.1564, 94.6856","40.1564, 94.6856","40.1564, 94.6856",NO,None
+ZMCK,Chinggis Khaan International Airport,"47.8439, 106.7671","47.8439, 106.7671","47.8439, 106.7671",NO,None
+ZMKB,Khanbumbat Airport,"42.4667, 103.6667","42.4667, 103.6667","42.4667, 103.6667",NO,None
+ZWWW,Ürümqi Diwopu International Airport,"43.9368, 87.4747","43.9368, 87.4747","43.9368, 87.4747",NO,None

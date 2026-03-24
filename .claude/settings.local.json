@@ -35,7 +35,25 @@
       "Bash(curl -s \"https://doctor-simulator-flights.vercel.app/api/metar?icao=LCEN&v=2\")",
       "Bash(curl -sL \"https://docs.google.com/spreadsheets/d/1FxCamcUs_L8-IT3ea24x0DYCg7-dig7a1Tz5rlIjZxY/export?format=csv\")",
       "Bash(curl -sL https://docs.google.com/spreadsheets/d/1FxCamcUs_L8-IT3ea24x0DYCg7-dig7a1Tz5rlIjZxY/export?format=csv)",
-      "Bash(grep -E '^[A-Z]{4}$')"
+      "Bash(grep -E '^[A-Z]{4}$')",
+      "Bash(awk 'NF')",
+      "Bash(curl -s 'https://docs.google.com/spreadsheets/d/1FxCamcUs_L8-IT3ea24x0DYCg7-dig7a1Tz5rlIjZxY/export?format=csv')",
+      "WebFetch(domain:skyvector.com)",
+      "WebFetch(domain:metar-taf.com)",
+      "WebFetch(domain:airportsbase.org)",
+      "WebFetch(domain:en.wikipedia.org)",
+      "WebFetch(domain:skybrary.aero)",
+      "WebFetch(domain:www.world-airport-codes.com)",
+      "Bash(\"/c/cluade/world travel/AIRPORT_VERIFICATION_SUMMARY.txt\":*)",
+      "Bash(\"/c/cluade/world travel/airport_verification_results.csv\":*)",
+      "Bash(\"C:\\\\cluade\\\\world travel\\\\VERIFICATION_EXECUTIVE_SUMMARY.txt\":*)",
+      "Bash(\"/c/cluade/world travel/VERIFICATION_INDEX.txt\":*)",
+      "Bash(ls -lh *.txt *.json *.csv)",
+      "Bash(ls -lh /c/cluade/world travel/*.csv)",
+      "Read(//c/cluade/world travel/**)",
+      "Bash(python /tmp/check_airports.py)",
+      "Bash(ls -lh COMPREHENSIVE* VERIFICATION* AIRPORT*)",
+      "Bash(ls -lh /c/cluade/world travel/*.txt)"
     ]
   }
 }

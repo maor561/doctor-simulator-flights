@@ -1,0 +1,52 @@
+{
+  "verification_summary": {
+    "date": "2026-03-24",
+    "total_airports_in_project": 46,
+    "all_project_airports_valid": true,
+    "suspicious_codes_analyzed": 16
+  },
+  "key_findings": {
+    "invalid_codes": ["CYQY", "LTAR", "SCLP"],
+    "valid_codes_not_in_project": 13,
+    "unconfirmed_codes": ["ZMKB", "ZWWW"],
+    "all_project_airports_status": "VERIFIED VALID"
+  },
+  "invalid_codes_detail": [
+    {
+      "icao": "CYQY",
+      "status": "INVALID",
+      "reason": "Does not exist in any aviation database",
+      "similar_valid": "CYQB (Quebec Jean Lesage - verified in project)"
+    },
+    {
+      "icao": "LTAR",
+      "status": "INVALID",
+      "reason": "Does not exist in any aviation database"
+    },
+    {
+      "icao": "SCLP",
+      "status": "INVALID",
+      "reason": "Incorrect code",
+      "correct_code": "SCEL (Santiago, Chile)"
+    }
+  ],
+  "valid_external_codes": [
+    {"icao": "CYXS", "name": "Prince George", "country": "Canada"},
+    {"icao": "LTAI", "name": "Antalya", "country": "Turkey", "note": "Not Istanbul"},
+    {"icao": "MMIT", "name": "Ixtepec", "country": "Mexico"},
+    {"icao": "MMZO", "name": "Manzanillo", "country": "Mexico"},
+    {"icao": "PAOH", "name": "Hoonah", "country": "USA (Alaska)"},
+    {"icao": "UDSG", "name": "Shirak", "country": "Armenia", "note": "Not Russia"},
+    {"icao": "USHN", "name": "Nyagan", "country": "Russia"},
+    {"icao": "UTAK", "name": "Turkmenbashi", "country": "Turkmenistan"},
+    {"icao": "UTAV", "name": "Turkmenabat", "country": "Turkmenistan"},
+    {"icao": "UTDL", "name": "Khudzhand", "country": "Tajikistan"},
+    {"icao": "ZBMZ", "name": "Manzhouli", "country": "China"},
+    {"icao": "ZLDH", "name": "Dunhuang", "country": "China"},
+    {"icao": "ZMCK", "name": "Chinggis Khaan", "country": "Mongolia"}
+  ],
+  "unconfirmed": [
+    {"icao": "ZMKB", "note": "Not found, similar: ZMKD (Mongolia)"},
+    {"icao": "ZWWW", "note": "Not found in databases"}
+  ]
+}

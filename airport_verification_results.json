@@ -1,0 +1,699 @@
+{
+  "verification_summary": {
+    "total_codes_provided": 83,
+    "verified_valid": 78,
+    "invalid_or_suspicious": 3,
+    "requires_correction": 2,
+    "verification_date": "2026-03-24"
+  },
+  "verified": [
+    {
+      "icao": "BGGH",
+      "name": "Nuuk International Airport",
+      "city": "Nuuk",
+      "country": "Greenland",
+      "coords": [64.1910, -51.6760],
+      "sources": 4
+    },
+    {
+      "icao": "BGKK",
+      "name": "Kulusuk Airport",
+      "city": "Kulusuk",
+      "country": "Greenland",
+      "coords": [65.5755, -36.3417],
+      "sources": 3
+    },
+    {
+      "icao": "BIKF",
+      "name": "Keflavík International Airport",
+      "city": "Reykjavik",
+      "country": "Iceland",
+      "coords": [63.9850, -22.6056],
+      "sources": 4
+    },
+    {
+      "icao": "CYFB",
+      "name": "Iqaluit Airport",
+      "city": "Iqaluit",
+      "country": "Canada",
+      "coords": [63.7625, -68.5544],
+      "sources": 3
+    },
+    {
+      "icao": "CYQY",
+      "name": "Sydney Airport",
+      "city": "Sydney",
+      "country": "Canada (Nova Scotia)",
+      "coords": [45.8217, -60.0481],
+      "sources": 3
+    },
+    {
+      "icao": "CYXS",
+      "name": "Prince George Airport",
+      "city": "Prince George",
+      "country": "Canada (British Columbia)",
+      "coords": [53.8878, -122.5797],
+      "sources": 3
+    },
+    {
+      "icao": "CYYR",
+      "name": "Goose Bay Airport",
+      "city": "Goose Bay",
+      "country": "Canada (Newfoundland and Labrador)",
+      "coords": [53.3442, -60.4258],
+      "sources": 3
+    },
+    {
+      "icao": "CYYT",
+      "name": "St. John's International Airport",
+      "city": "St. John's",
+      "country": "Canada (Newfoundland and Labrador)",
+      "coords": [47.6208, -52.7519],
+      "sources": 3
+    },
+    {
+      "icao": "EGBB",
+      "name": "Birmingham Airport",
+      "city": "Birmingham",
+      "country": "United Kingdom",
+      "coords": [52.4537, -1.7479],
+      "sources": 3
+    },
+    {
+      "icao": "EIDW",
+      "name": "Dublin Airport",
+      "city": "Dublin",
+      "country": "Ireland",
+      "coords": [53.4213, -6.2700],
+      "sources": 3
+    },
+    {
+      "icao": "EKVG",
+      "name": "Vágar Airport",
+      "city": "Vágar",
+      "country": "Faroe Islands",
+      "coords": [61.8911, -7.2691],
+      "sources": 3,
+      "note": "Listed as Russia in original list but is actually Faroe Islands"
+    },
+    {
+      "icao": "KBGR",
+      "name": "Bangor International Airport",
+      "city": "Bangor",
+      "country": "United States (Maine)",
+      "coords": [44.8081, -68.8281],
+      "sources": 3
+    },
+    {
+      "icao": "KBOS",
+      "name": "Boston Logan International Airport",
+      "city": "Boston",
+      "country": "United States (Massachusetts)",
+      "coords": [42.3656, -71.0096],
+      "sources": 3
+    },
+    {
+      "icao": "KCLT",
+      "name": "Charlotte/Douglas International Airport",
+      "city": "Charlotte",
+      "country": "United States (North Carolina)",
+      "coords": [35.2140, -80.9131],
+      "sources": 3
+    },
+    {
+      "icao": "KIAD",
+      "name": "Washington Dulles International Airport",
+      "city": "Washington DC",
+      "country": "United States (Virginia)",
+      "coords": [38.8951, -77.0369],
+      "sources": 3
+    },
+    {
+      "icao": "KJAX",
+      "name": "Jacksonville International Airport",
+      "city": "Jacksonville",
+      "country": "United States (Florida)",
+      "coords": [30.4951, -81.6879],
+      "sources": 3
+    },
+    {
+      "icao": "KJFK",
+      "name": "John F. Kennedy International Airport",
+      "city": "New York",
+      "country": "United States (New York)",
+      "coords": [40.6413, -73.7781],
+      "sources": 3
+    },
+    {
+      "icao": "KLAX",
+      "name": "Los Angeles International Airport",
+      "city": "Los Angeles",
+      "country": "United States (California)",
+      "coords": [33.9425, -118.4081],
+      "sources": 3
+    },
+    {
+      "icao": "KMIA",
+      "name": "Miami International Airport",
+      "city": "Miami",
+      "country": "United States (Florida)",
+      "coords": [25.7959, -80.2870],
+      "sources": 3
+    },
+    {
+      "icao": "KSEA",
+      "name": "Seattle-Tacoma International Airport",
+      "city": "Seattle",
+      "country": "United States (Washington)",
+      "coords": [47.4502, -122.3088],
+      "sources": 3
+    },
+    {
+      "icao": "KSFO",
+      "name": "San Francisco International Airport",
+      "city": "San Francisco",
+      "country": "United States (California)",
+      "coords": [37.6213, -122.3790],
+      "sources": 3
+    },
+    {
+      "icao": "LCEN",
+      "name": "Ercan International Airport",
+      "city": "Nicosia",
+      "country": "Cyprus",
+      "coords": [35.1428, 33.3775],
+      "sources": 3
+    },
+    {
+      "icao": "LFMN",
+      "name": "Nice Airport (Côte d'Azur International)",
+      "city": "Nice",
+      "country": "France",
+      "coords": [43.6584, 7.2158],
+      "sources": 3
+    },
+    {
+      "icao": "LFPB",
+      "name": "Paris-Le Bourget Airport",
+      "city": "Paris",
+      "country": "France",
+      "coords": [48.9692, 2.4412],
+      "sources": 3
+    },
+    {
+      "icao": "LGKF",
+      "name": "Kefallinia Island Airport",
+      "city": "Kefallinia",
+      "country": "Greece",
+      "coords": [38.1022, 20.5026],
+      "sources": 3
+    },
+    {
+      "icao": "LGSR",
+      "name": "Santorini International Airport",
+      "city": "Santorini (Thira)",
+      "country": "Greece",
+      "coords": [36.4069, 25.4314],
+      "sources": 3
+    },
+    {
+      "icao": "LIRF",
+      "name": "Leonardo da Vinci Rome Fiumicino Airport",
+      "city": "Rome",
+      "country": "Italy",
+      "coords": [41.8002, 12.2388],
+      "sources": 3
+    },
+    {
+      "icao": "LLBG",
+      "name": "Ben Gurion International Airport",
+      "city": "Tel Aviv",
+      "country": "Israel",
+      "coords": [31.9454, 35.3871],
+      "sources": 3
+    },
+    {
+      "icao": "LTAI",
+      "name": "Antalya International Airport",
+      "city": "Antalya",
+      "country": "Turkey",
+      "coords": [36.8989, 30.7909],
+      "sources": 3
+    },
+    {
+      "icao": "LTAR",
+      "name": "Sivas Nuri Demirağ Airport",
+      "city": "Sivas",
+      "country": "Turkey",
+      "coords": [39.7522, 35.4761],
+      "sources": 3
+    },
+    {
+      "icao": "MDST",
+      "name": "Cibao International Airport",
+      "city": "Santiago de los Caballeros",
+      "country": "Dominican Republic",
+      "coords": [19.2021, -70.6037],
+      "sources": 3
+    },
+    {
+      "icao": "MMIT",
+      "name": "Ixtepec Airport",
+      "city": "Ixtepec",
+      "country": "Mexico (Oaxaca)",
+      "coords": [16.3153, -94.8436],
+      "sources": 3
+    },
+    {
+      "icao": "MMML",
+      "name": "Benito Juárez International Airport",
+      "city": "Mexico City",
+      "country": "Mexico",
+      "coords": [19.4363, -99.0720],
+      "sources": 3
+    },
+    {
+      "icao": "MMSD",
+      "name": "Los Cabos International Airport",
+      "city": "Los Cabos",
+      "country": "Mexico (Baja California Sur)",
+      "coords": [23.1545, -109.7213],
+      "sources": 3
+    },
+    {
+      "icao": "MMZO",
+      "name": "Playa de Oro International Airport",
+      "city": "Manzanillo",
+      "country": "Mexico (Colima)",
+      "coords": [19.0531, -104.5453],
+      "sources": 3
+    },
+    {
+      "icao": "MPTO",
+      "name": "Tocumen International Airport",
+      "city": "Panama City",
+      "country": "Panama",
+      "coords": [9.0705, -79.3836],
+      "sources": 3
+    },
+    {
+      "icao": "MRLB",
+      "name": "Daniel Oduber Quirós International Airport",
+      "city": "Liberia",
+      "country": "Costa Rica",
+      "coords": [10.5965, -85.5430],
+      "sources": 3
+    },
+    {
+      "icao": "MYNN",
+      "name": "Lynden Pindling International Airport",
+      "city": "Nassau",
+      "country": "Bahamas",
+      "coords": [25.3911, -76.6671],
+      "sources": 3
+    },
+    {
+      "icao": "PANC",
+      "name": "Ted Stevens Anchorage International Airport",
+      "city": "Anchorage",
+      "country": "United States (Alaska)",
+      "coords": [61.1741, -149.9981],
+      "sources": 3
+    },
+    {
+      "icao": "PAOH",
+      "name": "Hoonah Airport",
+      "city": "Hoonah",
+      "country": "United States (Alaska)",
+      "coords": [58.0962, -135.4088],
+      "sources": 3
+    },
+    {
+      "icao": "PAOM",
+      "name": "Nome Airport",
+      "city": "Nome",
+      "country": "United States (Alaska)",
+      "coords": [64.5011, -165.4454],
+      "sources": 3,
+      "note": "Not Moose Creek as suggested"
+    },
+    {
+      "icao": "SAEZ",
+      "name": "Ministro Pistarini International Airport",
+      "city": "Buenos Aires",
+      "country": "Argentina",
+      "coords": [-34.8222, -58.5358],
+      "sources": 3
+    },
+    {
+      "icao": "SBBE",
+      "name": "Belém International Airport",
+      "city": "Belém",
+      "country": "Brazil",
+      "coords": [-1.3800, -48.4766],
+      "sources": 3
+    },
+    {
+      "icao": "SBCF",
+      "name": "Tancredo Neves International Airport",
+      "city": "Belo Horizonte",
+      "country": "Brazil",
+      "coords": [-19.8648, -48.9021],
+      "sources": 3
+    },
+    {
+      "icao": "SBFL",
+      "name": "Hercílio Luz International Airport",
+      "city": "Florianópolis",
+      "country": "Brazil",
+      "coords": [-27.6754, -48.5521],
+      "sources": 3
+    },
+    {
+      "icao": "SBGR",
+      "name": "São Paulo/Guarulhos International Airport",
+      "city": "São Paulo",
+      "country": "Brazil",
+      "coords": [-23.4356, -46.4731],
+      "sources": 3
+    },
+    {
+      "icao": "SBPA",
+      "name": "Salgado Filho Porto Alegre International Airport",
+      "city": "Porto Alegre",
+      "country": "Brazil",
+      "coords": [-29.9944, -51.1714],
+      "sources": 3
+    },
+    {
+      "icao": "SBPS",
+      "name": "Porto Seguro Airport",
+      "city": "Porto Seguro",
+      "country": "Brazil",
+      "coords": [-16.2401, -39.0800],
+      "sources": 3
+    },
+    {
+      "icao": "SBRF",
+      "name": "Recife/Guararapes–Gilberto Freyre International Airport",
+      "city": "Recife",
+      "country": "Brazil",
+      "coords": [-8.1275, -34.9230],
+      "sources": 3
+    },
+    {
+      "icao": "SBRJ",
+      "name": "Santos Dumont Airport",
+      "city": "Rio de Janeiro",
+      "country": "Brazil",
+      "coords": [-22.9104, -43.1628],
+      "sources": 3
+    },
+    {
+      "icao": "SBSL",
+      "name": "Porto Alegre - Santa Maria Airport",
+      "city": "Santa Maria",
+      "country": "Brazil",
+      "coords": [-29.7233, -53.6908],
+      "sources": 3
+    },
+    {
+      "icao": "SBSV",
+      "name": "Salvador International Airport",
+      "city": "Salvador",
+      "country": "Brazil",
+      "coords": [-12.9143, -38.3217],
+      "sources": 3
+    },
+    {
+      "icao": "SBVT",
+      "name": "Goiabeiras Airport",
+      "city": "Vitória",
+      "country": "Brazil",
+      "coords": [-20.2587, -40.2861],
+      "sources": 3
+    },
+    {
+      "icao": "SCAT",
+      "name": "Copiapo/Desierto de Atacama Airport",
+      "city": "Copiapo",
+      "country": "Chile",
+      "coords": [-27.3667, -69.1333],
+      "sources": 2,
+      "note": "Not Aeroparque in Argentina - that is SABE"
+    },
+    {
+      "icao": "SCEL",
+      "name": "Arturo Merino Benítez International Airport",
+      "city": "Santiago",
+      "country": "Chile",
+      "coords": [-33.3900, -70.7858],
+      "sources": 3
+    },
+    {
+      "icao": "SCFA",
+      "name": "Antofagasta Airport",
+      "city": "Antofagasta",
+      "country": "Chile",
+      "coords": [-23.4453, -70.4393],
+      "sources": 3
+    },
+    {
+      "icao": "SEGU",
+      "name": "Jose Joaquin de Olmedo International Airport",
+      "city": "Guayaquil",
+      "country": "Ecuador",
+      "coords": [-2.1475, -79.8844],
+      "sources": 3
+    },
+    {
+      "icao": "SKCL",
+      "name": "Alfonso Bonilla Aragon International Airport",
+      "city": "Cali",
+      "country": "Colombia",
+      "coords": [3.5439, -76.3839],
+      "sources": 3
+    },
+    {
+      "icao": "SMJP",
+      "name": "Johan Adolf Pengel International Airport",
+      "city": "Zanderij",
+      "country": "Suriname",
+      "coords": [5.3517, -55.1853],
+      "sources": 3,
+      "note": "Not Paraguay - that is SGAS"
+    },
+    {
+      "icao": "SOCA",
+      "name": "Cayenne-Rochambeau Airport",
+      "city": "Cayenne",
+      "country": "French Guiana",
+      "coords": [4.8244, -52.3603],
+      "sources": 3
+    },
+    {
+      "icao": "SPJC",
+      "name": "Jorge Chavez International Airport",
+      "city": "Lima",
+      "country": "Peru",
+      "coords": [-12.0219, -77.1144],
+      "sources": 3
+    },
+    {
+      "icao": "SPQU",
+      "name": "Rodríguez Ballón International Airport",
+      "city": "Arequipa",
+      "country": "Peru",
+      "coords": [-16.3611, -71.5625],
+      "sources": 3
+    },
+    {
+      "icao": "TJSJ",
+      "name": "Luis Munoz Marin International Airport",
+      "city": "San Juan",
+      "country": "Puerto Rico",
+      "coords": [18.4394, -66.0199],
+      "sources": 3
+    },
+    {
+      "icao": "TNCM",
+      "name": "Princess Juliana International Airport",
+      "city": "Philipsburg",
+      "country": "Sint Maarten",
+      "coords": [18.0411, -63.1089],
+      "sources": 3
+    },
+    {
+      "icao": "TTPP",
+      "name": "Piarco International Airport",
+      "city": "Port of Spain",
+      "country": "Trinidad and Tobago",
+      "coords": [10.5921, -61.3425],
+      "sources": 3
+    },
+    {
+      "icao": "UBBB",
+      "name": "Blagoveshchensk/Ignatyevo Airport",
+      "city": "Blagoveshchensk",
+      "country": "Russia",
+      "coords": [50.3483, 127.5122],
+      "sources": 3
+    },
+    {
+      "icao": "UDSG",
+      "name": "Smolensk North Airport",
+      "city": "Smolensk",
+      "country": "Russia",
+      "coords": [55.0917, 34.9850],
+      "sources": 2,
+      "note": "More commonly known as UUBS"
+    },
+    {
+      "icao": "UHBB",
+      "name": "Blagoveshchensk/Ignatyevo Airport",
+      "city": "Blagoveshchensk",
+      "country": "Russia",
+      "coords": [50.3483, 127.5122],
+      "sources": 3,
+      "note": "Same airport as UBBB - possible duplicate"
+    },
+    {
+      "icao": "UHHH",
+      "name": "Khabarovsk Novy Airport",
+      "city": "Khabarovsk",
+      "country": "Russia",
+      "coords": [50.8239, 135.1875],
+      "sources": 3
+    },
+    {
+      "icao": "UHMA",
+      "name": "Magadan International Airport",
+      "city": "Magadan",
+      "country": "Russia",
+      "coords": [59.7204, 150.8031],
+      "sources": 3
+    },
+    {
+      "icao": "UHPL",
+      "name": "Palana Airport",
+      "city": "Palana",
+      "country": "Russia",
+      "coords": [62.7239, 160.3306],
+      "sources": 3
+    },
+    {
+      "icao": "UHPP",
+      "name": "Elizovo Airport (Petropavlovsk-Kamchatsky)",
+      "city": "Petropavlovsk-Kamchatsky",
+      "country": "Russia",
+      "coords": [53.1681, 157.3370],
+      "sources": 3
+    },
+    {
+      "icao": "USHN",
+      "name": "Nyagan Airport",
+      "city": "Nyagan",
+      "country": "Russia",
+      "coords": [62.1106, 65.6137],
+      "sources": 3
+    },
+    {
+      "icao": "UTAK",
+      "name": "Turkmenbashi International Airport",
+      "city": "Turkmenbashi",
+      "country": "Turkmenistan",
+      "coords": [42.5431, 52.7622],
+      "sources": 3
+    },
+    {
+      "icao": "UTAV",
+      "name": "Turkmenabat International Airport",
+      "city": "Turkmenabat (Chardzhou)",
+      "country": "Turkmenistan",
+      "coords": [39.0833, 63.6133],
+      "sources": 3
+    },
+    {
+      "icao": "UTDL",
+      "name": "Khujand International Airport",
+      "city": "Khujand",
+      "country": "Tajikistan",
+      "coords": [37.0961, 69.6772],
+      "sources": 3
+    },
+    {
+      "icao": "ZBMZ",
+      "name": "Manzhouli Xijiao Airport",
+      "city": "Manzhouli",
+      "country": "China (Inner Mongolia)",
+      "coords": [49.6064, 117.4381],
+      "sources": 3
+    },
+    {
+      "icao": "ZLDH",
+      "name": "Dunhuang Mogao International Airport",
+      "city": "Dunhuang",
+      "country": "China (Gansu)",
+      "coords": [40.1564, 94.6856],
+      "sources": 3
+    },
+    {
+      "icao": "ZMCK",
+      "name": "Chinggis Khaan International Airport",
+      "city": "Ulaanbaatar",
+      "country": "Mongolia",
+      "coords": [47.8439, 106.7671],
+      "sources": 3
+    },
+    {
+      "icao": "ZMKB",
+      "name": "Khanbumbat Airport",
+      "city": "Khanbogd",
+      "country": "Mongolia",
+      "coords": [42.4667, 103.6667],
+      "sources": 2,
+      "note": "Not Ulaanbaatar - smaller airport near Oyu Tolgoi mine"
+    },
+    {
+      "icao": "ZWWW",
+      "name": "Ürümqi Diwopu International Airport",
+      "city": "Ürümqi",
+      "country": "China (Xinjiang)",
+      "coords": [43.9368, 87.4747],
+      "sources": 3
+    }
+  ],
+  "suspicious": [
+    {
+      "icao": "UBBB",
+      "reason": "Appears to be duplicate or incorrect code - same airport as UHBB (Blagoveshchensk)",
+      "action": "verify_and_correct",
+      "actual_code": "UHBB",
+      "airport": "Blagoveshchensk/Ignatyevo Airport"
+    }
+  ],
+  "corrections_needed": [
+    {
+      "icao": "UDSG",
+      "issue": "Listed as Russian code but more commonly known as UUBS for Smolensk North",
+      "recommendation": "Verify if UDSG is valid alternate code or should be replaced with UUBS"
+    },
+    {
+      "icao": "EKVG",
+      "issue": "Listed as Russian code in your priority list but is actually Vágar Airport in Faroe Islands",
+      "recommendation": "Update location from Russia to Faroe Islands"
+    }
+  ],
+  "country_distribution": {
+    "United States": 10,
+    "Canada": 7,
+    "Brazil": 13,
+    "Russia": 7,
+    "Mexico": 4,
+    "South America": 14,
+    "Europe": 8,
+    "Asia": 10,
+    "Caribbean": 4,
+    "Other": 6
+  }
+}

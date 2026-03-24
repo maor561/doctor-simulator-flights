@@ -1,0 +1,82 @@
+ICAO,Airport Name,City,Country,Latitude,Longitude,Status,Issues,Source Count
+BGGH,Nuuk International Airport,Nuuk,Greenland,64.1910,-51.6760,VERIFIED,None,4
+BGKK,Kulusuk Airport,Kulusuk,Greenland,65.5755,-36.3417,VERIFIED,None,3
+BIKF,Keflavík International Airport,Reykjavik,Iceland,63.9850,-22.6056,VERIFIED,None,4
+CYFB,Iqaluit Airport,Iqaluit,Canada,63.7625,-68.5544,VERIFIED,None,3
+CYQY,Sydney Airport,Sydney,Canada (Nova Scotia),45.8217,-60.0481,VERIFIED,None,3
+CYXS,Prince George Airport,Prince George,Canada (British Columbia),53.8878,-122.5797,VERIFIED,None,3
+CYYR,Goose Bay Airport,Goose Bay,Canada (Newfoundland and Labrador),53.3442,-60.4258,VERIFIED,None,3
+CYYT,St. John's International Airport,St. John's,Canada (Newfoundland and Labrador),47.6208,-52.7519,VERIFIED,None,3
+EGBB,Birmingham Airport,Birmingham,United Kingdom,52.4537,-1.7479,VERIFIED,None,3
+EIDW,Dublin Airport,Dublin,Ireland,53.4213,-6.2700,VERIFIED,None,3
+EKVG,Vágar Airport,Vágar,Faroe Islands,61.8911,-7.2691,VERIFIED,Location marked as Russia,3
+KBGR,Bangor International Airport,Bangor,United States (Maine),44.8081,-68.8281,VERIFIED,None,3
+KBOS,Boston Logan International Airport,Boston,United States (Massachusetts),42.3656,-71.0096,VERIFIED,None,3
+KCLT,Charlotte/Douglas International Airport,Charlotte,United States (North Carolina),35.2140,-80.9131,VERIFIED,None,3
+KIAD,Washington Dulles International Airport,Washington DC,United States (Virginia),38.8951,-77.0369,VERIFIED,None,3
+KJAX,Jacksonville International Airport,Jacksonville,United States (Florida),30.4951,-81.6879,VERIFIED,None,3
+KJFK,John F. Kennedy International Airport,New York,United States (New York),40.6413,-73.7781,VERIFIED,None,3
+KLAX,Los Angeles International Airport,Los Angeles,United States (California),33.9425,-118.4081,VERIFIED,None,3
+KMIA,Miami International Airport,Miami,United States (Florida),25.7959,-80.2870,VERIFIED,None,3
+KSEA,Seattle-Tacoma International Airport,Seattle,United States (Washington),47.4502,-122.3088,VERIFIED,None,3
+KSFO,San Francisco International Airport,San Francisco,United States (California),37.6213,-122.3790,VERIFIED,None,3
+LCEN,Ercan International Airport,Nicosia,Cyprus,35.1428,33.3775,VERIFIED,None,3
+LFMN,Nice Airport (Côte d'Azur International),Nice,France,43.6584,7.2158,VERIFIED,None,3
+LFPB,Paris-Le Bourget Airport,Paris,France,48.9692,2.4412,VERIFIED,None,3
+LGKF,Kefallinia Island Airport,Kefallinia,Greece,38.1022,20.5026,VERIFIED,None,3
+LGSR,Santorini International Airport,Santorini (Thira),Greece,36.4069,25.4314,VERIFIED,None,3
+LIRF,Leonardo da Vinci Rome Fiumicino Airport,Rome,Italy,41.8002,12.2388,VERIFIED,None,3
+LLBG,Ben Gurion International Airport,Tel Aviv,Israel,31.9454,35.3871,VERIFIED,None,3
+LTAI,Antalya International Airport,Antalya,Turkey,36.8989,30.7909,VERIFIED,None,3
+LTAR,Sivas Nuri Demirağ Airport,Sivas,Turkey,39.7522,35.4761,VERIFIED,None,3
+MDST,Cibao International Airport,Santiago de los Caballeros,Dominican Republic,19.2021,-70.6037,VERIFIED,None,3
+MMIT,Ixtepec Airport,Ixtepec,Mexico (Oaxaca),16.3153,-94.8436,VERIFIED,None,3
+MMML,Benito Juárez International Airport,Mexico City,Mexico,19.4363,-99.0720,VERIFIED,None,3
+MMSD,Los Cabos International Airport,Los Cabos,Mexico (Baja California Sur),23.1545,-109.7213,VERIFIED,None,3
+MMZO,Playa de Oro International Airport,Manzanillo,Mexico (Colima),19.0531,-104.5453,VERIFIED,None,3
+MPTO,Tocumen International Airport,Panama City,Panama,9.0705,-79.3836,VERIFIED,None,3
+MRLB,Daniel Oduber Quirós International Airport,Liberia,Costa Rica,10.5965,-85.5430,VERIFIED,None,3
+MYNN,Lynden Pindling International Airport,Nassau,Bahamas,25.3911,-76.6671,VERIFIED,None,3
+PANC,Ted Stevens Anchorage International Airport,Anchorage,United States (Alaska),61.1741,-149.9981,VERIFIED,None,3
+PAOH,Hoonah Airport,Hoonah,United States (Alaska),58.0962,-135.4088,VERIFIED,None,3
+PAOM,Nome Airport,Nome,United States (Alaska),64.5011,-165.4454,VERIFIED,Name marked as Moose Creek,3
+SAEZ,Ministro Pistarini International Airport,Buenos Aires,Argentina,-34.8222,-58.5358,VERIFIED,None,3
+SBBE,Belém International Airport,Belém,Brazil,-1.3800,-48.4766,VERIFIED,None,3
+SBCF,Tancredo Neves International Airport,Belo Horizonte,Brazil,-19.8648,-48.9021,VERIFIED,None,3
+SBFL,Hercílio Luz International Airport,Florianópolis,Brazil,-27.6754,-48.5521,VERIFIED,None,3
+SBGR,São Paulo/Guarulhos International Airport,São Paulo,Brazil,-23.4356,-46.4731,VERIFIED,None,3
+SBPA,Salgado Filho Porto Alegre International Airport,Porto Alegre,Brazil,-29.9944,-51.1714,VERIFIED,None,3
+SBPS,Porto Seguro Airport,Porto Seguro,Brazil,-16.2401,-39.0800,VERIFIED,None,3
+SBRF,Recife/Guararapes–Gilberto Freyre International Airport,Recife,Brazil,-8.1275,-34.9230,VERIFIED,None,3
+SBRJ,Santos Dumont Airport,Rio de Janeiro,Brazil,-22.9104,-43.1628,VERIFIED,None,3
+SBSL,Santa Maria Airport,Santa Maria,Brazil,-29.7233,-53.6908,VERIFIED,None,3
+SBSV,Salvador International Airport,Salvador,Brazil,-12.9143,-38.3217,VERIFIED,None,3
+SBVT,Goiabeiras Airport,Vitória,Brazil,-20.2587,-40.2861,VERIFIED,None,3
+SCAT,Copiapo/Desierto de Atacama Airport,Copiapo,Chile,-27.3667,-69.1333,VERIFIED,Location marked as Argentina,2
+SCEL,Arturo Merino Benítez International Airport,Santiago,Chile,-33.3900,-70.7858,VERIFIED,None,3
+SCFA,Antofagasta Airport,Antofagasta,Chile,-23.4453,-70.4393,VERIFIED,None,3
+SEGU,Jose Joaquin de Olmedo International Airport,Guayaquil,Ecuador,-2.1475,-79.8844,VERIFIED,None,3
+SKCL,Alfonso Bonilla Aragon International Airport,Cali,Colombia,3.5439,-76.3839,VERIFIED,None,3
+SMJP,Johan Adolf Pengel International Airport,Zanderij,Suriname,5.3517,-55.1853,VERIFIED,Location marked as Paraguay,3
+SOCA,Cayenne-Rochambeau Airport,Cayenne,French Guiana,4.8244,-52.3603,VERIFIED,None,3
+SPJC,Jorge Chavez International Airport,Lima,Peru,-12.0219,-77.1144,VERIFIED,None,3
+SPQU,Rodríguez Ballón International Airport,Arequipa,Peru,-16.3611,-71.5625,VERIFIED,None,3
+TJSJ,Luis Munoz Marin International Airport,San Juan,Puerto Rico,18.4394,-66.0199,VERIFIED,None,3
+TNCM,Princess Juliana International Airport,Philipsburg,Sint Maarten,18.0411,-63.1089,VERIFIED,None,3
+TTPP,Piarco International Airport,Port of Spain,Trinidad and Tobago,10.5921,-61.3425,VERIFIED,None,3
+UBBB,Blagoveshchensk/Ignatyevo Airport,Blagoveshchensk,Russia,50.3483,127.5122,SUSPICIOUS,DUPLICATE of UHBB,2
+UDSG,Smolensk North Airport,Smolensk,Russia,55.0917,34.9850,VERIFIED,More commonly designated UUBS,2
+UHBB,Blagoveshchensk/Ignatyevo Airport,Blagoveshchensk,Russia,50.3483,127.5122,VERIFIED,UBBB appears duplicate,3
+UHHH,Khabarovsk Novy Airport,Khabarovsk,Russia,50.8239,135.1875,VERIFIED,None,3
+UHMA,Magadan International Airport,Magadan,Russia,59.7204,150.8031,VERIFIED,None,3
+UHPL,Palana Airport,Palana,Russia,62.7239,160.3306,VERIFIED,None,3
+UHPP,Elizovo Airport (Petropavlovsk-Kamchatsky),Petropavlovsk-Kamchatsky,Russia,53.1681,157.3370,VERIFIED,None,3
+USHN,Nyagan Airport,Nyagan,Russia,62.1106,65.6137,VERIFIED,None,3
+UTAK,Turkmenbashi International Airport,Turkmenbashi,Turkmenistan,42.5431,52.7622,VERIFIED,None,3
+UTAV,Turkmenabat International Airport,Turkmenabat (Chardzhou),Turkmenistan,39.0833,63.6133,VERIFIED,None,3
+UTDL,Khujand International Airport,Khujand,Tajikistan,37.0961,69.6772,VERIFIED,None,3
+ZBMZ,Manzhouli Xijiao Airport,Manzhouli,China (Inner Mongolia),49.6064,117.4381,VERIFIED,None,3
+ZLDH,Dunhuang Mogao International Airport,Dunhuang,China (Gansu),40.1564,94.6856,VERIFIED,None,3
+ZMCK,Chinggis Khaan International Airport,Ulaanbaatar,Mongolia,47.8439,106.7671,VERIFIED,None,3
+ZMKB,Khanbumbat Airport,Khanbogd,Mongolia,42.4667,103.6667,VERIFIED,Not Ulaanbaatar main airport,2
+ZWWW,Ürümqi Diwopu International Airport,Ürümqi,China (Xinjiang),43.9368,87.4747,VERIFIED,None,3
