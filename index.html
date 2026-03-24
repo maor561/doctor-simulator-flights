@@ -931,9 +931,10 @@ async function loadRawRoutesFromSheet() {
             const cols = line.split(',').map(c => c.trim().replace(/^"|"$/g, ''));
             if (cols.length >= 3) {
                 const num = parseInt(cols[0]) || i;
-                // Strip invisible Unicode characters (RTL/LTR marks, zero-width spaces, etc)
-                const from = cols[1].toUpperCase().trim().replace(/[\u200B-\u200D\u202A-\u202E\u2060-\u2064\u2066-\u206F]/g, '');
-                const to = cols[2].toUpperCase().trim().replace(/[\u200B-\u200D\u202A-\u202E\u2060-\u2064\u2066-\u206F]/g, '');
+                // Strip invisible Unicode characters (RTL/LTR marks, zero-width spaces, bidirectional marks, etc)
+                const sanitize = (str) => str.toUpperCase().trim().replace(/[\u200B-\u200F\u202A-\u202E\u2060-\u206F]/g, '');
+                const from = sanitize(cols[1]);
+                const to = sanitize(cols[2]);
 
                 // Collect airport codes
                 airportCodes.add(from);
