@@ -208,7 +208,25 @@ export default async function handler(req, res) {
             'LGKF': 'LGKF 201720Z 33009KT 9999 SCT045 24/14 Q1016',
             'LGAV': 'LGAV 201720Z 35011KT 9999 FEW042 25/16 Q1015',
             // Greenland
-            'BGKK': 'BGKK 201720Z 28014KT 9999 BKN032 M08/M18 Q1012'
+            'BGKK': 'BGKK 201720Z 28014KT 9999 BKN032 M08/M18 Q1012',
+            // Canada - Sydney NS
+            'CYQY': 'CYQY 201720Z 28015KT 9999 FEW040 06/M01 Q1020',
+            // Russia - additional
+            'UHPL': 'UHPL 201720Z 25010KT 9999 BKN035 M08/M18 Q1011',
+            'USHN': 'USHN 201720Z 26011KT 9999 SCT040 M10/M20 Q1010',
+            'UHHH': 'UHHH 201720Z 27012KT 9999 FEW045 M12/M22 Q1009',
+            'UHBB': 'UHBB 201720Z 28013KT 9999 BKN050 M15/M25 Q1008',
+            'UDUG': 'UDUG 201720Z 24014KT 9999 SCT045 08/M02 Q1012',
+            // China - additional
+            'ZBMZ': 'ZBMZ 201720Z 29011KT 9999 FEW040 15/05 Q1011',
+            'ZMCK': 'ZMCK 201720Z 30012KT 9999 SCT045 12/02 Q1010',
+            'ZMKB': 'ZMKB 201720Z 31013KT 9999 BKN050 10/00 Q1009',
+            'ZLDH': 'ZLDH 201720Z 32014KT 9999 FEW055 18/08 Q1008',
+            'ZWWW': 'ZWWW 201720Z 33015KT 9999 SCT060 22/12 Q1007',
+            // Central Asia - additional
+            'UTDL': 'UTDL 201720Z 22016KT 9999 BKN065 16/06 Q1010',
+            'UTAV': 'UTAV 201720Z 21017KT 9999 SCT070 20/10 Q1009',
+            'UTAK': 'UTAK 201720Z 20018KT 9999 FEW075 24/14 Q1008'
         };
 
         const metar = mockMetarData[icao.toUpperCase()] || null;

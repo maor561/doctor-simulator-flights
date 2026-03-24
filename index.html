@@ -756,7 +756,25 @@ const AIRPORT_DB = {
     // Costa Rica - additional
     'MRLB': { coords: [10.5906, -85.5427], city: 'Liberia', country: 'CR' },
     // Bahamas (duplicate kept for safety)
-    'MYNN': { coords: [25.0504, -77.4659], city: 'Nassau', country: 'BS' }
+    'MYNN': { coords: [25.0504, -77.4659], city: 'Nassau', country: 'BS' },
+    // Canada - additional
+    'CYQY': { coords: [45.8217, -60.0481], city: 'Sydney', country: 'CA' },
+    // Russia - corrected coordinates
+    'UHPL': { coords: [59.5407, 159.8950], city: 'Palana', country: 'RU' },
+    'USHN': { coords: [51.7886, 143.1410], city: 'Nyagan', country: 'RU' },
+    'UHHH': { coords: [48.5261, 135.1715], city: 'Khabarovsk', country: 'RU' },
+    'UHBB': { coords: [50.4224, 127.4086], city: 'Blagoveshchensk', country: 'RU' },
+    'UDUG': { coords: [40.7510, 43.8549], city: 'Donetsk', country: 'RU' },
+    // China - corrected coordinates
+    'ZBMZ': { coords: [49.5711, 117.3315], city: 'Manzhouli', country: 'CN' },
+    'ZMCK': { coords: [47.6515, 106.8216], city: 'Ulaanbaatar', country: 'MN' },
+    'ZMKB': { coords: [43.1349, 106.8473], city: 'Khanbogd', country: 'MN' },
+    'ZLDH': { coords: [40.1664, 94.8058], city: 'Dunhuang', country: 'CN' },
+    'ZWWW': { coords: [43.9074, 87.4750], city: 'Ürümqi', country: 'CN' },
+    // Central Asia - corrected coordinates
+    'UTDL': { coords: [40.2171, 69.6983], city: 'Khujand', country: 'TJ' },
+    'UTAV': { coords: [38.9370, 63.5680], city: 'Turkmenabat', country: 'TM' },
+    'UTAK': { coords: [40.0439, 52.9944], city: 'Turkmenbashi', country: 'TM' }
 };
 
 let airports = {};
@@ -884,7 +902,8 @@ function getFlagEmoji(countryCode) {
         'DK': '🇩🇰', 'GL': '🇬🇱', 'AQ': '🇦🇶', 'RO': '🇷🇴', 'SG': '🇸🇬',
         'TT': '🇹🇹', 'GY': '🇬🇾', 'SR': '🇸🇷', 'GF': '🇬🇫',
         'BS': '🇧🇸', 'TR': '🇹🇷', 'RU': '🇷🇺', 'AZ': '🇦🇿', 'GE': '🇬🇪',
-        'BZ': '🇧🇿', 'GT': '🇬🇹', 'SV': '🇸🇻', 'PR': '🇵🇷', 'SX': '🇸🇽'
+        'BZ': '🇧🇿', 'GT': '🇬🇹', 'SV': '🇸🇻', 'PR': '🇵🇷', 'SX': '🇸🇽',
+        'MN': '🇲🇳', 'TJ': '🇹🇯', 'TM': '🇹🇲'
     };
     return flags[countryCode] || '🚩';
 }
