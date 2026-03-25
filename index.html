@@ -1007,6 +1007,7 @@ function getCountryEmojiFromAirport(icao) {
 }
 
 // Fallback routes if Sheet fails
+// NOTE: This function just sets the routes array, rendering is done in init()
 async function loadFallbackRoutes() {
     routes = [
 {id:1,num:1,from:"LLBG",fromCity:"תל אביב",fromCountry:"🇮🇱",to:"LCLK",toCity:"לרנקה",toCountry:"🇨🇾",name:"לרנקה",time:65},
@@ -1057,9 +1058,8 @@ async function loadFallbackRoutes() {
 {id:46,num:46,from:"OOMS",fromCity:"מסקט",fromCountry:"🇴🇲",to:"OTHH",toCity:"דוחא",toCountry:"🇶🇦",name:"דוחא",time:75},
 {id:47,num:47,from:"OTHH",fromCity:"דוחא",fromCountry:"🇶🇦",to:"LLBG",toCity:"תל אביב",toCountry:"🇮🇱",name:"תל אביב",time:135}
     ];
-    render();
-    await loadAllMetar();
-    initMap();
+    // Don't render here - let init() handle rendering after loadFromServer()
+    console.log('⚠️ Using fallback routes from hardcoded array');
 }
 
 let isAdmin = false;
