@@ -19,8 +19,9 @@
   ],
   "author": "Doctor Simulator Team",
   "license": "MIT",
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "express": "^5.2.1"
+  },
   "engines": {
     "node": "18.x || 20.x"
   }

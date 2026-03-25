@@ -1510,10 +1510,15 @@ async function loadAllMetar() {
 }
 
 // Use DOMContentLoaded instead of window.onload to ensure we run after DOM is ready
+console.log('🔧 Script loaded, document.readyState:', document.readyState);
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('📍 DOMContentLoaded fired, calling init()');
+        init();
+    });
 } else {
     // DOM is already loaded
+    console.log('📍 DOM already loaded, calling init() immediately');
     init();
 }
 

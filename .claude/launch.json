@@ -2,9 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "world-travel-site",
-      "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8000", "--directory", "."],
+      "name": "doctor-simulator",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["server.js"],
       "port": 8000
     }
   ]

@@ -53,7 +53,10 @@
       "Read(//c/cluade/world travel/**)",
       "Bash(python /tmp/check_airports.py)",
       "Bash(ls -lh COMPREHENSIVE* VERIFICATION* AIRPORT*)",
-      "Bash(ls -lh /c/cluade/world travel/*.txt)"
+      "Bash(ls -lh /c/cluade/world travel/*.txt)",
+      "Bash(curl -s -L \"https://docs.google.com/spreadsheets/d/1FxCamcUs_L8-IT3ea24x0DYCg7-dig7a1Tz5rlIjZxY/export?format=csv\")",
+      "Bash(grep -v \"//\")",
+      "Bash(npm install:*)"
     ]
   }
 }
