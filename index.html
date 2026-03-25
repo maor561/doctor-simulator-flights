@@ -1140,8 +1140,13 @@ function saveToServer() {
         }
     })
     .catch(err => {
-        console.error('❌ Server save error:', err.message);
-        showMessage('❌ שגיאת חיבור לשרת', 'error');
+        // Ignore AbortError (happens when page reloads during request)
+        if (err.name === 'AbortError') {
+            console.log('⚠️ Save request aborted (page reload)');
+        } else {
+            console.error('❌ Server save error:', err.message);
+            showMessage('❌ שגיאת חיבור לשרת', 'error');
+        }
     });
 
     // SECONDARY: Also save to localStorage for offline support and speed
