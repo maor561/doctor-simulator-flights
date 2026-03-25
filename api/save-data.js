@@ -8,7 +8,8 @@
 import fs from 'fs';
 import path from 'path';
 
-const DATA_FILE = '/tmp/doctor-simulator-data.json';
+// Use persistent data directory instead of /tmp which gets cleaned regularly
+const DATA_FILE = process.env.DATA_DIR || './data/doctor-simulator-data.json';
 
 function ensureDataDir() {
     const dir = path.dirname(DATA_FILE);
