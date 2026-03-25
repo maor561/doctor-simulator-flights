@@ -1,4 +1,13 @@
 {
   "version": 2,
-  "outputDirectory": "."
+  "outputDirectory": ".",
+  "functions": {
+    "api/save-data.js": {
+      "memory": 128,
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    { "source": "/api/save-data", "destination": "/api/save-data" }
+  ]
 }
