@@ -1123,19 +1123,37 @@ async function loadFromServer() {
 }
 
 function saveToServer() {
-    // Save to localStorage first (primary storage)
-    localStorage.setItem('doctor-simulator-completed', JSON.stringify(completed));
-    localStorage.setItem('doctor-simulator-dates', JSON.stringify(routeDates));
-
-    showMessage('✅ נשמר בהצלחה!', 'success');
-
-    // Also try to sync with server (optional)
+    // PRIORITY: Save to server FIRST (cloud is primary storage)
+    // This ensures data persists even in incognito/private mode
     fetch('/api/save-data', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({completed, dates: routeDates})
     })
-    .catch(err => console.log('Server sync error:', err));
+    .then(response => {
+        if (response.ok) {
+            console.log('☁️ Data saved to server successfully');
+            showMessage('✅ נשמר בהצלחה! (שמור בענן)', 'success');
+        } else {
+            console.warn('⚠️ Server save returned status:', response.status);
+            showMessage('⚠️ שגיאה בשמירה לשרת', 'error');
+        }
+    })
+    .catch(err => {
+        console.error('❌ Server save error:', err.message);
+        showMessage('❌ שגיאת חיבור לשרת', 'error');
+    });
+
+    // SECONDARY: Also save to localStorage for offline support and speed
+    // This is just a cache - server is the source of truth
+    try {
+        localStorage.setItem('doctor-simulator-completed', JSON.stringify(completed));
+        localStorage.setItem('doctor-simulator-dates', JSON.stringify(routeDates));
+        console.log('💾 Data cached to localStorage');
+    } catch (e) {
+        // This is normal in incognito mode - no need to show error
+        console.log('📝 localStorage unavailable (incognito mode):', e.message);
+    }
 }
 
 // Convert country code to emoji flag
