@@ -1092,7 +1092,7 @@ async function loadFromServer() {
             if (result.data && result.data.completed) {
                 completed = result.data.completed;
                 routeDates = result.data.dates || {};
-                console.log('✅ Data loaded from server');
+                console.log('✅ Data loaded from server - dates count:', Object.keys(routeDates).length);
                 return;
             }
         }
@@ -1111,7 +1111,7 @@ async function loadFromServer() {
         if (savedDates) {
             routeDates = JSON.parse(savedDates);
         }
-        console.log('✅ Data loaded from localStorage');
+        console.log('✅ Data loaded from localStorage - dates count:', Object.keys(routeDates).length);
     } catch (e) {
         console.log('Could not load from localStorage:', e.message);
     }
