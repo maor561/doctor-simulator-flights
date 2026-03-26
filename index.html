@@ -1182,7 +1182,9 @@ function getFlag(emoji) {
 // ===== TEAMUP CALENDAR INTEGRATION =====
 // Generate iCalendar (.ics) file and open TeamUp with direct API call
 function addToTeamUp(routeId) {
+    console.log('🚀 addToTeamUp called with routeId:', routeId);
     const route = routes.find(r => r.id == routeId);
+    console.log('📍 Route found:', route);
     if (!route) return;
 
     const routeData = routeDates[routeId];
