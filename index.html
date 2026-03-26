@@ -1083,83 +1083,64 @@ function updateAdminStatus() {
     document.getElementById('adminStatus').textContent = isAdmin ? '✅ מצב עריכה' : '';
 }
 
-// ===== CLOUD STORAGE (jsonblob.com - free, no server needed) =====
-const CLOUD_STORAGE_URL = 'https://jsonblob.com/api/jsonBlob/019d261c-6be7-7601-afef-b5e42c179e33';
+// ===== CLOUD STORAGE via Vercel KV (Upstash Redis) =====
+// All data goes through /api/save-data which uses Vercel KV on the server side
 
 async function loadFromServer() {
-    // PRIORITY 1: Load from cloud storage (works everywhere, even incognito)
+    // PRIORITY 1: Load from server API (uses Vercel KV in production)
     try {
-        console.log('☁️ Loading from cloud...');
-        const response = await fetch(CLOUD_STORAGE_URL, {
-            headers: { 'Accept': 'application/json' }
-        });
-        if (response.ok) {
-            const data = await response.json();
-            if (data && typeof data === 'object') {
-                completed = data.completed || {};
-                routeDates = data.dates || {};
-                console.log('✅ Data loaded from cloud - dates:', Object.keys(routeDates).length, 'completed:', Object.keys(completed).length);
-                return;
-            }
-        }
-    } catch (e) {
-        console.warn('⚠️ Could not load from cloud:', e.message);
-    }
-
-    // PRIORITY 2: Try local server API (for local development)
-    try {
+        console.log('☁️ Loading from server...');
         const response = await fetch('/api/save-data');
         if (response.ok) {
             const result = await response.json();
             if (result.data && typeof result.data === 'object') {
                 completed = result.data.completed || {};
                 routeDates = result.data.dates || {};
-                console.log('✅ Data loaded from local server - dates:', Object.keys(routeDates).length);
+                console.log('✅ Data loaded from server (' + (result.storage || 'unknown') + ') - dates:', Object.keys(routeDates).length, 'completed:', Object.keys(completed).length);
                 return;
             }
         }
     } catch (e) {
-        console.log('📁 Local server not available:', e.message);
+        console.warn('⚠️ Could not load from server:', e.message);
     }
 
-    // PRIORITY 3: Fallback to localStorage (offline cache)
+    // PRIORITY 2: Fallback to localStorage (offline cache)
     try {
         const savedCompleted = localStorage.getItem('doctor-simulator-completed');
         const savedDates = localStorage.getItem('doctor-simulator-dates');
         if (savedCompleted) completed = JSON.parse(savedCompleted);
         if (savedDates) routeDates = JSON.parse(savedDates);
-        console.log('💾 Data loaded from localStorage cache');
+        if (savedCompleted || savedDates) {
+            console.log('💾 Data loaded from localStorage cache');
+            return;
+        }
     } catch (e) {
         console.log('📝 localStorage unavailable (incognito mode)');
     }
 }
 
 function saveToServer() {
-    // PRIORITY 1: Save to cloud storage (jsonblob.com - works everywhere!)
-    fetch(CLOUD_STORAGE_URL, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    // PRIMARY: Save to server API (Vercel KV in production, file in local dev)
+    fetch('/api/save-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ completed, dates: routeDates })
     })
     .then(response => {
         if (response.ok) {
-            console.log('☁️ Data saved to cloud successfully');
-            showMessage('✅ נשמר בהצלחה!', 'success');
+            return response.json().then(result => {
+                console.log('☁️ Data saved to server (' + (result.storage || 'unknown') + ')');
+                showMessage('✅ נשמר בהצלחה!', 'success');
+            });
         } else {
-            console.warn('⚠️ Cloud save failed:', response.status);
-            showMessage('⚠️ שגיאה בשמירה', 'error');
+            console.warn('⚠️ Server save failed:', response.status);
+            showMessage('⚠️ שגיאה בשמירה לשרת', 'error');
         }
     })
     .catch(err => {
         if (err.name === 'AbortError') return;
-        console.error('❌ Cloud save error:', err.message);
-        // Try local server as fallback
-        fetch('/api/save-data', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ completed, dates: routeDates })
-        }).catch(() => {});
-        showMessage('❌ שגיאת חיבור', 'error');
+        console.error('❌ Server save error:', err.message);
+        showMessage('❌ שגיאת חיבור לשרת', 'error');
     });
 
     // SECONDARY: Cache to localStorage for offline speed
