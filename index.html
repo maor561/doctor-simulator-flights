@@ -1214,8 +1214,22 @@ function addToTeamUp(routeId) {
     ].join('\n');
 
     // Create .ics file (iCalendar format)
-    const startDateTime = routeData.date + 'T' + routeData.time.replace(':', '') + '00';
-    const endDateTime = routeData.date + 'T' + endTime.replace(':', '') + '00';
+    // Convert date format from YYYY-MM-DD to YYYYMMDD
+    const dateNoHyphens = routeData.date.replace(/-/g, '');
+    const timeNoColon = routeData.time.replace(':', '');
+    const endTimeNoColon = endTime.replace(':', '');
+
+    const startDateTime = dateNoHyphens + 'T' + timeNoColon + '00';
+    const endDateTime = dateNoHyphens + 'T' + endTimeNoColon + '00';
+
+    // Get current time in iCalendar format
+    const now = new Date();
+    const dtstamp = now.getUTCFullYear() +
+        String(now.getUTCMonth() + 1).padStart(2, '0') +
+        String(now.getUTCDate()).padStart(2, '0') + 'T' +
+        String(now.getUTCHours()).padStart(2, '0') +
+        String(now.getUTCMinutes()).padStart(2, '0') +
+        String(now.getUTCSeconds()).padStart(2, '0') + 'Z';
 
     const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -1226,9 +1240,9 @@ X-WR-CALNAME:Flight Logs
 X-WR-TIMEZONE:UTC
 BEGIN:VEVENT
 UID:${routeId}-${Date.now()}@doctor-simulator
-DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z
-DTSTART:${startDateTime}00Z
-DTEND:${endDateTime}00Z
+DTSTAMP:${dtstamp}
+DTSTART:${startDateTime}Z
+DTEND:${endDateTime}Z
 SUMMARY:${title}
 LOCATION:${route.fromCity} → ${route.toCity}
 DESCRIPTION:${description}
