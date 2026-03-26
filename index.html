@@ -1191,21 +1191,36 @@ function addToTeamUp(routeId) {
         return;
     }
 
-    const routeName = route.name || route.toCity || route.to;
-    const [hours, minutes] = routeData.time.split(':');
-    const endHours = (parseInt(hours) + 1) % 24;
-    const endTime = String(endHours).padStart(2, '0') + ':' + minutes;
+    // Calculate end time (start time + flight duration)
+    const [startHours, startMinutes] = routeData.time.split(':').map(Number);
+    const flightDuration = route.time || 90; // minutes
+    const totalMinutes = startHours * 60 + startMinutes + flightDuration;
+    const endHours = Math.floor(totalMinutes / 60) % 24;
+    const endMinutes = totalMinutes % 60;
+    const endTime = String(endHours).padStart(2, '0') + ':' + String(endMinutes).padStart(2, '0');
+
+    // Build title: DEP ICAO → ARR ICAO
+    const title = `✈️ ${route.from} → ${route.to}`;
+
+    // Build notes with all details
+    const notes = [
+        `DEP: ${route.from} (${route.fromCity})`,
+        `ARR: ${route.to} (${route.toCity})`,
+        `Duration: ${flightDuration} min`,
+        `WHO: מסביב לעולם`,
+        `IFR`
+    ].join('\n');
 
     // TeamUp calendar URL with pre-filled event
     const params = new URLSearchParams({
         calendar: 'o7y5wi',
-        title: `✈️ ${routeName}`,
+        title: title,
         startDate: routeData.date,
         startTime: routeData.time,
         endDate: routeData.date,
         endTime: endTime,
-        location: routeName,
-        notes: `Flight Route ID: ${routeId}`
+        location: `${route.fromCity} → ${route.toCity}`,
+        notes: notes
     });
 
     const teamupUrl = `https://teamup.com/create?${params.toString()}`;
