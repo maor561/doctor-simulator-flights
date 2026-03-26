@@ -1234,20 +1234,14 @@ function addToTeamUp(routeId) {
     const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//Doctor Simulator//EN
-CALSCALE:GREGORIAN
-METHOD:PUBLISH
-X-WR-CALNAME:Flight Logs
-X-WR-TIMEZONE:UTC
 BEGIN:VEVENT
 UID:${routeId}-${Date.now()}@doctor-simulator
 DTSTAMP:${dtstamp}
-DTSTART:${startDateTime}Z
-DTEND:${endDateTime}Z
+DTSTART:${startDateTime}
+DTEND:${endDateTime}
 SUMMARY:${title}
-LOCATION:${route.fromCity} → ${route.toCity}
+LOCATION:${route.fromCity} - ${route.toCity}
 DESCRIPTION:${description}
-STATUS:CONFIRMED
-SEQUENCE:0
 END:VEVENT
 END:VCALENDAR`;
 
