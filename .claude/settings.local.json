@@ -56,7 +56,18 @@
       "Bash(ls -lh /c/cluade/world travel/*.txt)",
       "Bash(curl -s -L \"https://docs.google.com/spreadsheets/d/1FxCamcUs_L8-IT3ea24x0DYCg7-dig7a1Tz5rlIjZxY/export?format=csv\")",
       "Bash(grep -v \"//\")",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(curl -X GET http://localhost:8000/api/save-data)",
+      "Bash(gh api:*)",
+      "Bash(curl -s -X POST https://jsonblob.com/api/jsonBlob -H \"Content-Type: application/json\" -H \"Accept: application/json\" -d '{\"\"\"\"completed\"\"\"\":{},\"\"\"\"dates\"\"\"\":{}}' -D -)",
+      "Bash(curl -s https://jsonblob.com/api/jsonBlob/019d261c-6be7-7601-afef-b5e42c179e33)",
+      "Bash(curl -s -X PUT https://jsonblob.com/api/jsonBlob/019d261c-6be7-7601-afef-b5e42c179e33 -H \"Content-Type: application/json\" -d '{\"\"completed\"\":{\"\"1\"\":true},\"\"dates\"\":{\"\"1\"\":{\"\"date\"\":\"\"2026-03-25\"\",\"\"time\"\":\"\"14:30\"\"}}}')",
+      "Bash(grep -v \"^\\\\.\\\\.$\")",
+      "Bash(awk 'NR>3')",
+      "Bash(npx vercel:*)",
+      "Bash(curl -s -X POST \"https://welcome-tapir-85334.upstash.io\" -H \"Authorization: Bearer gQAAAAAAAU1WAAIncDExNTlmNmRiN2VhZGE0MWEyODkzMWI3N2RkNWExMWFjYXAxODUzMzQ\" -H \"Content-Type: application/json\" -d '[\"\"GET\"\", \"\"doctor-simulator-data\"\"]')",
+      "Bash(curl -s \"https://doctor-simulator-flights.vercel.app/api/save-data\")",
+      "Bash(curl -s -X POST \"https://doctor-simulator-flights.vercel.app/api/save-data\" -H \"Content-Type: application/json\" -d '{\"\"completed\"\":{\"\"1\"\":true},\"\"dates\"\":{\"\"1\"\":{\"\"date\"\":\"\"2026-03-26\"\",\"\"time\"\":\"\"15:30\"\"}}}')"
     ]
   }
 }

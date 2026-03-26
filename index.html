@@ -1179,6 +1179,47 @@ function getFlag(emoji) {
     return '<img class="flag-badge" src="https://flagcdn.com/w40/' + code + '.png" alt="' + code.toUpperCase() + '">';
 }
 
+// ===== TEAMUP CALENDAR INTEGRATION =====
+async function addToTeamUp(routeId) {
+    // Find the route
+    const route = routes.find(r => r.id == routeId);
+    if (!route) return;
+
+    const routeData = routeDates[routeId];
+    if (!routeData || !routeData.date || !routeData.time) {
+        console.log('⏭️ Skipping TeamUp - no date/time set for route', routeId);
+        return;
+    }
+
+    console.log('📅 Adding to TeamUp:', route.name, routeData.date, routeData.time);
+
+    try {
+        const response = await fetch('/api/teamup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                routeId: routeId,
+                routeName: route.name || route.toCity || route.to,
+                date: routeData.date,
+                time: routeData.time
+            })
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log('✅ Added to TeamUp:', result.eventId);
+            showMessage('✅ נוסף ליומן TeamUp!', 'success');
+        } else {
+            const error = await response.json();
+            console.warn('⚠️ TeamUp error:', error);
+            showMessage('⚠️ שגיאה בהוסף ליומן', 'error');
+        }
+    } catch (err) {
+        console.error('❌ TeamUp API error:', err.message);
+        // Don't show error - it's secondary to main save
+    }
+}
+
 function parseMetarRaw(raw) {
     if (!raw || raw === 'N/A' || raw.length < 10) return null;
     const parts = raw.trim().split(/\s+/);
@@ -1282,6 +1323,7 @@ function updateDate(id, value) {
     if (!routeDates[id]) routeDates[id] = {};
     routeDates[id].date = value;
     saveToServer();
+    addToTeamUp(id);
 }
 
 function updateTime(id, value) {
@@ -1289,6 +1331,7 @@ function updateTime(id, value) {
     if (!routeDates[id]) routeDates[id] = {};
     routeDates[id].time = value;
     saveToServer();
+    addToTeamUp(id);
 }
 
 function toggleShowDone() {

@@ -41,3 +41,6 @@ logs/
 # Old server files
 *.php.bak
 airports.csv.bak
+
+.vercel
+.env*.local
