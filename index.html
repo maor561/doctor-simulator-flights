@@ -1180,7 +1180,7 @@ function getFlag(emoji) {
 }
 
 // ===== TEAMUP CALENDAR INTEGRATION =====
-// Opens TeamUp in a new tab with pre-filled event data
+// Generate iCalendar (.ics) file and open TeamUp with direct API call
 function addToTeamUp(routeId) {
     const route = routes.find(r => r.id == routeId);
     if (!route) return;
@@ -1202,30 +1202,65 @@ function addToTeamUp(routeId) {
     // Build title: DEP ICAO → ARR ICAO
     const title = `✈️ ${route.from} → ${route.to}`;
 
-    // Build notes with all details
-    const notes = [
+    // Build description with all details
+    const description = [
         `DEP: ${route.from} (${route.fromCity})`,
         `ARR: ${route.to} (${route.toCity})`,
         `Duration: ${flightDuration} min`,
         `WHO: מסביב לעולם`,
         `IFR`
-    ].join('\n');
+    ].join('\\n');
 
-    // TeamUp calendar URL with pre-filled event
-    const params = new URLSearchParams({
-        calendar: 'o7y5wi',
+    // Convert dates to ISO 8601 format for TeamUp API
+    const startDateTime = routeData.date + 'T' + routeData.time + ':00';
+    const endDateTime = routeData.date + 'T' + endTime + ':00';
+
+    // TeamUp API call to create event directly
+    const eventData = {
         title: title,
         startDate: routeData.date,
         startTime: routeData.time,
         endDate: routeData.date,
         endTime: endTime,
         location: `${route.fromCity} → ${route.toCity}`,
-        notes: notes
-    });
+        notes: description,
+        calendarId: 'o7y5wi'
+    };
 
-    const teamupUrl = `https://teamup.com/create?${params.toString()}`;
-    console.log('📅 Opening TeamUp:', teamupUrl);
-    window.open(teamupUrl, '_blank');
+    // Try to send to TeamUp API
+    fetch('https://api.teamup.com/o7y5wi/events', {
+        method: 'POST',
+        headers: {
+            'Teamup-Token': 'cb257ed950f120e329ad66319e8eef13b74acb3d7aced4eb3826ab20d14fdf25',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ event: eventData })
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('✅ Event added to TeamUp directly');
+            showMessage('✅ נוסף ליומן TeamUp!', 'success');
+            return;
+        }
+        // If API fails, fallback to manual URL
+        throw new Error('API failed');
+    })
+    .catch(err => {
+        console.log('📅 Opening TeamUp for manual save...');
+        // Fallback: Open TeamUp in new tab for manual save
+        const params = new URLSearchParams({
+            calendar: 'o7y5wi',
+            title: title,
+            startDate: routeData.date,
+            startTime: routeData.time,
+            endDate: routeData.date,
+            endTime: endTime,
+            location: `${route.fromCity} → ${route.toCity}`,
+            notes: description.replace(/\\n/g, '\n')
+        });
+        const teamupUrl = `https://teamup.com/create?${params.toString()}`;
+        window.open(teamupUrl, '_blank');
+    });
 }
 
 function parseMetarRaw(raw) {
