@@ -1180,8 +1180,8 @@ function getFlag(emoji) {
 }
 
 // ===== TEAMUP CALENDAR INTEGRATION =====
-async function addToTeamUp(routeId) {
-    // Find the route
+// Opens TeamUp in a new tab with pre-filled event data
+function addToTeamUp(routeId) {
     const route = routes.find(r => r.id == routeId);
     if (!route) return;
 
@@ -1191,33 +1191,26 @@ async function addToTeamUp(routeId) {
         return;
     }
 
-    console.log('📅 Adding to TeamUp:', route.name, routeData.date, routeData.time);
+    const routeName = route.name || route.toCity || route.to;
+    const [hours, minutes] = routeData.time.split(':');
+    const endHours = (parseInt(hours) + 1) % 24;
+    const endTime = String(endHours).padStart(2, '0') + ':' + minutes;
 
-    try {
-        const response = await fetch('/api/teamup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                routeId: routeId,
-                routeName: route.name || route.toCity || route.to,
-                date: routeData.date,
-                time: routeData.time
-            })
-        });
+    // TeamUp calendar URL with pre-filled event
+    const params = new URLSearchParams({
+        calendar: 'o7y5wi',
+        title: `✈️ ${routeName}`,
+        startDate: routeData.date,
+        startTime: routeData.time,
+        endDate: routeData.date,
+        endTime: endTime,
+        location: routeName,
+        notes: `Flight Route ID: ${routeId}`
+    });
 
-        if (response.ok) {
-            const result = await response.json();
-            console.log('✅ Added to TeamUp:', result.eventId);
-            showMessage('✅ נוסף ליומן TeamUp!', 'success');
-        } else {
-            const error = await response.json();
-            console.warn('⚠️ TeamUp error:', error);
-            showMessage('⚠️ שגיאה בהוסף ליומן', 'error');
-        }
-    } catch (err) {
-        console.error('❌ TeamUp API error:', err.message);
-        // Don't show error - it's secondary to main save
-    }
+    const teamupUrl = `https://teamup.com/create?${params.toString()}`;
+    console.log('📅 Opening TeamUp:', teamupUrl);
+    window.open(teamupUrl, '_blank');
 }
 
 function parseMetarRaw(raw) {

@@ -67,7 +67,8 @@
       "Bash(npx vercel:*)",
       "Bash(curl -s -X POST \"https://welcome-tapir-85334.upstash.io\" -H \"Authorization: Bearer gQAAAAAAAU1WAAIncDExNTlmNmRiN2VhZGE0MWEyODkzMWI3N2RkNWExMWFjYXAxODUzMzQ\" -H \"Content-Type: application/json\" -d '[\"\"GET\"\", \"\"doctor-simulator-data\"\"]')",
       "Bash(curl -s \"https://doctor-simulator-flights.vercel.app/api/save-data\")",
-      "Bash(curl -s -X POST \"https://doctor-simulator-flights.vercel.app/api/save-data\" -H \"Content-Type: application/json\" -d '{\"\"completed\"\":{\"\"1\"\":true},\"\"dates\"\":{\"\"1\"\":{\"\"date\"\":\"\"2026-03-26\"\",\"\"time\"\":\"\"15:30\"\"}}}')"
+      "Bash(curl -s -X POST \"https://doctor-simulator-flights.vercel.app/api/save-data\" -H \"Content-Type: application/json\" -d '{\"\"completed\"\":{\"\"1\"\":true},\"\"dates\"\":{\"\"1\"\":{\"\"date\"\":\"\"2026-03-26\"\",\"\"time\"\":\"\"15:30\"\"}}}')",
+      "Bash(curl -s -X POST \"https://doctor-simulator-flights.vercel.app/api/teamup\" -H \"Content-Type: application/json\" -d '{\"\"routeId\"\":\"\"1\"\",\"\"routeName\"\":\"\"Tel Aviv\"\",\"\"date\"\":\"\"2026-03-27\"\",\"\"time\"\":\"\"14:30\"\"}')"
     ]
   }
 }
