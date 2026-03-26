@@ -1209,58 +1209,45 @@ function addToTeamUp(routeId) {
         `Duration: ${flightDuration} min`,
         `WHO: מסביב לעולם`,
         `IFR`
-    ].join('\\n');
+    ].join('\n');
 
-    // Convert dates to ISO 8601 format for TeamUp API
-    const startDateTime = routeData.date + 'T' + routeData.time + ':00';
-    const endDateTime = routeData.date + 'T' + endTime + ':00';
+    // Create .ics file (iCalendar format)
+    const startDateTime = routeData.date + 'T' + routeData.time.replace(':', '') + '00';
+    const endDateTime = routeData.date + 'T' + endTime.replace(':', '') + '00';
 
-    // TeamUp API call to create event directly
-    const eventData = {
-        title: title,
-        startDate: routeData.date,
-        startTime: routeData.time,
-        endDate: routeData.date,
-        endTime: endTime,
-        location: `${route.fromCity} → ${route.toCity}`,
-        notes: description,
-        calendarId: 'o7y5wi'
-    };
+    const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Doctor Simulator//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Flight Logs
+X-WR-TIMEZONE:UTC
+BEGIN:VEVENT
+UID:${routeId}-${Date.now()}@doctor-simulator
+DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z
+DTSTART:${startDateTime}00Z
+DTEND:${endDateTime}00Z
+SUMMARY:${title}
+LOCATION:${route.fromCity} → ${route.toCity}
+DESCRIPTION:${description}
+STATUS:CONFIRMED
+SEQUENCE:0
+END:VEVENT
+END:VCALENDAR`;
 
-    // Try to send to TeamUp API
-    fetch('https://api.teamup.com/o7y5wi/events', {
-        method: 'POST',
-        headers: {
-            'Teamup-Token': 'cb257ed950f120e329ad66319e8eef13b74acb3d7aced4eb3826ab20d14fdf25',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ event: eventData })
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log('✅ Event added to TeamUp directly');
-            showMessage('✅ נוסף ליומן TeamUp!', 'success');
-            return;
-        }
-        // If API fails, fallback to manual URL
-        throw new Error('API failed');
-    })
-    .catch(err => {
-        console.log('📅 Opening TeamUp for manual save...');
-        // Fallback: Open TeamUp in new tab for manual save
-        const params = new URLSearchParams({
-            calendar: 'o7y5wi',
-            title: title,
-            startDate: routeData.date,
-            startTime: routeData.time,
-            endDate: routeData.date,
-            endTime: endTime,
-            location: `${route.fromCity} → ${route.toCity}`,
-            notes: description.replace(/\\n/g, '\n')
-        });
-        const teamupUrl = `https://teamup.com/create?${params.toString()}`;
-        window.open(teamupUrl, '_blank');
-    });
+    // Download .ics file
+    const blob = new Blob([icsContent], { type: 'text/calendar' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `flight-${route.from}-${route.to}-${routeData.date}.ics`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    showMessage('📥 קובץ .ics הורד! פתח ב-TeamUp כדי להוסיף את האירוע', 'success');
+    console.log('✅ .ics file downloaded for TeamUp import');
 }
 
 function parseMetarRaw(raw) {
