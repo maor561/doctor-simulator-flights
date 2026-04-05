@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import handler from './api/save-data.js';
+import rssHandler from './api/rss.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,6 +26,11 @@ app.post('/api/save-data', (req, res) => {
 
 app.options('/api/save-data', (req, res) => {
     handler({ method: 'OPTIONS', body: {} }, res);
+});
+
+// RSS Feed
+app.get('/api/rss', (req, res) => {
+    rssHandler({ method: 'GET' }, res);
 });
 
 // Serve index.html for root path

@@ -3,8 +3,6 @@
  * GET /api/rss - Returns RSS XML feed with all scheduled flights
  */
 
-import { kv } from '@vercel/kv';
-
 const KV_URL = process.env.KV_REST_API_URL;
 const KV_TOKEN = process.env.KV_REST_API_TOKEN;
 const KV_KEY = 'doctor-simulator-data';
