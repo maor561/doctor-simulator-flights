@@ -61,7 +61,12 @@ const AIRPORT_DB = {
     'VTBS': { coords: [13.9125, 100.6075], city: 'Bangkok', country: 'TH' },
     'VOCI': { coords: [9.8267, 76.2706], city: 'Kochi', country: 'IN' },
     'OOMS': { coords: [23.6100, 58.2844], city: 'Muscat', country: 'OM' },
-    'OTHH': { coords: [25.2731, 51.6072], city: 'Doha', country: 'QA' }
+    'OTHH': { coords: [25.2731, 51.6072], city: 'Doha', country: 'QA' },
+    'UBBB': { coords: [40.0620, 50.2300], city: 'Baku', country: 'AZ' },
+    'LTAR': { coords: [39.5564, 32.4143], city: 'Ankara', country: 'TR' },
+    'LTAI': { coords: [40.3967, 33.1036], city: 'Istanbul', country: 'TR' },
+    'MMIT': { coords: [19.2547, -99.4896], city: 'Mexico City Terminal 1', country: 'MX' },
+    'MMZO': { coords: [19.6178, -99.5339], city: 'Toluca', country: 'MX' }
 };
 
 async function loadRoutesFromSheet() {
