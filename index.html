@@ -459,33 +459,6 @@
             background: #c2185b;
             transform: translateY(-1px);
         }
-        /* Registrations section */
-        .registrations-section {
-            width: 100%;
-            margin-top: 8px;
-            padding: 10px 16px;
-            background: linear-gradient(135deg, #fce4ec, #f8bbd0);
-            border-radius: 0;
-            border-top: 1px solid #f48fb1;
-        }
-        .registrations-title {
-            font-size: 12px;
-            font-weight: 700;
-            color: #c2185b;
-            margin-bottom: 6px;
-        }
-        .registrations-list {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .registration-item {
-            font-size: 11px;
-            color: #6f0a33;
-            padding: 4px 0;
-            direction: rtl;
-            text-align: right;
-        }
         /* unused old classes removed */
         .modal {
             display: none;
@@ -520,6 +493,21 @@
             gap: 10px;
         }
         .modal-buttons button { flex: 1; }
+
+        /* Active route animation */
+        .leaflet-interactive.active-route {
+            filter: drop-shadow(0 0 8px rgba(255, 20, 147, 0.6));
+        }
+
+        @keyframes routePulse {
+            0%, 100% { filter: drop-shadow(0 0 4px rgba(255, 20, 147, 0.4)); }
+            50% { filter: drop-shadow(0 0 12px rgba(255, 20, 147, 0.8)); }
+        }
+
+        .leaflet-interactive.active-route {
+            animation: routePulse 2s ease-in-out infinite;
+        }
+
         @media (max-width: 1024px) {
             .main-layout { flex-direction: column; }
             .routes-panel { max-height: none; overflow-y: visible; }
@@ -1501,9 +1489,13 @@ function drawMapRoute(routeId) {
     const to = getOrCreateCoordinates(route.to);
 
     const polyline = L.polyline([from, to], {
-        color: completed[routeId] ? '#4caf50' : '#e91e63',
-        weight: 3,
-        opacity: 0.8
+        color: completed[routeId] ? '#4caf50' : '#ff1493',
+        weight: 4,
+        opacity: 0.85,
+        dashArray: completed[routeId] ? null : '8, 4',
+        lineCap: 'round',
+        lineJoin: 'round',
+        className: 'active-route'
     }).addTo(map);
 
     // Add tooltip to polyline (LEG info)
@@ -1597,14 +1589,6 @@ function render() {
                     <button class="btn-calendar" onclick="downloadICS(${r.id})">📅 הוסף ליומן</button>
                     ${isAdmin ? `<input type="checkbox" ${completed[r.id] ? 'checked' : ''} onchange="toggleRoute(${r.id})"> <label>סימון בוצע</label>` : ''}
                 </div>
-                ${registrations[r.id] && registrations[r.id].length > 0 ? `
-                <div class="registrations-section">
-                    <div class="registrations-title">👥 משתתפים (${registrations[r.id].length}):</div>
-                    <div class="registrations-list">
-                        ${registrations[r.id].map((reg, i) => `<div class="registration-item">${i + 1}. ${reg.name}</div>`).join('')}
-                    </div>
-                </div>
-                ` : ''}
             </div>
         `;
     }).join('');
