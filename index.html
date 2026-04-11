@@ -1257,13 +1257,28 @@ function downloadICS(routeId) {
     showMessage('📥 קובץ .ics הורד', 'success');
 }
 
-// Register for a route
+// View or register for a route
 function registerForRoute(routeId) {
-    const name = prompt('הכנס את שמך להרשמה לטיסה:');
-    if (!name || name.trim() === '') return;
+    const route = routes.find(r => r.id == routeId);
+    if (!route) return;
 
     if (!registrations) registrations = {};
     if (!registrations[routeId]) registrations[routeId] = [];
+
+    const regs = registrations[routeId];
+
+    // If there are already registrations, show them first with an option to add more
+    if (regs.length > 0) {
+        const regList = regs.map((r, i) => `${i + 1}. ${r.name}`).join('\n');
+        const action = confirm(
+            `נרשמו ${regs.length} משתתפים:\n\n${regList}\n\nלחץ "אישור" להוספת משתתף חדש או "ביטול" לסגירה`
+        );
+        if (!action) return; // User clicked Cancel - just view mode
+    }
+
+    // Get name for new registration
+    const name = prompt('הכנס את שמך להרשמה לטיסה:');
+    if (!name || name.trim() === '') return;
 
     registrations[routeId].push({
         name: name.trim(),
