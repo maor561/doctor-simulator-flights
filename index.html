@@ -494,18 +494,68 @@
         }
         .modal-buttons button { flex: 1; }
 
-        /* Active route animation */
-        .leaflet-interactive.active-route {
-            filter: drop-shadow(0 0 8px rgba(255, 20, 147, 0.6));
+        /* Stunning route line animation - only for incomplete routes */
+        .route-line[stroke="#10B981"] {
+            /* Completed routes - solid, steady, no animation */
+            filter: drop-shadow(0 0 2px rgba(16, 185, 129, 0.4));
+            animation: none;
         }
 
-        @keyframes routePulse {
-            0%, 100% { filter: drop-shadow(0 0 4px rgba(255, 20, 147, 0.4)); }
-            50% { filter: drop-shadow(0 0 12px rgba(255, 20, 147, 0.8)); }
+        .route-line:not([stroke="#10B981"]) {
+            /* Incomplete routes - vibrant and animated */
+            filter: drop-shadow(0 0 6px currentColor) drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
+            animation: routeGlow 3s ease-in-out infinite;
         }
 
-        .leaflet-interactive.active-route {
-            animation: routePulse 2s ease-in-out infinite;
+        .route-glow {
+            animation: glowPulse 2.5s ease-in-out infinite;
+        }
+
+        .route-glow[stroke="#10B981"] {
+            animation: none;
+        }
+
+        @keyframes routeGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 6px currentColor) drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
+            }
+            50% {
+                filter: drop-shadow(0 0 12px currentColor) drop-shadow(0 0 20px rgba(255, 255, 255, 0.6));
+            }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.15; }
+            50% { opacity: 0.35; }
+        }
+
+        /* Marker pulse animation - only for incomplete routes */
+        .route-marker-from:not([fill="#10B981"]),
+        .route-marker-to:not([fill="#10B981"]) {
+            animation: markerPulse 2s ease-in-out infinite;
+        }
+
+        .route-marker-to:not([fill="#10B981"]) {
+            animation: markerPulse 2s ease-in-out infinite 0.5s;
+        }
+
+        .route-marker-from[fill="#10B981"],
+        .route-marker-to[fill="#10B981"] {
+            animation: none;
+            opacity: 0.7 !important;
+        }
+
+        @keyframes markerPulse {
+            0%, 100% {
+                r: 8px;
+                opacity: 0.9;
+                filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
+            }
+            50% {
+                r: 12px;
+                opacity: 0.6;
+                filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8));
+            }
         }
 
         @media (max-width: 1024px) {
@@ -1488,33 +1538,96 @@ function drawMapRoute(routeId) {
     const from = getOrCreateCoordinates(route.from);
     const to = getOrCreateCoordinates(route.to);
 
+    // Vibrant color palette for different routes
+    const colors = [
+        '#FF006E', '#FB5607', '#FFBE0B', '#8338EC', '#3A86FF',
+        '#06FFA5', '#FF006E', '#FB5607', '#FFBE0B', '#8338EC'
+    ];
+    const routeColor = completed[routeId] ? '#10B981' : colors[routeId % colors.length];
+
+    // Create main polyline with glow effect
     const polyline = L.polyline([from, to], {
-        color: completed[routeId] ? '#4caf50' : '#ff1493',
-        weight: 4,
-        opacity: 0.85,
-        dashArray: completed[routeId] ? null : '8, 4',
+        color: routeColor,
+        weight: 5,
+        opacity: 0.9,
+        dashArray: completed[routeId] ? null : '10, 5',
         lineCap: 'round',
         lineJoin: 'round',
-        className: 'active-route'
+        className: 'route-line'
+    }).addTo(map);
+
+    // Add glow effect with SVG shadow
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+    filter.id = `glow-${routeId}`;
+    filter.innerHTML = `
+        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+        <feMerge>
+            <feMergeNode in="coloredBlur"/>
+            <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+    `;
+
+    // Create animated airplane icon that moves along the route
+    const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svgElement.setAttribute('style', `
+        position: absolute;
+        pointer-events: none;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 10;
+    `);
+
+    map._container.appendChild(svgElement);
+
+    // Create beautiful gradient effect by adding multiple layers
+    const glowPolyline = L.polyline([from, to], {
+        color: routeColor,
+        weight: 12,
+        opacity: 0.15,
+        dashArray: completed[routeId] ? null : '10, 5',
+        lineCap: 'round',
+        lineJoin: 'round',
+        className: 'route-glow'
+    }).addTo(map);
+
+    // Add decorative markers with pulse animation
+    const fromMarker = L.circleMarker(from, {
+        radius: 8,
+        fillColor: routeColor,
+        color: '#fff',
+        weight: 3,
+        opacity: 0.9,
+        fillOpacity: 0.8,
+        className: 'route-marker-from'
+    }).addTo(map);
+
+    const toMarker = L.circleMarker(to, {
+        radius: 8,
+        fillColor: routeColor,
+        color: '#fff',
+        weight: 3,
+        opacity: 0.9,
+        fillOpacity: 0.8,
+        className: 'route-marker-to'
     }).addTo(map);
 
     // Add tooltip to polyline (LEG info)
     polyline.bindTooltip(
-        `<strong style="color:#333">LEG #${route.num}</strong><br>${route.from} → ${route.to}<br>${route.time} דקות`,
+        `<strong style="color:#333">✈️ LEG #${route.num}</strong><br>${route.from} → ${route.to}<br>🕐 ${route.time} דקות`,
         {permanent: false, direction: 'center', sticky: true}
     );
 
-    // Add markers with tooltips (airport info)
-    const fromMarker = L.circleMarker(from, {radius: 5, color: '#0288d1', fillOpacity: 0.8}).addTo(map);
-    const toMarker = L.circleMarker(to, {radius: 5, color: '#0288d1', fillOpacity: 0.8}).addTo(map);
-
+    // Add tooltips to markers (airport info)
     fromMarker.bindTooltip(`<strong>${route.from}</strong><br>${route.fromCity || ''}<br>${route.fromCountry || ''}`,
         {permanent: false, direction: 'top', offset: [0, -10]});
 
     toMarker.bindTooltip(`<strong>${route.to}</strong><br>${route.toCity || ''}<br>${route.toCountry || ''}`,
         {permanent: false, direction: 'top', offset: [0, -10]});
 
-    drawnRoutes.push({id: routeId, polyline: polyline, fromMarker: fromMarker, toMarker: toMarker});
+    drawnRoutes.push({id: routeId, polyline: polyline, glowPolyline: glowPolyline, fromMarker: fromMarker, toMarker: toMarker});
 }
 
 function zoomToRoute(routeId) {
@@ -1531,8 +1644,14 @@ function zoomToRoute(routeId) {
     drawnRoutes.forEach(r => {
         if (r.polyline) {
             r.polyline.setStyle({
-                weight: r.id === routeId ? 5 : 3,
-                opacity: r.id === routeId ? 1 : 0.6
+                weight: r.id === routeId ? 6 : 5,
+                opacity: r.id === routeId ? 1 : 0.9
+            });
+        }
+        if (r.glowPolyline) {
+            r.glowPolyline.setStyle({
+                weight: r.id === routeId ? 16 : 12,
+                opacity: r.id === routeId ? 0.4 : 0.15
             });
         }
     });
