@@ -494,67 +494,85 @@
         }
         .modal-buttons button { flex: 1; }
 
-        /* Stunning route line animation - only for incomplete routes */
-        .route-line[stroke="#10B981"] {
-            /* Completed routes - solid, steady, no animation */
-            filter: drop-shadow(0 0 2px rgba(16, 185, 129, 0.4));
-            animation: none;
+        /* Dynamic flowing route animation */
+        .route-line {
+            stroke-dasharray: 10, 5;
+            stroke-dashoffset: 0;
+            filter: drop-shadow(0 0 4px currentColor);
         }
 
-        .route-line:not([stroke="#10B981"]) {
-            /* Incomplete routes - vibrant and animated */
-            filter: drop-shadow(0 0 6px currentColor) drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
-            animation: routeGlow 3s ease-in-out infinite;
+        .route-line.route-incomplete {
+            animation: flowingRoute 1s linear infinite;
+        }
+
+        .route-line.route-completed {
+            /* Completed routes - solid, subtle glow */
+            stroke-dasharray: none;
+            animation: completedGlow 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 3px rgba(16, 185, 129, 0.6));
         }
 
         .route-glow {
-            animation: glowPulse 2.5s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px currentColor);
         }
 
-        .route-glow[stroke="#10B981"] {
-            animation: none;
+        .route-glow.route-incomplete {
+            animation: glowWave 2s ease-in-out infinite;
         }
 
-        @keyframes routeGlow {
-            0%, 100% {
-                filter: drop-shadow(0 0 6px currentColor) drop-shadow(0 0 12px rgba(255, 255, 255, 0.3));
-            }
-            50% {
-                filter: drop-shadow(0 0 12px currentColor) drop-shadow(0 0 20px rgba(255, 255, 255, 0.6));
-            }
+        .route-glow.route-completed {
+            animation: completedGlowSoft 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 2px rgba(16, 185, 129, 0.3));
         }
 
-        @keyframes glowPulse {
+        /* Dynamic flowing dash animation */
+        @keyframes flowingRoute {
+            0% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: -15; }
+        }
+
+        /* Glow wave for incomplete routes */
+        @keyframes glowWave {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Gentle glow for completed routes */
+        @keyframes completedGlow {
+            0%, 100% { filter: drop-shadow(0 0 3px rgba(16, 185, 129, 0.6)); }
+            50% { filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.8)); }
+        }
+
+        @keyframes completedGlowSoft {
             0%, 100% { opacity: 0.15; }
-            50% { opacity: 0.35; }
+            50% { opacity: 0.25; }
         }
 
-        /* Marker pulse animation - only for incomplete routes */
-        .route-marker-from:not([fill="#10B981"]),
-        .route-marker-to:not([fill="#10B981"]) {
-            animation: markerPulse 2s ease-in-out infinite;
+        /* Dynamic marker animation */
+        .route-marker-from,
+        .route-marker-to {
+            animation: markerBreathe 1.5s ease-in-out infinite;
+            filter: drop-shadow(0 0 6px currentColor);
         }
 
-        .route-marker-to:not([fill="#10B981"]) {
-            animation: markerPulse 2s ease-in-out infinite 0.5s;
+        .route-marker-to {
+            animation-delay: 0.3s;
         }
 
         .route-marker-from[fill="#10B981"],
         .route-marker-to[fill="#10B981"] {
-            animation: none;
-            opacity: 0.7 !important;
+            filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.6));
+            animation: markerBreathe 1.5s ease-in-out infinite;
         }
 
-        @keyframes markerPulse {
+        @keyframes markerBreathe {
             0%, 100% {
                 r: 8px;
-                opacity: 0.9;
-                filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5));
+                opacity: 0.8;
             }
             50% {
-                r: 12px;
-                opacity: 0.6;
-                filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8));
+                r: 11px;
+                opacity: 1;
             }
         }
 
@@ -1538,22 +1556,19 @@ function drawMapRoute(routeId) {
     const from = getOrCreateCoordinates(route.from);
     const to = getOrCreateCoordinates(route.to);
 
-    // Vibrant color palette for different routes
-    const colors = [
-        '#FF006E', '#FB5607', '#FFBE0B', '#8338EC', '#3A86FF',
-        '#06FFA5', '#FF006E', '#FB5607', '#FFBE0B', '#8338EC'
-    ];
-    const routeColor = completed[routeId] ? '#10B981' : colors[routeId % colors.length];
+    // Simple and elegant color scheme
+    const routeColor = completed[routeId] ? '#10B981' : '#9C27B0';
 
     // Create main polyline with glow effect
+    const isCompleted = completed[routeId];
     const polyline = L.polyline([from, to], {
         color: routeColor,
         weight: 5,
         opacity: 0.9,
-        dashArray: completed[routeId] ? null : '10, 5',
+        dashArray: isCompleted ? null : '10, 5',
         lineCap: 'round',
         lineJoin: 'round',
-        className: 'route-line'
+        className: isCompleted ? 'route-line route-completed' : 'route-line route-incomplete'
     }).addTo(map);
 
     // Add glow effect with SVG shadow
@@ -1587,10 +1602,10 @@ function drawMapRoute(routeId) {
         color: routeColor,
         weight: 12,
         opacity: 0.15,
-        dashArray: completed[routeId] ? null : '10, 5',
+        dashArray: isCompleted ? null : '10, 5',
         lineCap: 'round',
         lineJoin: 'round',
-        className: 'route-glow'
+        className: isCompleted ? 'route-glow route-completed' : 'route-glow route-incomplete'
     }).addTo(map);
 
     // Add decorative markers with pulse animation

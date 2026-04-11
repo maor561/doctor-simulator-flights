@@ -68,7 +68,27 @@
       "Bash(curl -s -X POST \"https://welcome-tapir-85334.upstash.io\" -H \"Authorization: Bearer gQAAAAAAAU1WAAIncDExNTlmNmRiN2VhZGE0MWEyODkzMWI3N2RkNWExMWFjYXAxODUzMzQ\" -H \"Content-Type: application/json\" -d '[\"\"GET\"\", \"\"doctor-simulator-data\"\"]')",
       "Bash(curl -s \"https://doctor-simulator-flights.vercel.app/api/save-data\")",
       "Bash(curl -s -X POST \"https://doctor-simulator-flights.vercel.app/api/save-data\" -H \"Content-Type: application/json\" -d '{\"\"completed\"\":{\"\"1\"\":true},\"\"dates\"\":{\"\"1\"\":{\"\"date\"\":\"\"2026-03-26\"\",\"\"time\"\":\"\"15:30\"\"}}}')",
-      "Bash(curl -s -X POST \"https://doctor-simulator-flights.vercel.app/api/teamup\" -H \"Content-Type: application/json\" -d '{\"\"routeId\"\":\"\"1\"\",\"\"routeName\"\":\"\"Tel Aviv\"\",\"\"date\"\":\"\"2026-03-27\"\",\"\"time\"\":\"\"14:30\"\"}')"
+      "Bash(curl -s -X POST \"https://doctor-simulator-flights.vercel.app/api/teamup\" -H \"Content-Type: application/json\" -d '{\"\"routeId\"\":\"\"1\"\",\"\"routeName\"\":\"\"Tel Aviv\"\",\"\"date\"\":\"\"2026-03-27\"\",\"\"time\"\":\"\"14:30\"\"}')",
+      "Bash(curl -s \"https://api.teamup.com/o7y5wi/events?startDate=2026-03-01&endDate=2026-03-31\" -H \"Teamup-Token: cb257ed950f120e329ad66319e8eef13b74acb3d7aced4eb3826ab20d14fdf25\")",
+      "Bash(curl -s \"https://api.teamup.com/check-access\" -H \"Teamup-Token: cb257ed950f120e329ad66319e8eef13b74acb3d7aced4eb3826ab20d14fdf25\" -w \"\\\\nStatus: %{http_code}\\\\n\")",
+      "Bash(curl -s -X POST \"https://api.teamup.com/o7y5wi/events\" -H \"Teamup-Token: cb257ed950f120e329ad66319e8eef13b74acb3d7aced4eb3826ab20d14fdf25\" -H \"Content-Type: application/json\" -d '{:*)",
+      "WebFetch(domain:apidocs.teamup.com)",
+      "WebFetch(domain:calendar.teamup.com)",
+      "WebFetch(domain:www.postman.com)",
+      "Bash(curl -s \"https://apidocs.teamup.com/docs/api/e60b71a05cf57-authentication\")",
+      "Bash(curl -X POST \"https://api.goteamup.com/events?calendarKey=o7y5wi\" -H \"Teamup-Token: cb257ed950f120e329ad66319e8eef13b74acb3d7aced4eb3826ab20d14fdf25\" -H \"Content-Type: application/json\" -d '{:*)",
+      "Bash(curl -X POST \"https://api.teamup.com/calendars/o7y5wi/events\" -H \"Teamup-Token: cb257ed950f120e329ad66319e8eef13b74acb3d7aced4eb3826ab20d14fdf25\" -H \"Content-Type: application/json\" -d '{:*)",
+      "Bash(curl -X POST \"https://api.teamup.com/o7y5wi/events\" -H \"Teamup-Token: cb257ed950f120e329ad66319e8eef13b74acb3d7aced4eb3826ab20d14fdf25\" -H \"Content-Type: application/json\" -d '{:*)",
+      "Bash(curl -I \"https://api.goteamup.com\")",
+      "Bash(curl -X POST \"https://api.teamup.com/o7y5wi/events\" -H \"Authorization: Bearer cb257ed950f120e329ad66319e8eef13b74acb3d7aced4eb3826ab20d14fdf25\" -H \"Content-Type: application/json\" -d '{:*)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill /PID 38552 /F)",
+      "Bash(PORT=3000 node server.js)",
+      "Bash(grep -E \"\\\\.\\(html|js\\)$|^d\")",
+      "Bash(npx kill-port:*)",
+      "Bash(taskkill /PID 34196 /F)",
+      "Bash(kill -9 34196)",
+      "Bash(powershell -Command \"Stop-Process -Id 34196 -Force\")"
     ]
   }
 }

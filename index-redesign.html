@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Simulator - Flight Training</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0f1419;
+            --bg-secondary: #1a1f29;
+            --bg-tertiary: #252d3a;
+            --text-primary: #e8eef7;
+            --text-secondary: #a8b4c8;
+            --accent: #3b82f6;
+            --accent-alt: #10b981;
+            --border: #374151;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            color: var(--text-primary);
+        }
+
+        .logo-subtitle {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-item {
+            font-size: 13px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 3px;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .header-right {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .header-stat {
+            text-align: right;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        /* ===== MAIN LAYOUT ===== */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 30px 40px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 30px;
+        }
+
+        /* ===== MAP SECTION ===== */
+        .map-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            height: 650px;
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ===== ROUTES PANEL ===== */
+        .panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-tertiary);
+        }
+
+        .panel-title {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-primary);
+        }
+
+        .panel-search {
+            width: 100%;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .panel-search::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== ROUTE LIST ===== */
+        .route-item {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--bg-secondary);
+        }
+
+        .route-item:last-child {
+            border-bottom: none;
+        }
+
+        .route-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .route-item.active {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid var(--accent);
+            padding-left: 13px;
+        }
+
+        .route-code {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .route-from {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-primary);
+            min-width: 45px;
+        }
+
+        .route-arrow {
+            color: var(--text-secondary);
+            font-size: 11px;
+        }
+
+        .route-to {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .route-cities {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .route-duration {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent);
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* ===== SCHEDULE PANEL ===== */
+        .schedule-panel {
+            flex: 1;
+            min-height: 250px;
+        }
+
+        .input-field {
+            margin: 12px 0;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .input-field input {
+            width: 100%;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            padding: 10px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .input-field input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+
+        .input-field input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            padding: 0 20px 16px 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-save {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #2563eb;
+        }
+
+        .btn-export {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-export:hover {
+            background: var(--bg-primary);
+            border-color: var(--accent);
+        }
+
+        /* ===== MESSAGE ===== */
+        #message {
+            position: fixed;
+            top: 90px;
+            right: 40px;
+            padding: 12px 20px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+            border-left: 3px solid;
+        }
+
+        #message.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-alt);
+            border-color: var(--accent-alt);
+        }
+
+        #message.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        .panel-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .panel-content::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        .panel-content::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        .panel-content::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .map-section {
+                height: 500px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+
+            .header-nav {
+                gap: 15px;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-around;
+            }
+
+            .container {
+                padding: 20px 15px;
+            }
+
+            #message {
+                right: 15px;
+                left: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-left">
+            <div>
+                <div class="logo">DOCTOR SIMULATOR</div>
+                <div class="logo-subtitle">Flight Training System</div>
+            </div>
+            <div class="header-nav">
+                <div class="nav-item active">Dashboard</div>
+                <div class="nav-item">Routes</div>
+                <div class="nav-item">Weather</div>
+                <div class="nav-item">Logbook</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="header-stat">
+                <div class="stat-value">47</div>
+                <div class="stat-label">Routes</div>
+            </div>
+            <div class="header-stat">
+                <div class="stat-value">0</div>
+                <div class="stat-label">Completed</div>
+            </div>
+            <div class="header-stat">
+                <div class="stat-value">0h</div>
+                <div class="stat-label">Flight Time</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MESSAGE -->
+    <div id="message"></div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+        <div class="main-grid">
+            <!-- MAP SECTION -->
+            <div class="map-section">
+                <div class="map-placeholder">
+                    Map will be displayed here
+                </div>
+            </div>
+
+            <!-- SIDEBAR -->
+            <div class="sidebar">
+                <!-- ROUTES PANEL -->
+                <div class="panel" style="flex: 1; min-height: 400px;">
+                    <div class="panel-header">
+                        <div class="panel-title">Active Routes</div>
+                    </div>
+                    <div class="panel-content">
+                        <!-- Route Item 1 -->
+                        <div class="route-item active">
+                            <div class="route-code">
+                                <span class="route-from">LLBG</span>
+                                <span class="route-arrow">→</span>
+                                <span class="route-to">LFPG</span>
+                            </div>
+                            <div class="route-cities">Tel Aviv → Paris</div>
+                            <div class="route-duration">4h 30m</div>
+                        </div>
+
+                        <!-- Route Item 2 -->
+                        <div class="route-item">
+                            <div class="route-code">
+                                <span class="route-from">LLBG</span>
+                                <span class="route-arrow">→</span>
+                                <span class="route-to">LCEN</span>
+                            </div>
+                            <div class="route-cities">Tel Aviv → Nicosia</div>
+                            <div class="route-duration">49m</div>
+                        </div>
+
+                        <!-- Route Item 3 -->
+                        <div class="route-item">
+                            <div class="route-code">
+                                <span class="route-from">LLBG</span>
+                                <span class="route-arrow">→</span>
+                                <span class="route-to">LGAV</span>
+                            </div>
+                            <div class="route-cities">Tel Aviv → Athens</div>
+                            <div class="route-duration">2h 40m</div>
+                        </div>
+
+                        <!-- Route Item 4 -->
+                        <div class="route-item">
+                            <div class="route-code">
+                                <span class="route-from">EGLL</span>
+                                <span class="route-arrow">→</span>
+                                <span class="route-to">LFPG</span>
+                            </div>
+                            <div class="route-cities">London → Paris</div>
+                            <div class="route-duration">1h 15m</div>
+                        </div>
+
+                        <!-- Route Item 5 -->
+                        <div class="route-item">
+                            <div class="route-code">
+                                <span class="route-from">KJFK</span>
+                                <span class="route-arrow">→</span>
+                                <span class="route-to">EGLL</span>
+                            </div>
+                            <div class="route-cities">New York → London</div>
+                            <div class="route-duration">7h 15m</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SCHEDULE PANEL -->
+                <div class="panel schedule-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">Schedule Flight</div>
+                    </div>
+                    <div style="padding: 20px;">
+                        <div class="input-field">
+                            <label class="input-label">Departure Date</label>
+                            <input type="date">
+                        </div>
+                        <div class="input-field">
+                            <label class="input-label">Departure Time</label>
+                            <input type="time">
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-save">Schedule</button>
+                            <button class="btn btn-export">Export</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showMessage(text, type) {
+            const msg = document.getElementById('message');
+            msg.textContent = text;
+            msg.className = type;
+            setTimeout(() => {
+                msg.textContent = '';
+                msg.className = '';
+            }, 3000);
+        }
+
+        document.querySelectorAll('.route-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.route-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                showMessage('✓ Route selected successfully', 'success');
+            });
+        });
+    </script>
+
+</body>
+</html>
