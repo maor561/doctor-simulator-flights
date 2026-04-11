@@ -524,6 +524,8 @@
             stroke-dasharray: 10, 5;
             stroke-dashoffset: 0;
             filter: drop-shadow(0 0 4px currentColor);
+            pointer-events: auto;
+            cursor: pointer;
         }
 
         .route-line.route-incomplete {
@@ -1593,7 +1595,8 @@ function drawMapRoute(routeId) {
         dashArray: isCompleted ? null : '10, 5',
         lineCap: 'round',
         lineJoin: 'round',
-        className: isCompleted ? 'route-line route-completed' : 'route-line route-incomplete'
+        className: isCompleted ? 'route-line route-completed' : 'route-line route-incomplete',
+        title: `✈️ LEG #${route.num} - ${route.from} → ${route.to} (${route.time} דקות)`
     }).addTo(map);
 
     // Add glow effect with SVG shadow
