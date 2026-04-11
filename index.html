@@ -87,6 +87,31 @@
             max-height: 800px;
             overflow-y: auto;
         }
+
+        /* Leaflet Tooltip Styling */
+        .leaflet-tooltip {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+            color: #fff !important;
+            border: none !important;
+            border-radius: 4px !important;
+            padding: 8px 12px !important;
+            font-size: 13px !important;
+            z-index: 9999 !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+        }
+        .leaflet-tooltip-left::before {
+            border-left-color: rgba(0, 0, 0, 0.9) !important;
+        }
+        .leaflet-tooltip-right::before {
+            border-right-color: rgba(0, 0, 0, 0.9) !important;
+        }
+        .leaflet-tooltip-top::before {
+            border-top-color: rgba(0, 0, 0, 0.9) !important;
+        }
+        .leaflet-tooltip-bottom::before {
+            border-bottom-color: rgba(0, 0, 0, 0.9) !important;
+        }
+
         @media (max-width: 1024px) {
             .main-layout {
                 flex-direction: column;
@@ -1629,18 +1654,43 @@ function drawMapRoute(routeId) {
         className: 'route-marker-to'
     }).addTo(map);
 
-    // Add tooltip to polyline (LEG info)
-    polyline.bindTooltip(
-        `<strong style="color:#333">✈️ LEG #${route.num}</strong><br>${route.from} → ${route.to}<br>🕐 ${route.time} דקות`,
-        {permanent: false, direction: 'center', sticky: true}
-    );
+    // Add popup on hover to show LEG info
+    const routeInfo = `<strong>✈️ LEG #${route.num}</strong><br>${route.from} → ${route.to}<br>🕐 ${route.time} דקות`;
+    polyline.bindPopup(routeInfo);
+
+    // Also keep tooltip for accessibility
+    polyline.bindTooltip(routeInfo, {permanent: false, direction: 'top', sticky: false, className: 'leaflet-tooltip'});
+
+    // Show popup on hover
+    polyline.on('mouseover', function() {
+        this.openPopup();
+        this.openTooltip();
+    });
+    polyline.on('mouseout', function() {
+        this.closePopup();
+        this.closeTooltip();
+    });
 
     // Add tooltips to markers (airport info)
     fromMarker.bindTooltip(`<strong>${route.from}</strong><br>${route.fromCity || ''}<br>${route.fromCountry || ''}`,
-        {permanent: false, direction: 'top', offset: [0, -10]});
+        {permanent: false, direction: 'top', offset: [0, -10], className: 'leaflet-tooltip'});
+
+    fromMarker.on('mouseover', function() {
+        this.openTooltip();
+    });
+    fromMarker.on('mouseout', function() {
+        this.closeTooltip();
+    });
 
     toMarker.bindTooltip(`<strong>${route.to}</strong><br>${route.toCity || ''}<br>${route.toCountry || ''}`,
-        {permanent: false, direction: 'top', offset: [0, -10]});
+        {permanent: false, direction: 'top', offset: [0, -10], className: 'leaflet-tooltip'});
+
+    toMarker.on('mouseover', function() {
+        this.openTooltip();
+    });
+    toMarker.on('mouseout', function() {
+        this.closeTooltip();
+    });
 
     drawnRoutes.push({id: routeId, polyline: polyline, glowPolyline: glowPolyline, fromMarker: fromMarker, toMarker: toMarker});
 }
