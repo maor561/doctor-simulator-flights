@@ -1654,21 +1654,25 @@ function drawMapRoute(routeId) {
         className: 'route-marker-to'
     }).addTo(map);
 
-    // Add popup on hover to show LEG info
+    // Add popup and tooltip for LEG info
     const routeInfo = `<strong>✈️ LEG #${route.num}</strong><br>${route.from} → ${route.to}<br>🕐 ${route.time} דקות`;
     polyline.bindPopup(routeInfo);
-
-    // Also keep tooltip for accessibility
     polyline.bindTooltip(routeInfo, {permanent: false, direction: 'top', sticky: false, className: 'leaflet-tooltip'});
 
-    // Show popup on hover
-    polyline.on('mouseover', function() {
+    // Show popup on hover - use mousemove for more reliable trigger
+    polyline.on('mouseover', function(e) {
+        console.log('Route hover:', route.num);
         this.openPopup();
-        this.openTooltip();
+        if (this._tooltip) {
+            this._tooltip.setOpacity(1);
+            this._tooltip.getElement().style.visibility = 'visible';
+        }
     });
     polyline.on('mouseout', function() {
         this.closePopup();
-        this.closeTooltip();
+        if (this._tooltip) {
+            this._tooltip.getElement().style.visibility = 'hidden';
+        }
     });
 
     // Add tooltips to markers (airport info)
