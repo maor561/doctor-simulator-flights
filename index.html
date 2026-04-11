@@ -1593,7 +1593,7 @@ function render() {
                     </div>
                 </div>
                 <div class="route-bottom" onclick="event.stopPropagation()">
-                    <button class="btn-register" onclick="registerForRoute(${r.id})">👥 הרשם (${registrations[r.id] ? registrations[r.id].length : 0})</button>
+                    <button class="btn-register" onclick="registerForRoute(${r.id})" title="${registrations[r.id] && registrations[r.id].length > 0 ? '👥 רשומים: ' + registrations[r.id].map((reg, i) => `${i + 1}. ${reg.name}`).join('\\n') : '🚫 אין משתתפים'}">👥 הרשם (${registrations[r.id] ? registrations[r.id].length : 0})</button>
                     <button class="btn-calendar" onclick="downloadICS(${r.id})">📅 הוסף ליומן</button>
                     ${isAdmin ? `<input type="checkbox" ${completed[r.id] ? 'checked' : ''} onchange="toggleRoute(${r.id})"> <label>סימון בוצע</label>` : ''}
                 </div>
