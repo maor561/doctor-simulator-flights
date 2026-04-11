@@ -1,8 +1,8 @@
 /**
  * API endpoint for saving and loading route data
- * POST /api/save-data - Save routes data (dates + completed)
+ * POST /api/save-data - Save routes data (dates + completed + registrations)
  * GET /api/save-data - Load saved routes data
- * Body: { completed: {}, dates: {} }
+ * Body: { completed: {}, dates: {}, registrations: {} }
  *
  * Storage: Uses Vercel KV (cloud) when available, falls back to file system (local dev)
  */
@@ -140,10 +140,10 @@ export default async function handler(req, res) {
 
     // POST: Save data
     if (req.method === 'POST') {
-        const { completed, dates, action } = req.body;
+        const { completed, dates, registrations, action } = req.body;
 
         if (action === 'sync' || (completed !== undefined && dates !== undefined)) {
-            const data = { completed, dates };
+            const data = { completed, dates, registrations: registrations || {} };
             if (await saveData(data)) {
                 return res.status(200).json({
                     success: true,
@@ -157,7 +157,7 @@ export default async function handler(req, res) {
                 });
             }
         } else if (action === 'reset') {
-            if (await saveData({ completed: {}, dates: {} })) {
+            if (await saveData({ completed: {}, dates: {}, registrations: {} })) {
                 return res.status(200).json({
                     success: true,
                     message: 'Data reset successfully',

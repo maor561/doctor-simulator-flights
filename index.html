@@ -444,6 +444,21 @@
             color: #666;
             margin: 0;
         }
+        .btn-register, .btn-calendar {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-register:hover, .btn-calendar:hover {
+            background: #c2185b;
+            transform: translateY(-1px);
+        }
         /* unused old classes removed */
         .modal {
             display: none;
@@ -1077,6 +1092,7 @@ let isAdmin = false;
 let showDone = false;
 let completed = {};
 let routeDates = {};
+let registrations = {};
 let map = null;
 let drawnRoutes = [];
 let selectedRoute = null;
@@ -1107,6 +1123,7 @@ async function loadFromServer() {
             if (result.data && typeof result.data === 'object') {
                 completed = result.data.completed || {};
                 routeDates = result.data.dates || {};
+                registrations = result.data.registrations || {};
                 console.log('✅ Data loaded from server (' + (result.storage || 'unknown') + ') - dates:', Object.keys(routeDates).length, 'completed:', Object.keys(completed).length);
                 return;
             }
@@ -1119,9 +1136,11 @@ async function loadFromServer() {
     try {
         const savedCompleted = localStorage.getItem('doctor-simulator-completed');
         const savedDates = localStorage.getItem('doctor-simulator-dates');
+        const savedRegistrations = localStorage.getItem('doctor-simulator-registrations');
         if (savedCompleted) completed = JSON.parse(savedCompleted);
         if (savedDates) routeDates = JSON.parse(savedDates);
-        if (savedCompleted || savedDates) {
+        if (savedRegistrations) registrations = JSON.parse(savedRegistrations);
+        if (savedCompleted || savedDates || savedRegistrations) {
             console.log('💾 Data loaded from localStorage cache');
             return;
         }
@@ -1135,7 +1154,7 @@ function saveToServer() {
     fetch('/api/save-data', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ completed, dates: routeDates })
+        body: JSON.stringify({ completed, dates: routeDates, registrations })
     })
     .then(response => {
         if (response.ok) {
@@ -1158,6 +1177,7 @@ function saveToServer() {
     try {
         localStorage.setItem('doctor-simulator-completed', JSON.stringify(completed));
         localStorage.setItem('doctor-simulator-dates', JSON.stringify(routeDates));
+        localStorage.setItem('doctor-simulator-registrations', JSON.stringify(registrations));
     } catch (e) { /* incognito mode - ok */ }
 }
 
@@ -1192,72 +1212,38 @@ function getFlag(emoji) {
 
 // ===== TEAMUP CALENDAR INTEGRATION =====
 // Generate iCalendar (.ics) file and open TeamUp with direct API call
-function addToTeamUp(routeId) {
-    console.log('🚀 addToTeamUp called with routeId:', routeId);
+// Download ICS calendar file
+function downloadICS(routeId) {
     const route = routes.find(r => r.id == routeId);
-    console.log('📍 Route found:', route);
     if (!route) return;
 
     const routeData = routeDates[routeId];
     if (!routeData || !routeData.date || !routeData.time) {
-        console.log('⏭️ Skipping TeamUp - no date/time set for route', routeId);
+        showMessage('❌ תאריך ושעה לא מוגדרים לטיסה זו', 'error');
         return;
     }
 
-    // Calculate end time (start time + flight duration)
     const [startHours, startMinutes] = routeData.time.split(':').map(Number);
-    const flightDuration = route.time || 90; // minutes
+    const flightDuration = route.time || 90;
     const totalMinutes = startHours * 60 + startMinutes + flightDuration;
     const endHours = Math.floor(totalMinutes / 60) % 24;
     const endMinutes = totalMinutes % 60;
     const endTime = String(endHours).padStart(2, '0') + ':' + String(endMinutes).padStart(2, '0');
 
-    // Build title: DEP ICAO → ARR ICAO
     const title = `✈️ ${route.from} → ${route.to}`;
+    const description = [`DEP: ${route.from} (${route.fromCity})`, `ARR: ${route.to} (${route.toCity})`, `Duration: ${flightDuration} min`, `WHO: מסביב לעולם`, `IFR`].join('\n');
 
-    // Build description with all details
-    const description = [
-        `DEP: ${route.from} (${route.fromCity})`,
-        `ARR: ${route.to} (${route.toCity})`,
-        `Duration: ${flightDuration} min`,
-        `WHO: מסביב לעולם`,
-        `IFR`
-    ].join('\n');
-
-    // Create .ics file (iCalendar format)
-    // Convert date format from YYYY-MM-DD to YYYYMMDD
     const dateNoHyphens = routeData.date.replace(/-/g, '');
     const timeNoColon = routeData.time.replace(':', '');
     const endTimeNoColon = endTime.replace(':', '');
-
     const startDateTime = dateNoHyphens + 'T' + timeNoColon + '00';
     const endDateTime = dateNoHyphens + 'T' + endTimeNoColon + '00';
 
-    // Get current time in iCalendar format
     const now = new Date();
-    const dtstamp = now.getUTCFullYear() +
-        String(now.getUTCMonth() + 1).padStart(2, '0') +
-        String(now.getUTCDate()).padStart(2, '0') + 'T' +
-        String(now.getUTCHours()).padStart(2, '0') +
-        String(now.getUTCMinutes()).padStart(2, '0') +
-        String(now.getUTCSeconds()).padStart(2, '0') + 'Z';
+    const dtstamp = now.getUTCFullYear() + String(now.getUTCMonth() + 1).padStart(2, '0') + String(now.getUTCDate()).padStart(2, '0') + 'T' + String(now.getUTCHours()).padStart(2, '0') + String(now.getUTCMinutes()).padStart(2, '0') + String(now.getUTCSeconds()).padStart(2, '0') + 'Z';
 
-    const icsContent = `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//Doctor Simulator//EN
-BEGIN:VEVENT
-UID:${routeId}-${Date.now()}@doctor-simulator
-DTSTAMP:${dtstamp}
-DTSTART:${startDateTime}
-DTEND:${endDateTime}
-SUMMARY:${title}
-LOCATION:${route.fromCity} - ${route.toCity}
-DESCRIPTION:${description}
-CATEGORIES:IFR Flight
-END:VEVENT
-END:VCALENDAR`;
+    const icsContent = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Doctor Simulator//EN\nBEGIN:VEVENT\nUID:${routeId}-${Date.now()}@doctor-simulator\nDTSTAMP:${dtstamp}\nDTSTART:${startDateTime}\nDTEND:${endDateTime}\nSUMMARY:${title}\nLOCATION:${route.fromCity} - ${route.toCity}\nDESCRIPTION:${description}\nCATEGORIES:IFR Flight\nEND:VEVENT\nEND:VCALENDAR`;
 
-    // Download .ics file
     const blob = new Blob([icsContent], { type: 'text/calendar' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -1268,8 +1254,24 @@ END:VCALENDAR`;
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 
-    showMessage('📥 קובץ .ics הורד! פתח ב-TeamUp כדי להוסיף את האירוע', 'success');
-    console.log('✅ .ics file downloaded for TeamUp import');
+    showMessage('📥 קובץ .ics הורד', 'success');
+}
+
+// Register for a route
+function registerForRoute(routeId) {
+    const name = prompt('הכנס את שמך להרשמה לטיסה:');
+    if (!name || name.trim() === '') return;
+
+    if (!registrations) registrations = {};
+    if (!registrations[routeId]) registrations[routeId] = [];
+
+    registrations[routeId].push({
+        name: name.trim(),
+        timestamp: new Date().toISOString()
+    });
+
+    saveToServer();
+    showMessage(`✅ ${name} נרשם בהצלחה! (${registrations[routeId].length} משתתפים)`, 'success');
 }
 
 function parseMetarRaw(raw) {
@@ -1548,12 +1550,11 @@ function render() {
                         </div>
                     </div>
                 </div>
-                ${isAdmin ? `
                 <div class="route-bottom" onclick="event.stopPropagation()">
-                    <input type="checkbox" ${completed[r.id] ? 'checked' : ''} onchange="toggleRoute(${r.id})">
-                    <label>סימון בוצע</label>
+                    <button class="btn-register" onclick="registerForRoute(${r.id})">👥 הרשם (${registrations[r.id] ? registrations[r.id].length : 0})</button>
+                    <button class="btn-calendar" onclick="downloadICS(${r.id})">📅 הוסף ליומן</button>
+                    ${isAdmin ? `<input type="checkbox" ${completed[r.id] ? 'checked' : ''} onchange="toggleRoute(${r.id})"> <label>סימון בוצע</label>` : ''}
                 </div>
-                ` : ''}
             </div>
         `;
     }).join('');
