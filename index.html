@@ -1548,10 +1548,12 @@ function render() {
                         </div>
                     </div>
                 </div>
+                ${isAdmin ? `
                 <div class="route-bottom" onclick="event.stopPropagation()">
-                    <input type="checkbox" ${completed[r.id] ? 'checked' : ''} onchange="toggleRoute(${r.id})" ${!isAdmin ? 'disabled' : ''}>
+                    <input type="checkbox" ${completed[r.id] ? 'checked' : ''} onchange="toggleRoute(${r.id})">
                     <label>סימון בוצע</label>
                 </div>
+                ` : ''}
             </div>
         `;
     }).join('');
