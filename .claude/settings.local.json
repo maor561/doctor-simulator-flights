@@ -88,7 +88,8 @@
       "Bash(npx kill-port:*)",
       "Bash(taskkill /PID 34196 /F)",
       "Bash(kill -9 34196)",
-      "Bash(powershell -Command \"Stop-Process -Id 34196 -Force\")"
+      "Bash(powershell -Command \"Stop-Process -Id 34196 -Force\")",
+      "mcp__Claude_in_Chrome__navigate"
     ]
   }
 }

@@ -32,7 +32,62 @@
             background: linear-gradient(135deg, #f3e7ff, #e3f2fd);
             color: #212121;
             padding: 20px;
+            padding-top: 80px;
         }
+
+        /* Scrolling Banner */
+        .promotional-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(90deg, #e91e63, #9c27b0, #e91e63);
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            z-index: 1000;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+            overflow: hidden;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .banner-content {
+            display: flex;
+            gap: 60px;
+            animation: scroll-banner 15s linear infinite;
+            white-space: nowrap;
+        }
+
+        .banner-content span {
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .banner-content a {
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 2px solid rgba(255,255,255,0.5);
+            padding-bottom: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .banner-content a:hover {
+            border-bottom-color: #fff;
+            filter: brightness(1.2);
+        }
+
+        @keyframes scroll-banner {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
         header {
             display: flex;
             align-items: center;
@@ -614,6 +669,19 @@
     <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 <body>
+    <!-- Promotional Scrolling Banner -->
+    <div class="promotional-banner">
+        <div class="banner-content">
+            <span>✈️ <a href="https://flight-target.vercel.app/" target="_blank">אני רוצה שתרשום כל הטיסות מיוחדות שיוצאות מנתבג</a></span>
+            <span>🌍 <a href="https://flight-target.vercel.app/" target="_blank">מחפש לאן לטוס?</a></span>
+            <span>🎯 <a href="https://flight-target.vercel.app/" target="_blank">כן משפט למפשט - בקרו אצלנו</a></span>
+            <span>🔍 <a href="https://flight-target.vercel.app/" target="_blank">Flight Target – לראות את מה שאחרים מפספסים</a></span>
+            <span>✈️ <a href="https://flight-target.vercel.app/" target="_blank">אני רוצה שתרשום כל הטיסות מיוחדות שיוצאות מנתבג</a></span>
+            <span>🌍 <a href="https://flight-target.vercel.app/" target="_blank">מחפש לאן לטוס?</a></span>
+            <span>🎯 <a href="https://flight-target.vercel.app/" target="_blank">כן משפט למפשט - בקרו אצלנו</a></span>
+        </div>
+    </div>
+
     <header>
         <div class="logo">
             <img src="logo.png" alt="Doctor Simulator Logo">
