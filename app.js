@@ -245,6 +245,8 @@ function renderRoutesList() {
                         <input
                             type="date"
                             class="route-date-input"
+                            min="2020-01-01"
+                            max="2099-12-31"
                             value="${date}"
                             onchange="updateRouteDateTime(${route.id}, 'date', this.value); event.stopPropagation()"
                             placeholder="תאריך"
@@ -280,6 +282,11 @@ function toggleRoute(routeId) {
 function updateRouteDateTime(routeId, type, value) {
     if (!appState.routeDates[routeId]) {
         appState.routeDates[routeId] = {};
+    }
+
+    // תוך כדי הקלדת השנה הדפדפן שולח ערכים חלקיים (0002, 0026, 0202...). שומרים רק שנה מלאה ותקינה.
+    if (type === 'date' && value && !/^20[2-9]\d-\d{2}-\d{2}$/.test(value)) {
+        return;
     }
 
     if (type === 'date') {
