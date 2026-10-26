@@ -10,64 +10,32 @@ const KV_KEY = 'doctor-simulator-data';
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1FxCamcUs_L8-IT3ea24x0DYCg7-dig7a1Tz5rlIjZxY/export?format=csv';
 const SITE_URL = 'https://doctor-simulator-flights.vercel.app';
 
-// Airport database with coordinates
-const AIRPORT_DB = {
-    'LLBG': { coords: [32.0114, 34.8867], city: 'Tel Aviv', country: 'IL' },
-    'LROP': { coords: [44.5711, 26.0850], city: 'Bucharest', country: 'RO' },
-    'LCLK': { coords: [34.8751, 33.6249], city: 'Larnaca', country: 'CY' },
-    'LGSR': { coords: [36.3992, 25.4793], city: 'Santorini', country: 'GR' },
-    'LGAV': { coords: [37.9364, 23.9445], city: 'Athens', country: 'GR' },
-    'LGKF': { coords: [38.1200, 20.5005], city: 'Kefalonia', country: 'GR' },
-    'LIRF': { coords: [41.8003, 12.2389], city: 'Rome', country: 'IT' },
-    'LFMN': { coords: [43.6584, 7.2159], city: 'Nice', country: 'FR' },
-    'LFPB': { coords: [48.9694, 2.4414], city: 'Paris', country: 'FR' },
-    'EGBB': { coords: [52.4539, -1.7480], city: 'Birmingham', country: 'GB' },
-    'EGLL': { coords: [51.4700, -0.4543], city: 'London', country: 'GB' },
-    'EIDW': { coords: [53.4213, -6.2700], city: 'Dublin', country: 'IE' },
-    'EKVG': { coords: [62.0161, -7.1926], city: 'Vágar', country: 'FO' },
-    'BIKF': { coords: [63.9850, -22.6056], city: 'Keflavík', country: 'IS' },
-    'CYYT': { coords: [47.6144, -52.7519], city: 'St. John\'s', country: 'CA' },
-    'CYQX': { coords: [48.4436, -54.5675], city: 'Gander', country: 'CA' },
-    'CYGZ': { coords: [53.2719, -60.3986], city: 'Goose Bay', country: 'CA' },
-    'CYQB': { coords: [46.7911, -71.2260], city: 'Quebec', country: 'CA' },
-    'CYYZ': { coords: [43.6772, -79.6306], city: 'Toronto', country: 'CA' },
-    'KDTW': { coords: [42.2124, -83.3534], city: 'Detroit', country: 'US' },
-    'KORD': { coords: [41.9742, -87.9073], city: 'Chicago', country: 'US' },
-    'KOMA': { coords: [41.3033, -95.8980], city: 'Omaha', country: 'US' },
-    'KDEN': { coords: [39.8561, -104.6737], city: 'Denver', country: 'US' },
-    'KSLC': { coords: [40.7884, -111.8787], city: 'Salt Lake City', country: 'US' },
-    'KRNO': { coords: [39.4665, -119.7674], city: 'Reno', country: 'US' },
-    'KSFO': { coords: [37.6213, -122.3790], city: 'San Francisco', country: 'US' },
-    'KPHX': { coords: [33.4342, -112.0116], city: 'Phoenix', country: 'US' },
-    'MMCN': { coords: [29.9705, -110.3888], city: 'Hermosillo', country: 'MX' },
-    'MMMZ': { coords: [25.5261, -109.3910], city: 'Mazatlán', country: 'MX' },
-    'MMMX': { coords: [19.4366, -99.0720], city: 'Mexico City', country: 'MX' },
-    'MROC': { coords: [9.9281, -84.1208], city: 'San José', country: 'CR' },
-    'MPTO': { coords: [8.9824, -79.5199], city: 'Panama City', country: 'PA' },
-    'SKBO': { coords: [4.7212, -74.1479], city: 'Bogotá', country: 'CO' },
-    'SEQM': { coords: [-0.2155, -78.4896], city: 'Quito', country: 'EC' },
-    'SPJC': { coords: [-12.0219, -77.1144], city: 'Lima', country: 'PE' },
-    'SCLP': { coords: [-33.3989, -70.7942], city: 'Santiago', country: 'CL' },
-    'SCIP': { coords: [-53.0033, -70.8153], city: 'Punta Arenas', country: 'CL' },
-    'SCAR': { coords: [-38.7369, -57.5924], city: 'Río Grande', country: 'AR' },
-    'NZIR': { coords: [-77.8405, 166.6789], city: 'McMurdo', country: 'AQ' },
-    'NZCH': { coords: [-43.4890, 172.5326], city: 'Christchurch', country: 'NZ' },
-    'YMML': { coords: [-37.6733, 144.8445], city: 'Melbourne', country: 'AU' },
-    'YSSY': { coords: [-33.9461, 151.1772], city: 'Sydney', country: 'AU' },
-    'YBBN': { coords: [-27.3842, 153.1175], city: 'Brisbane', country: 'AU' },
-    'YPDN': { coords: [-12.4534, 131.0064], city: 'Darwin', country: 'AU' },
-    'WADD': { coords: [-8.7674, 115.1674], city: 'Denpasar', country: 'ID' },
-    'WMKP': { coords: [3.1186, 101.6869], city: 'Kuala Lumpur', country: 'MY' },
-    'VTBS': { coords: [13.9125, 100.6075], city: 'Bangkok', country: 'TH' },
-    'VOCI': { coords: [9.8267, 76.2706], city: 'Kochi', country: 'IN' },
-    'OOMS': { coords: [23.6100, 58.2844], city: 'Muscat', country: 'OM' },
-    'OTHH': { coords: [25.2731, 51.6072], city: 'Doha', country: 'QA' },
-    'UBBB': { coords: [40.0620, 50.2300], city: 'Baku', country: 'AZ' },
-    'LTAR': { coords: [39.5564, 32.4143], city: 'Ankara', country: 'TR' },
-    'LTAI': { coords: [40.3967, 33.1036], city: 'Istanbul', country: 'TR' },
-    'MMIT': { coords: [19.2547, -99.4896], city: 'Mexico City Terminal 1', country: 'MX' },
-    'MMZO': { coords: [19.6178, -99.5339], city: 'Toluca', country: 'MX' }
-};
+import { AIRPORT_DB } from './_airports.js';
+
+const TIME_ZONE = 'Asia/Jerusalem';
+
+// הפרש השעות של ישראל מ-UTC ברגע נתון (2 בחורף, 3 בקיץ), בדקות
+function israelOffsetMinutes(utcMs) {
+    const parts = {};
+    for (const p of new Intl.DateTimeFormat('en-GB', {
+        timeZone: TIME_ZONE, hourCycle: 'h23',
+        year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit',
+    }).formatToParts(new Date(utcMs))) parts[p.type] = p.value;
+    const asUtc = Date.UTC(+parts.year, +parts.month - 1, +parts.day, +parts.hour, +parts.minute);
+    return Math.round((asUtc - utcMs) / 60000);
+}
+
+// התאריך והשעה באפליקציה הם שעון ישראל. ממירים לרגע אמיתי, כדי ש-pubDate יהיה נכון ב-GMT.
+export function israelLocalToDate(date, time) {
+    const [y, mo, d] = date.split('-').map(Number);
+    const [h, mi] = time.split(':').map(Number);
+    const naive = Date.UTC(y, mo - 1, d, h, mi);
+    let utc = naive - israelOffsetMinutes(naive) * 60000;
+    utc = naive - israelOffsetMinutes(utc) * 60000; // תיקון ליד מעבר שעון
+    return new Date(utc);
+}
+
+const isSaneDate = (date) => /^(20[2-9]\d)-\d{2}-\d{2}$/.test(date || '');
 
 async function loadRoutesFromSheet() {
     const response = await fetch(SHEET_URL + '&t=' + Date.now());
@@ -156,7 +124,10 @@ export default async function handler(req, res) {
         if (!routeDate || !routeDate.date || !routeDate.time) continue;
 
         const isCompleted = !!completed[route.id];
-        const pubDate = new Date(`${routeDate.date}T${routeDate.time}:00`).toUTCString();
+        // תאריך עם שנה שגויה (למשל 0026) לא מקבל pubDate מזויף; הבוט ממילא מדלג עליו
+        const pubDate = isSaneDate(routeDate.date)
+            ? israelLocalToDate(routeDate.date, routeDate.time).toUTCString()
+            : null;
         const title = `✈️ ${route.from} → ${route.to}`;
 
         // Get airport info with coordinates
@@ -179,8 +150,7 @@ export default async function handler(req, res) {
     <item>
       <title>${escapeXml(title)}</title>
       <description><![CDATA[${description}]]></description>
-      <pubDate>${pubDate}</pubDate>
-      <guid isPermaLink="false">${SITE_URL}/flight/${route.id}</guid>
+${pubDate ? `      <pubDate>${pubDate}</pubDate>\n` : ''}      <guid isPermaLink="false">${SITE_URL}/flight/${route.id}</guid>
       <link>${SITE_URL}</link>
       <category>IFR Flight</category>
       <category>${isCompleted ? 'Completed' : 'Scheduled'}</category>
