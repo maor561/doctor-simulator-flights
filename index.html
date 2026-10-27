@@ -6,14 +6,14 @@
     <title>Doctor Simulator - טיסות בעולם</title>
 
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#e91e63">
+    <meta name="theme-color" content="#2A1B12">
     <meta name="description" content="Doctor Simulator - מערכת ניהול טיסות אינטראקטיבית עם מפה בזמן אמת">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Doctor Simulator">
     <meta name="application-name" content="Doctor Simulator">
-    <meta name="msapplication-TileColor" content="#e91e63">
+    <meta name="msapplication-TileColor" content="#2A1B12">
     <meta name="msapplication-config" content="browserconfig.xml">
 
     <!-- Manifest -->
@@ -25,643 +25,231 @@
     <link rel="icon" type="image/png" href="logo.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Gveret+Levin&family=IM+Fell+English+SC&family=Special+Elite&display=swap">
     <style>
+        /* Concept: an old aviator's logbook open on a desk. Aged paper, red ledger rules, entries written by hand, ink stamps for every landing, a sepia chart of the whole route. One deliberate look: paper, ink and leather. */
+        :root {
+            --desk: #2A1B12; --leather: #4A2C1B; --leather-2: #5E3A25; --stitch: #C9A06A;
+            --paper: #E6D3A2; --paper-3: #EFE0B6; --ink: #2A2118; --blue: #1F2F57; --pencil: #7C7566;
+            --red: #9E2A22; --violet: #2F3A82; --rule: #9A8A60; --mute: #6A5A3E;
+            --f-print: 'Frank Ruhl Libre', serif; --f-hand: 'Gveret Levin', 'Special Elite', cursive;
+            --f-type: 'Special Elite', monospace; --f-fell: 'IM Fell English SC', serif;
+            --noise: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .36 0 0 0 0 .24 0 0 0 0 .1 0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.38'/></svg>");
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { background: var(--desk); }
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #f3e7ff, #e3f2fd);
-            color: #212121;
-            padding: 20px;
-            padding-top: 80px;
+            font-family: var(--f-print);
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--ink);
+            background: radial-gradient(ellipse at 50% 30%, #3A271B 0, #1E130C 80%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 58px clamp(8px, 2.6vw, 36px) 36px;
         }
 
-        /* Scrolling Banner */
+        /* Scrolling banner, styled as a pasted paper strip */
         .promotional-banner {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(90deg, #e91e63, #9c27b0, #e91e63);
-            color: white;
-            padding: 12px 20px;
-            text-align: center;
+            position: fixed; top: 0; left: 0; right: 0; height: 40px;
+            background: var(--noise), var(--paper-3);
+            border-bottom: 3px double var(--mute);
+            color: var(--ink);
             z-index: 1000;
-            font-size: 16px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+            display: flex; align-items: center; justify-content: center;
             overflow: hidden;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font: 500 16px var(--f-print);
+            box-shadow: 0 4px 10px rgba(0,0,0,.45);
         }
+        .banner-content { display: flex; gap: 70px; animation: scroll-banner 75s linear infinite; white-space: nowrap; }
+        .banner-content span { display: inline-flex; gap: 10px; align-items: center; }
+        .banner-content span::before { content: "\2766"; color: var(--red); }
+        .banner-content a { color: var(--ink); text-decoration: none; border-bottom: 1.5px dotted var(--red); padding-bottom: 1px; }
+        .banner-content a:hover { color: var(--red); }
+        @keyframes scroll-banner { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
-        .banner-content {
-            display: flex;
-            gap: 60px;
-            animation: scroll-banner 75s linear infinite;
-            white-space: nowrap;
+        /* Book */
+        .cover {
+            max-width: 1440px; margin-inline: auto;
+            background: var(--noise), linear-gradient(135deg, var(--leather-2), var(--leather));
+            border-radius: 14px;
+            padding: clamp(10px, 1.8vw, 24px);
+            box-shadow: 0 30px 60px rgba(0,0,0,.6), inset 0 0 0 2px #2B170D;
+            position: relative;
         }
+        .cover::before { content: ""; position: absolute; inset: 6px; border: 2px dashed var(--stitch); border-radius: 10px; opacity: .5; pointer-events: none; }
+        .spread { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); position: relative; border-radius: 4px; box-shadow: 0 6px 14px rgba(0,0,0,.5); }
+        .spread::after {
+            content: ""; position: absolute; inset-block: 0; left: calc(50% - 26px); width: 52px; pointer-events: none; z-index: 3;
+            background: linear-gradient(90deg, transparent, rgba(40,22,8,.38) 45%, rgba(40,22,8,.55) 50%, rgba(40,22,8,.38) 55%, transparent);
+        }
+        .pg {
+            position: relative; min-width: 0;
+            padding: clamp(16px, 2.6vw, 34px);
+            background:
+                radial-gradient(circle at 12% 88%, rgba(120,70,20,.18) 0, transparent 22%),
+                radial-gradient(circle at 86% 14%, rgba(120,70,20,.14) 0, transparent 18%),
+                radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(110,70,25,.28) 100%),
+                var(--noise), var(--paper);
+        }
+        .pg.r { border-radius: 0 4px 4px 0; }
+        .pg.l { border-radius: 4px 0 0 4px; }
+        .ribbon { position: absolute; top: -6px; inset-inline-end: 46px; width: 18px; height: 92px; z-index: 4; box-shadow: 2px 3px 4px rgba(0,0,0,.4);
+            background: linear-gradient(90deg, #7C1D18, #A8332A, #7C1D18); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 86%, 0 100%); }
 
-        .banner-content span {
-            display: inline-flex;
-            gap: 8px;
-            align-items: center;
+        header.label {
+            display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+            border-top: 3px double var(--ink); border-bottom: 3px double var(--ink);
+            padding-block: 10px 8px; margin-bottom: 14px;
         }
+        header .logo { width: 56px; height: 56px; border-radius: 50%; overflow: hidden; flex-shrink: 0; border: 2px solid var(--ink); filter: sepia(.7) contrast(.95); }
+        header .logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        header .title { flex: 1; min-width: 150px; }
+        header small { display: block; font: 400 12px var(--f-fell); letter-spacing: .22em; color: var(--mute); text-transform: uppercase; }
+        h1 { font: 900 clamp(30px, 3.4vw, 46px)/1.05 var(--f-print); letter-spacing: -.01em; color: var(--ink); }
+        header .title p { font: 400 17px var(--f-hand); color: var(--blue); }
 
-        .banner-content a {
-            color: #fff;
-            text-decoration: none;
-            border-bottom: 2px solid rgba(255,255,255,0.5);
-            padding-bottom: 2px;
-            transition: all 0.3s ease;
+        /* Buttons: labels and ink */
+        .controls { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
+        button { font: 400 17px var(--f-hand); cursor: pointer; transition: background .15s, color .15s; }
+        .controls button, #installBtn {
+            padding: 4px 16px; border: 1.5px solid var(--ink); border-radius: 2px;
+            background: rgba(255,255,255,.18); color: var(--ink);
         }
+        .btn-primary:hover, .btn-primary:focus-visible, #installBtn:hover { background: var(--ink); color: var(--paper-3); outline: none; }
+        .btn-success { border-color: var(--blue) !important; color: var(--blue) !important; }
+        .btn-success:hover, .btn-success:focus-visible { background: var(--blue) !important; color: var(--paper-3) !important; outline: none; }
+        .btn-danger { border-color: var(--red) !important; color: var(--red) !important; }
+        .btn-danger:hover, .btn-danger:focus-visible { background: var(--red) !important; color: var(--paper-3) !important; outline: none; }
+        #adminStatus { flex: 1; text-align: end; font: 400 17px var(--f-hand); color: var(--red); }
 
-        .banner-content a:hover {
-            border-bottom-color: #fff;
-            filter: brightness(1.2);
-        }
+        .stats { margin-bottom: 14px; font: 400 21px var(--f-hand); color: var(--blue); }
+        .stats b { font-weight: 400; font-size: 26px; }
+        .ruler { height: 9px; margin-top: 6px; border: 1.5px solid var(--ink); position: relative;
+            background: repeating-linear-gradient(90deg, transparent 0 9px, rgba(42,33,24,.4) 9px 10px); }
+        .ruler i { position: absolute; inset-block: 0; inset-inline-start: 0; width: 0; background: var(--red); opacity: .85; transition: width .6s; }
 
-        @keyframes scroll-banner {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        header .logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        header .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        header .title {
-            flex: 1;
-            text-align: center;
-            min-width: 200px;
-        }
-        h1 { color: #e91e63; margin-bottom: 5px; }
-        .main-layout {
-            display: flex;
-            gap: 20px;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-        .map-panel {
-            flex: 1;
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            min-height: 600px;
-        }
-        #map { width: 100%; height: 600px; border-radius: 8px; }
-        .routes-panel {
-            flex: 1;
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            max-height: 800px;
-            overflow-y: auto;
-        }
-
-        /* Leaflet Tooltip Styling */
-        .leaflet-tooltip {
-            background-color: rgba(0, 0, 0, 0.9) !important;
-            color: #fff !important;
-            border: none !important;
-            border-radius: 4px !important;
-            padding: 8px 12px !important;
-            font-size: 13px !important;
-            z-index: 9999 !important;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
-        }
-        .leaflet-tooltip-left::before {
-            border-left-color: rgba(0, 0, 0, 0.9) !important;
-        }
-        .leaflet-tooltip-right::before {
-            border-right-color: rgba(0, 0, 0, 0.9) !important;
-        }
-        .leaflet-tooltip-top::before {
-            border-top-color: rgba(0, 0, 0, 0.9) !important;
-        }
-        .leaflet-tooltip-bottom::before {
-            border-bottom-color: rgba(0, 0, 0, 0.9) !important;
-        }
-
-        @media (max-width: 1024px) {
-            .main-layout {
-                flex-direction: column;
-                gap: 15px;
-            }
-            .map-panel {
-                min-height: 400px;
-            }
-            #map { height: 400px; }
-            .routes-panel {
-                max-height: 600px;
-            }
-            header .logo {
-                width: 60px;
-                height: 60px;
-            }
-        }
-        @media (max-width: 600px) {
-            body {
-                padding: 8px;
-            }
-            header {
-                padding: 12px;
-                gap: 8px;
-            }
-            header .logo {
-                width: 50px;
-                height: 50px;
-            }
-            header .title {
-                min-width: 150px;
-            }
-            h1 {
-                font-size: 18px;
-            }
-            p {
-                font-size: 13px;
-            }
-            .main-layout {
-                gap: 10px;
-            }
-            .map-panel {
-                min-height: 250px;
-                padding: 8px;
-            }
-            #map { height: 250px; }
-            .routes-panel {
-                padding: 10px;
-                max-height: none;
-                overflow-y: visible;
-            }
-            .route {
-                padding: 10px;
-                gap: 8px;
-                flex-direction: column;
-            }
-            .route-right {
-                flex: 0 0 auto;
-                width: 100%;
-                align-items: flex-end;
-                order: -1;
-            }
-            .route-left {
-                flex: 0 0 auto;
-                width: 100%;
-            }
-            .route-left input {
-                min-height: 50px;
-                font-size: 14px;
-                padding: 6px 4px;
-                border-radius: 6px;
-            }
-            .route-label {
-                font-size: 16px;
-            }
-            .route-airports {
-                font-size: 13px;
-                gap: 4px;
-            }
-            .route-arrow {
-                width: 22px;
-                height: 22px;
-                font-size: 11px;
-            }
-            .route-cities {
-                font-size: 11px;
-                gap: 15px;
-            }
-            .route-duration {
-                font-size: 16px;
-            }
-            .flag-badge {
-                width: 20px;
-                height: 15px;
-            }
-            .route-bottom {
-                margin-top: 4px;
-                padding-top: 6px;
-            }
-            .controls {
-                gap: 6px;
-            }
-            .controls button {
-                padding: 8px 12px;
-                font-size: 13px;
-            }
-        }
-        .controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        .btn-primary { background: #0288d1; color: white; }
-        .btn-primary:hover { background: #0277bd; }
-        .btn-success { background: #4caf50; color: white; }
-        .btn-success:hover { background: #45a049; }
-        .btn-danger { background: #f44336; color: white; }
-        .btn-danger:hover { background: #da190b; }
-        .stats {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 5px;
-            text-align: center;
-            font-weight: 600;
-            color: #4caf50;
-            margin-bottom: 20px;
-        }
-        .message {
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            text-align: center;
-            font-weight: 600;
-            display: none;
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 999;
-            max-width: 400px;
-        }
+        .message { display: none; position: fixed; top: 52px; inset-inline-end: 16px; z-index: 999; max-width: 380px;
+            padding: 12px 18px; font: 400 19px var(--f-hand); background: var(--paper-3); color: var(--ink);
+            border: 1.5px solid var(--ink); box-shadow: 0 6px 14px rgba(0,0,0,.4); transform: rotate(-1deg); }
         .message.show { display: block; }
-        .message.success { background: #c8e6c9; color: #2e7d32; }
-        .message.error { background: #ffcdd2; color: #c62828; }
-        .routes-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+        .message.success { border-inline-start: 6px solid var(--blue); }
+        .message.error { border-inline-start: 6px solid var(--red); color: var(--red); }
+
+        /* Ledger entries */
+        .routes-list { display: flex; flex-direction: column; border-top: 2px solid var(--red); }
+        .routes-list.turn-in { animation: turnin .38s ease-out; }
+        @keyframes turnin { from { opacity: 0; transform: translateX(22px) rotateY(-10deg); } to { opacity: 1; transform: none; } }
+        .foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+        .pageno { font: 400 22px var(--f-hand); color: var(--blue); }
+        .turn { display: flex; gap: 8px; flex-wrap: wrap; }
+        .turn button { padding: 3px 16px; border: 1.5px solid var(--blue); border-radius: 2px; background: rgba(255,255,255,.18); color: var(--blue); }
+        .turn button:hover:not(:disabled), .turn button:focus-visible { background: var(--blue); color: var(--paper-3); outline: none; }
+        .turn button:disabled { opacity: .35; cursor: default; }
+        .leg-no { cursor: default; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
         .route {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 0;
-            transition: all 0.3s;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            align-items: flex-start;
+            position: relative; display: flex; flex-direction: column; align-items: stretch; gap: 6px;
+            padding: 14px 8px 12px; border-bottom: 1px solid var(--rule); cursor: pointer;
+            background: transparent; transition: background .2s;
         }
-        .route > div:not(.metar-section) {
-            padding: 16px 16px 0 16px;
-            width: 100%;
-        }
-        .route > .route-left,
-        .route > .route-right,
-        .route > .route-bottom {
-            padding: 16px 16px 0 16px;
-        }
-        .route > .route-bottom {
-            padding: 8px 16px 16px 16px;
-        }
-        .route:hover { border-color: #7b1fa2; box-shadow: 0 2px 12px rgba(123,31,162,0.15); }
-        .route.active { border-color: #e91e63; background: #fce4ec; }
-        .route.done { opacity: 0.6; }
-
-        /* LEFT COLUMN - date/time boxes */
-        .route-left {
-            flex: 1 1 0;
-            min-width: 0;
-            display: flex;
-            gap: 8px;
-            align-items: stretch;
-        }
+        .route:hover { background: rgba(158,42,34,.05); }
+        .route.active { background: linear-gradient(90deg, transparent, rgba(158,42,34,.1)); box-shadow: inset -3px 0 0 var(--red); }
+        .route-label { display: flex; gap: 12px; align-items: baseline; font: 400 14px var(--f-type); letter-spacing: .08em; color: var(--mute); direction: ltr; justify-content: flex-end; }
+        .route-label .dur { font: 400 18px var(--f-hand); letter-spacing: 0; color: var(--blue); direction: rtl; }
+        .route-label .next { font: 400 17px var(--f-hand); color: var(--red); letter-spacing: 0; direction: rtl; }
+        .route-airports { display: flex; align-items: center; justify-content: flex-end; gap: 10px; direction: ltr; font: 400 30px/1.1 var(--f-hand); color: var(--blue); letter-spacing: .03em; }
+        .route-arrow { font: 400 22px var(--f-print); color: var(--mute); }
+        .flag-badge { width: 22px; height: 16px; object-fit: cover; border: 1px solid var(--mute); filter: sepia(.55) contrast(.95); }
+        .route-cities { display: flex; justify-content: flex-end; gap: 22px; direction: ltr; font: 400 15px var(--f-hand); color: var(--mute); }
+        .route-left { display: flex; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
         .route-left input {
-            flex: 1;
-            min-width: 0;
-            padding: 8px 4px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 700;
-            background: #5c7a9a;
-            color: white;
-            text-align: center;
-            cursor: pointer;
-            min-height: 90px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            direction: ltr;
+            width: 138px; background: transparent; border: 0; border-bottom: 1.5px solid var(--mute); border-radius: 0;
+            font: 400 19px var(--f-hand); color: var(--blue); direction: ltr; text-align: center; padding: 2px 4px; min-height: 30px;
         }
-        .route-left input::-webkit-calendar-picker-indicator { filter: invert(1); }
+        .route-left input:disabled { border-bottom-color: transparent; -webkit-text-fill-color: var(--blue); opacity: 1; cursor: pointer; }
+        .route-left input:disabled::-webkit-calendar-picker-indicator { display: none; }
+        .route-left input:not(:disabled):focus { outline: none; border-bottom-color: var(--red); }
+        .route.todo .route-airports, .route.todo .route-left input:disabled { color: var(--pencil); -webkit-text-fill-color: var(--pencil); }
 
-        /* RIGHT COLUMN - flight info */
-        .route-right {
-            flex: 1 1 0;
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 5px;
-            text-align: right;
-        }
-        .route-label {
-            font-weight: 700;
-            color: #212121;
-            font-size: 20px;
-        }
-        .route-airports {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 16px;
-            font-weight: 700;
-            color: #333;
-            direction: ltr;
-        }
-        .flag-badge {
-            width: 24px;
-            height: 18px;
-            border-radius: 3px;
-            flex-shrink: 0;
-            object-fit: cover;
-            border: 1px solid #ddd;
-        }
-        .route-arrow {
-            background: #7b1fa2;
-            color: white;
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 700;
-        }
-        .route-cities {
-            display: flex;
-            font-size: 12px;
-            color: #888;
-            justify-content: space-between;
-            direction: ltr;
-            width: 100%;
-            padding: 0 30px;
-        }
-        .route-cities span { text-align: center; }
+        .metar-section { direction: ltr; margin-top: 4px; padding: 8px 12px; background: #F4EAC9; border: 1px dashed var(--mute); box-shadow: 0 2px 4px rgba(0,0,0,.18); transform: rotate(-.35deg); }
+        .metar-title { font: 400 11px var(--f-fell); letter-spacing: .22em; color: var(--red); text-transform: uppercase; margin-bottom: 3px; }
+        .metar-row { display: flex; gap: 12px; align-items: center; font: 400 12.5px/1.7 var(--f-type); color: #3A3022; }
+        .metar-icao { min-width: 48px; color: var(--ink); }
+        .metar-data { flex: 1; text-align: end; }
+        .metar-cat { padding: 0 6px; border: 1px solid currentColor; font-size: 11px; }
+        .metar-cat.VFR, .metar-cat.CAVOK { color: #2F6A3E; }
+        .metar-cat.MVFR { color: var(--blue); }
+        .metar-cat.IFR { color: var(--red); }
+        .metar-cat.LIFR { color: #6B1A52; }
 
-        /* METAR weather section */
-        .metar-section {
-            width: 100%;
-            margin-top: 0;
-            margin-left: 0;
-            margin-right: 0;
-            padding: 10px 16px;
-            background: linear-gradient(135deg, #f0f4ff, #f8f0ff);
-            border-radius: 0;
-            border: none;
-            border-top: 1px solid #e0d8f0;
-            direction: ltr;
-        }
-        .metar-title {
-            font-size: 11px;
-            font-weight: 700;
-            color: #7b1fa2;
-            margin-bottom: 5px;
-            text-align: center;
-        }
-        .metar-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 11px;
-            color: #555;
-            font-family: 'Courier New', monospace;
-            line-height: 1.8;
-            padding: 3px 0;
-            justify-content: space-between;
-        }
-        .metar-row + .metar-row {
-            border-top: 1px solid #e8e0f0;
-        }
-        .metar-icao {
-            font-weight: 700;
-            color: #0288d1;
-            min-width: 50px;
-            flex-shrink: 0;
-        }
-        .metar-data {
-            color: #333;
-            flex: 1;
-            text-align: right;
-        }
-        .metar-cat {
-            font-weight: 700;
-            padding: 1px 6px;
-            border-radius: 3px;
-            font-size: 10px;
-        }
-        .metar-cat.VFR { background: #c8e6c9; color: #2e7d32; }
-        .metar-cat.MVFR { background: #bbdefb; color: #1565c0; }
-        .metar-cat.IFR { background: #ffcdd2; color: #c62828; }
-        .metar-cat.LIFR { background: #f8bbd0; color: #880e4f; }
-        .metar-cat.CAVOK { background: #c8e6c9; color: #2e7d32; }
-        .route-duration {
-            font-size: 20px;
-            font-weight: 700;
-            color: #e91e63;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .route-bottom { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; margin-top: 2px; }
+        .btn-register, .btn-calendar { font: 400 16px var(--f-hand); color: var(--ink); background: none; border: 0; border-bottom: 1.5px solid var(--ink); padding: 0 2px 1px; }
+        .btn-register:hover, .btn-calendar:hover { color: var(--red); border-color: var(--red); }
+        .route-bottom input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--red); cursor: pointer; }
+        .route-bottom label { font: 400 16px var(--f-hand); color: var(--ink); cursor: pointer; }
 
-        /* BOTTOM ROW - checkbox */
-        .route-bottom {
-            flex: 0 0 100%;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 6px;
-            padding-top: 8px;
-            border-top: 1px solid #f0e0f5;
+        .stamp { position: absolute; inset-inline-end: auto; left: 6px; top: 8px; width: 92px; height: 92px; pointer-events: none; transform: rotate(var(--r)); opacity: .88; animation: thump .5s cubic-bezier(.2,1.4,.4,1) both; }
+        @keyframes thump { from { transform: rotate(var(--r)) scale(1.5); opacity: 0; } to { transform: rotate(var(--r)) scale(1); opacity: .88; } }
+
+        /* Chart page */
+        .chart { position: relative; background: #F3E7C8; padding: 12px; box-shadow: 0 3px 8px rgba(0,0,0,.35); transform: rotate(-.5deg); }
+        .chart::before, .chart::after { content: ""; position: absolute; width: 86px; height: 26px; top: -12px; z-index: 900; background: rgba(214,190,120,.7); box-shadow: 0 1px 2px rgba(0,0,0,.2); }
+        .chart::before { inset-inline-start: -18px; transform: rotate(-34deg); }
+        .chart::after { inset-inline-end: -18px; transform: rotate(34deg); }
+        #map { width: 100%; height: 620px; border: 1.5px solid var(--ink); background: #DCC995; }
+        .leaflet-container { font-family: var(--f-print); }
+        .leaflet-tile-pane { filter: sepia(1) saturate(.85) hue-rotate(-8deg) brightness(.98) contrast(1.05); }
+        .maplay { position: absolute; inset: 12px 12px 44px; pointer-events: none; z-index: 450; box-shadow: inset 0 0 70px rgba(110,70,25,.5); }
+        .cap { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 8px 2px 0; font: 400 12px var(--f-fell); letter-spacing: .2em; color: var(--mute); text-transform: uppercase; }
+        .cap-actions { display: flex; gap: 16px; }
+        .cap button { font: 400 16px var(--f-hand); letter-spacing: 0; text-transform: none; color: var(--ink); background: none; border: 0; border-bottom: 1.5px solid var(--ink); padding: 0; }
+        .cap button:hover { color: var(--red); border-color: var(--red); }
+        .key { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 18px; font: 400 17px var(--f-hand); }
+        .key span { display: flex; align-items: center; gap: 8px; }
+        .key svg { width: 36px; height: 14px; }
+        .map-stamp { background: none; border: 0; }
+        .map-stamp svg { width: 100%; height: 100%; display: block; opacity: .92; }
+        .compass { position: absolute; inset-inline-start: 22px; bottom: 18px; width: 84px; opacity: .65; }
+
+        .leaflet-tooltip, .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+            background: #F4EAC9 !important; color: var(--ink) !important; border: 1px solid var(--mute) !important; border-radius: 2px !important;
+            box-shadow: 0 3px 8px rgba(0,0,0,.3) !important; font: 400 15px var(--f-hand) !important;
         }
-        .route-bottom input[type="checkbox"] {
-            cursor: pointer;
-            width: 18px;
-            height: 18px;
-            margin: 0;
-            accent-color: #7b1fa2;
-        }
-        .route-bottom label {
-            cursor: pointer;
-            font-size: 13px;
-            color: #666;
-            margin: 0;
-        }
-        .btn-register, .btn-calendar {
-            background: #e91e63;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-register:hover, .btn-calendar:hover {
-            background: #c2185b;
-            transform: translateY(-1px);
-        }
-        /* unused old classes removed */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-        }
+        .leaflet-tooltip-top::before { border-top-color: var(--mute) !important; }
+        .leaflet-bar a { background: #F4EAC9; color: var(--ink); border-color: var(--mute); }
+        .leaflet-bar a:hover { background: var(--paper); }
+        .leaflet-control-attribution { background: rgba(244,234,201,.8) !important; font-size: 10px; }
+
+        /* Password modal */
+        .modal { display: none; position: fixed; inset: 0; z-index: 1100; background: rgba(20,12,6,.7); }
         .modal.show { display: flex; align-items: center; justify-content: center; }
-        .modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-        }
-        .modal-content h2 { margin-bottom: 20px; color: #e91e63; }
-        .modal-content input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        .modal-buttons button { flex: 1; }
+        .modal-content { width: 90%; max-width: 380px; padding: 28px; text-align: center; background: var(--noise), var(--paper-3); border: 3px double var(--ink); box-shadow: 0 20px 40px rgba(0,0,0,.6); }
+        .modal-content h2 { font: 700 26px var(--f-print); margin-bottom: 16px; }
+        .modal-content input { width: 100%; padding: 8px; margin-bottom: 18px; background: transparent; border: 0; border-bottom: 1.5px solid var(--ink); font: 400 22px var(--f-hand); color: var(--blue); text-align: center; direction: ltr; }
+        .modal-content input:focus { outline: none; border-bottom-color: var(--red); }
+        .modal-buttons { display: flex; gap: 10px; }
+        .modal-buttons button { flex: 1; padding: 4px 12px; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); border-radius: 2px; }
 
-        /* Dynamic flowing route animation */
-        .route-line {
-            stroke-dasharray: 10, 5;
-            stroke-dashoffset: 0;
-            filter: drop-shadow(0 0 4px currentColor);
-            pointer-events: auto;
-            cursor: pointer;
-        }
+        :focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
 
-        .route-line.route-incomplete {
-            animation: flowingRoute 1s linear infinite;
+        @media (max-width: 960px) {
+            .spread { grid-template-columns: 1fr; }
+            .spread::after { display: none; }
+            .pg.l { order: -1; border-radius: 4px 4px 0 0; }
+            .pg.r { border-radius: 0 0 4px 4px; }
+            .routes-list { max-height: none; overflow: visible; }
+            #map { height: 400px; }
+            .compass { display: none; }
         }
-
-        .route-line.route-completed {
-            /* Completed routes - solid, subtle glow */
-            stroke-dasharray: none;
-            animation: completedGlow 2s ease-in-out infinite;
-            filter: drop-shadow(0 0 3px rgba(16, 185, 129, 0.6));
+        @media (max-width: 560px) {
+            #map { height: 320px; }
+            .route-airports { font-size: 26px; }
+            .stamp { width: 74px; height: 74px; }
+            .route-left input { width: 120px; }
         }
-
-        .route-glow {
-            filter: drop-shadow(0 0 8px currentColor);
-        }
-
-        .route-glow.route-incomplete {
-            animation: glowWave 2s ease-in-out infinite;
-        }
-
-        .route-glow.route-completed {
-            animation: completedGlowSoft 2s ease-in-out infinite;
-            filter: drop-shadow(0 0 2px rgba(16, 185, 129, 0.3));
-        }
-
-        /* Dynamic flowing dash animation */
-        @keyframes flowingRoute {
-            0% { stroke-dashoffset: 0; }
-            100% { stroke-dashoffset: -15; }
-        }
-
-        /* Glow wave for incomplete routes */
-        @keyframes glowWave {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 0.4; }
-        }
-
-        /* Gentle glow for completed routes */
-        @keyframes completedGlow {
-            0%, 100% { filter: drop-shadow(0 0 3px rgba(16, 185, 129, 0.6)); }
-            50% { filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.8)); }
-        }
-
-        @keyframes completedGlowSoft {
-            0%, 100% { opacity: 0.15; }
-            50% { opacity: 0.25; }
-        }
-
-        /* Dynamic marker animation */
-        .route-marker-from,
-        .route-marker-to {
-            animation: markerBreathe 1.5s ease-in-out infinite;
-            filter: drop-shadow(0 0 6px currentColor);
-        }
-
-        .route-marker-to {
-            animation-delay: 0.3s;
-        }
-
-        .route-marker-from[fill="#10B981"],
-        .route-marker-to[fill="#10B981"] {
-            filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.6));
-            animation: markerBreathe 1.5s ease-in-out infinite;
-        }
-
-        @keyframes markerBreathe {
-            0%, 100% {
-                r: 8px;
-                opacity: 0.8;
-            }
-            50% {
-                r: 11px;
-                opacity: 1;
-            }
-        }
-
-        @media (max-width: 1024px) {
-            .main-layout { flex-direction: column; }
-            .routes-panel { max-height: none; overflow-y: visible; }
-        }
+        @media (prefers-reduced-motion: reduce) { .stamp, .routes-list.turn-in { animation: none; } .banner-content { animation-duration: 200s; } .ruler i { transition: none; } }
     </style>
 
     <!-- Vercel Analytics & Speed Insights -->
@@ -672,57 +260,76 @@
     <!-- Promotional Scrolling Banner -->
     <div class="promotional-banner">
         <div class="banner-content">
-            <span>✈️ <a href="https://flight-target.vercel.app/" target="_blank">כל הטיסות הלא שגרתיות שיוצאות מנתב"ג</a></span>
-            <span>🌍 <a href="https://flight-target.vercel.app/" target="_blank">מחפש לאן לטוס?</a></span>
-            <span>🔍 <a href="https://flight-target.vercel.app/" target="_blank">Flight Target – לראות את מה שאחרים מפספסים</a></span>
-            <span>✈️ <a href="https://flight-target.vercel.app/" target="_blank">כל הטיסות הלא שגרתיות שיוצאות מנתב"ג</a></span>
-            <span>🌍 <a href="https://flight-target.vercel.app/" target="_blank">מחפש לאן לטוס?</a></span>
-            <span>🔍 <a href="https://flight-target.vercel.app/" target="_blank">Flight Target – לראות את מה שאחרים מפספסים</a></span>
+            <span><a href="https://flight-target.vercel.app/" target="_blank" rel="noopener">כל הטיסות הלא שגרתיות שיוצאות מנתב"ג</a></span>
+            <span><a href="https://flight-target.vercel.app/" target="_blank" rel="noopener">מחפש לאן לטוס?</a></span>
+            <span><a href="https://flight-target.vercel.app/" target="_blank" rel="noopener">Flight Target – לראות את מה שאחרים מפספסים</a></span>
+            <span><a href="https://flight-target.vercel.app/" target="_blank" rel="noopener">כל הטיסות הלא שגרתיות שיוצאות מנתב"ג</a></span>
+            <span><a href="https://flight-target.vercel.app/" target="_blank" rel="noopener">מחפש לאן לטוס?</a></span>
+            <span><a href="https://flight-target.vercel.app/" target="_blank" rel="noopener">Flight Target – לראות את מה שאחרים מפספסים</a></span>
         </div>
     </div>
 
-    <header>
-        <div class="logo">
-            <img src="logo.png" alt="Doctor Simulator Logo">
-        </div>
-        <div class="title">
-            <h1>✈️ Doctor Simulator</h1>
-            <p>🌍 מסלול טיסות סביב העולם</p>
-        </div>
-        <button id="installBtn" class="btn-primary" style="display:none; white-space:nowrap;">📱 הוסף לבית</button>
-    </header>
-
     <div id="message" class="message"></div>
 
-    <div class="main-layout">
-        <div class="map-panel">
-            <div id="map"></div>
-        </div>
+    <div class="cover">
+        <div class="spread">
+            <section class="pg r" aria-label="יומן הטיסות">
+                <div class="ribbon" aria-hidden="true"></div>
+                <header class="label">
+                    <div class="logo"><img src="logo.png" alt="Doctor Simulator"></div>
+                    <div class="title">
+                        <small>Flight Log · Doctor Simulator</small>
+                        <h1>יומן טיסה</h1>
+                        <p>מסלול טיסות סביב העולם</p>
+                    </div>
+                    <button id="installBtn" style="display:none; white-space:nowrap;">הוסף למסך הבית</button>
+                </header>
 
-        <div class="routes-panel">
-            <div class="controls">
-                <button class="btn-primary" onclick="toggleShowDone()">הצג בוצע</button>
-                <button class="btn-success" onclick="saveToServer()">💾 שמור</button>
-                <button class="btn-primary" onclick="location.reload()">🔄 רענן</button>
-                <button class="btn-danger" onclick="showPasswordModal()">🔐 עריכה</button>
-                <span style="flex: 1; text-align: right; padding: 10px; font-weight: 600; color: #4caf50;" id="adminStatus"></span>
-            </div>
+                <div class="controls">
+                    <button class="btn-success" onclick="saveToServer()">שמור</button>
+                    <button class="btn-primary" onclick="location.reload()">רענן</button>
+                    <span id="adminStatus"></span>
+                </div>
 
-            <div class="stats">
-                מסלולים שהושלמו: <span id="completed">0</span>/<span id="totalRoutes">0</span>
-            </div>
+                <div class="stats">
+                    נחיתות שנחתמו: <b><span id="completed">0</span> / <span id="totalRoutes">0</span></b>
+                    <div class="ruler" aria-hidden="true"><i id="progress"></i></div>
+                </div>
 
-            <div id="routesList" class="routes-list"></div>
+                <div id="routesList" class="routes-list"></div>
+                <div class="foot">
+                    <div class="pageno" id="pageNo"></div>
+                    <div class="turn">
+                        <button type="button" id="pagePrev" aria-label="העמוד הקודם" onclick="turnPage(-1)">→ הקודם</button>
+                        <button type="button" id="pageNext" aria-label="העמוד הבא" onclick="turnPage(1)">העמוד הבא ←</button>
+                        <button type="button" id="pageToday" onclick="goToNext()">לטיסה הבאה</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="pg l" aria-label="מפת המסע">
+                <div class="chart">
+                    <div id="map"></div>
+                    <div class="maplay" aria-hidden="true"></div>
+                    <div class="cap"><span>Chart of the voyage</span><span class="cap-actions"><button type="button" onclick="fitNextLegs()">10 הטיסות הבאות</button><button type="button" onclick="fitAllRoutes()">כל המסע</button></span></div>
+                </div>
+                <div class="key">
+                    <span><svg viewBox="0 0 36 14"><path d="M1 8 Q10 2 18 8 T35 7" fill="none" stroke="#9E2A22" stroke-width="3" stroke-linecap="round"/></svg>נטוס, בדיו</span>
+                    <span><svg viewBox="0 0 36 14"><line x1="1" x2="35" y1="7" y2="7" stroke="#6A5A3E" stroke-width="3" stroke-dasharray="1 8" stroke-linecap="round"/></svg>עוד בעיפרון</span>
+                    <span><svg viewBox="0 0 36 14"><circle cx="18" cy="7" r="6" fill="none" stroke="#2F3A82" stroke-width="2"/></svg>חותמת נחיתה</span>
+                </div>
+                <svg class="compass" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="#2A2118" stroke-width="1.2"><circle cx="50" cy="50" r="40"/><circle cx="50" cy="50" r="30" stroke-width=".6"/><path d="M50 4L56 50L50 96L44 50Z" fill="#9E2A22" fill-opacity=".55"/><path d="M4 50L50 44L96 50L50 56Z" fill="#2A2118" fill-opacity=".25"/></g><text x="50" y="14" text-anchor="middle" font-family="IM Fell English SC" font-size="11" fill="#2A2118">N</text></svg>
+            </section>
         </div>
     </div>
 
     <div id="passwordModal" class="modal">
         <div class="modal-content">
-            <h2>🔐 סיסמה לעריכה</h2>
+            <h2>סיסמה לעריכה</h2>
             <input type="password" id="passwordInput" placeholder="הזן סיסמה" onkeypress="if(event.key==='Enter')checkPassword()">
             <div class="modal-buttons">
-                <button class="btn-primary" onclick="checkPassword()">אישור</button>
-                <button class="btn-danger" onclick="closePasswordModal()">ביטול</button>
+                <button onclick="checkPassword()">אישור</button>
+                <button onclick="closePasswordModal()">ביטול</button>
             </div>
         </div>
     </div>
@@ -1266,7 +873,8 @@ async function loadFallbackRoutes() {
 }
 
 let isAdmin = false;
-let showDone = false;
+let page = null;
+const ROWS_PER_PAGE = 3;
 let completed = {};
 let routeDates = {};
 let registrations = {};
@@ -1284,7 +892,7 @@ function showMessage(text, type) {
 }
 
 function updateAdminStatus() {
-    document.getElementById('adminStatus').textContent = isAdmin ? '✅ מצב עריכה' : '';
+    document.getElementById('adminStatus').textContent = isAdmin ? 'מצב עריכה פעיל' : '';
 }
 
 // ===== CLOUD STORAGE via Vercel KV (Upstash Redis) =====
@@ -1512,9 +1120,9 @@ function parseMetarRaw(raw) {
 function formatMetar(data) {
     if (!data || !data.temp) return '<span style="color:#999">טוען...</span>';
     const parts = [];
-    if (data.temp) parts.push('🌡️' + data.temp);
-    if (data.wind) parts.push('💨' + data.wind);
-    if (data.qnh) parts.push('📊' + data.qnh);
+    if (data.temp) parts.push('T ' + data.temp);
+    if (data.wind) parts.push('W ' + data.wind);
+    if (data.qnh) parts.push(data.qnh);
     let cat = '';
     if (data.conditions) {
         cat = ' <span class="metar-cat ' + data.conditions + '">' + data.conditions + '</span>';
@@ -1554,12 +1162,7 @@ async function fetchMetar(icao) {
 function toggleRoute(id) {
     if (!isAdmin) { showPasswordModal(); return; }
     completed[id] = !completed[id];
-    // Update all polylines on map to reflect completion state
-    drawnRoutes.forEach(dr => {
-        dr.polyline.setStyle({
-            color: completed[dr.id] ? '#4caf50' : '#e91e63'
-        });
-    });
+    drawnRoutes.forEach(styleRoute);
     saveToServer();
     render();
 }
@@ -1578,11 +1181,6 @@ function updateTime(id, value) {
     routeDates[id].time = value;
     saveToServer();
     addToTeamUp(id);
-}
-
-function toggleShowDone() {
-    showDone = !showDone;
-    render();
 }
 
 function showPasswordModal() {
@@ -1643,6 +1241,58 @@ function getOrCreateCoordinates(icao) {
     return [20, 0];
 }
 
+const INK_DONE = '#9E2A22';
+const INK_PLAN = '#6A5A3E';
+const STAMP_COLORS = ['#9E2A22', '#2F3A82'];
+
+function formatStampDate(id) {
+    const d = routeDates[id] && routeDates[id].date;
+    return d ? d.split('-').reverse().join('·') : '';
+}
+
+function stampSvg(route, small) {
+    const col = STAMP_COLORS[route.num % 2];
+    const city = String((airportInfo[route.to] && airportInfo[route.to].city) || route.to).toUpperCase().replace(/[^A-Z0-9 .'\-]/g, '').slice(0, 16);
+    const date = formatStampDate(route.id) || 'LANDED';
+    const uid = (small ? 'm' : 'r') + route.id;
+    if (small) {
+        return `<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" fill="rgba(239,224,182,.55)" stroke="${col}" stroke-width="5"/><circle cx="50" cy="50" r="38" fill="none" stroke="${col}" stroke-width="1.6"/><text x="50" y="58" text-anchor="middle" font-family="Special Elite, monospace" font-size="22" fill="${col}">${route.to}</text></svg>`;
+    }
+    return `<svg class="stamp" style="--r:${((route.num * 47) % 23) - 11}deg" viewBox="0 0 100 100" aria-hidden="true">
+        <defs><path id="st${uid}" d="M50 50m-37 0a37 37 0 1 1 74 0"/><path id="sb${uid}" d="M50 50m-41 0a41 41 0 0 0 82 0"/></defs>
+        <g fill="none" stroke="${col}"><circle cx="50" cy="50" r="47" stroke-width="3"/><circle cx="50" cy="50" r="42" stroke-width="1"/><circle cx="50" cy="50" r="27" stroke-width="1"/></g>
+        <text font-family="IM Fell English SC, serif" font-size="9.5" letter-spacing="1.6" fill="${col}"><textPath href="#st${uid}" startOffset="50%" text-anchor="middle">${city}</textPath></text>
+        <text font-family="Special Elite, monospace" font-size="9" letter-spacing="1" fill="${col}" direction="ltr" style="unicode-bidi:bidi-override"><textPath href="#sb${uid}" startOffset="50%" text-anchor="middle">${date}</textPath></text>
+        <text x="50" y="57" text-anchor="middle" font-family="Special Elite, monospace" font-size="19" fill="${col}">${route.to}</text></svg>`;
+}
+
+function makeStampIcon(route) {
+    const size = Math.round(Math.max(22, Math.min(44, 16 + map.getZoom() * 7)));
+    return L.divIcon({ className: 'map-stamp', html: stampSvg(route, true), iconSize: [size, size], iconAnchor: [size / 2, size / 2] });
+}
+
+function styleRoute(dr) {
+    const done = !!completed[dr.id];
+    dr.polyline.setStyle({
+        color: done ? INK_DONE : INK_PLAN,
+        weight: done ? 4 : 3,
+        opacity: done ? 0.95 : 0.85,
+        dashArray: done ? null : '1 9'
+    });
+    [dr.fromMarker, dr.toMarker].forEach(m => m && m.setStyle({ fillColor: done ? INK_DONE : '#EFE0B6' }));
+    const route = routes.find(r => r.id === dr.id);
+    if (done && !dr.stampMarker && route) {
+        dr.stampMarker = L.marker(getOrCreateCoordinates(route.to), {
+            icon: makeStampIcon(route),
+            interactive: false,
+            keyboard: false
+        }).addTo(map);
+    } else if (!done && dr.stampMarker) {
+        map.removeLayer(dr.stampMarker);
+        dr.stampMarker = null;
+    }
+}
+
 function drawMapRoute(routeId) {
     const route = routes.find(r => r.id === routeId);
     if (!route) return;
@@ -1650,123 +1300,50 @@ function drawMapRoute(routeId) {
     const from = getOrCreateCoordinates(route.from);
     const to = getOrCreateCoordinates(route.to);
 
-    // Simple and elegant color scheme
-    const routeColor = completed[routeId] ? '#10B981' : '#9C27B0';
-
-    // Create main polyline with glow effect
-    const isCompleted = completed[routeId];
     const polyline = L.polyline([from, to], {
-        color: routeColor,
-        weight: 5,
-        opacity: 0.9,
-        dashArray: isCompleted ? null : '10, 5',
+        color: INK_PLAN,
+        weight: 3,
         lineCap: 'round',
         lineJoin: 'round',
-        className: isCompleted ? 'route-line route-completed' : 'route-line route-incomplete',
-        title: `✈️ LEG #${route.num} - ${route.from} → ${route.to} (${route.time} דקות)`
+        className: 'route-line'
     }).addTo(map);
 
-    // Add glow effect with SVG shadow
-    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-    const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
-    filter.id = `glow-${routeId}`;
-    filter.innerHTML = `
-        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-        <feMerge>
-            <feMergeNode in="coloredBlur"/>
-            <feMergeNode in="SourceGraphic"/>
-        </feMerge>
-    `;
+    const dot = { radius: 4, fillColor: '#EFE0B6', color: '#2A2118', weight: 1.5, opacity: 0.9, fillOpacity: 1 };
+    const fromMarker = L.circleMarker(from, dot).addTo(map);
+    const toMarker = L.circleMarker(to, dot).addTo(map);
 
-    // Create animated airplane icon that moves along the route
-    const svgElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svgElement.setAttribute('style', `
-        position: absolute;
-        pointer-events: none;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        z-index: 10;
-    `);
-
-    map._container.appendChild(svgElement);
-
-    // Create beautiful gradient effect by adding multiple layers
-    const glowPolyline = L.polyline([from, to], {
-        color: routeColor,
-        weight: 12,
-        opacity: 0.15,
-        dashArray: isCompleted ? null : '10, 5',
-        lineCap: 'round',
-        lineJoin: 'round',
-        className: isCompleted ? 'route-glow route-completed' : 'route-glow route-incomplete'
-    }).addTo(map);
-
-    // Add decorative markers with pulse animation
-    const fromMarker = L.circleMarker(from, {
-        radius: 8,
-        fillColor: routeColor,
-        color: '#fff',
-        weight: 3,
-        opacity: 0.9,
-        fillOpacity: 0.8,
-        className: 'route-marker-from'
-    }).addTo(map);
-
-    const toMarker = L.circleMarker(to, {
-        radius: 8,
-        fillColor: routeColor,
-        color: '#fff',
-        weight: 3,
-        opacity: 0.9,
-        fillOpacity: 0.8,
-        className: 'route-marker-to'
-    }).addTo(map);
-
-    // Add popup and tooltip for LEG info
-    const routeInfo = `<strong>✈️ LEG #${route.num}</strong><br>${route.from} → ${route.to}<br>🕐 ${route.time} דקות`;
+    const routeInfo = `<strong>LEG #${route.num}</strong><br>${route.from} → ${route.to}<br>${route.time} דקות`;
     polyline.bindPopup(routeInfo);
-    polyline.bindTooltip(routeInfo, {permanent: false, direction: 'top', sticky: false, className: 'leaflet-tooltip'});
+    polyline.bindTooltip(routeInfo, { permanent: false, direction: 'top', sticky: true });
+    polyline.on('mouseover', function () { this.openPopup(); });
+    polyline.on('mouseout', function () { this.closePopup(); });
 
-    // Show popup on hover - use mousemove for more reliable trigger
-    polyline.on('mouseover', function(e) {
-        console.log('Route hover:', route.num);
-        this.openPopup();
-        if (this._tooltip) {
-            this._tooltip.setOpacity(1);
-            this._tooltip.getElement().style.visibility = 'visible';
-        }
-    });
-    polyline.on('mouseout', function() {
-        this.closePopup();
-        if (this._tooltip) {
-            this._tooltip.getElement().style.visibility = 'hidden';
-        }
-    });
+    fromMarker.bindTooltip(`<strong>${route.from}</strong><br>${route.fromCity || ''}`, { permanent: false, direction: 'top', offset: [0, -6] });
+    toMarker.bindTooltip(`<strong>${route.to}</strong><br>${route.toCity || ''}`, { permanent: false, direction: 'top', offset: [0, -6] });
 
-    // Add tooltips to markers (airport info)
-    fromMarker.bindTooltip(`<strong>${route.from}</strong><br>${route.fromCity || ''}<br>${route.fromCountry || ''}`,
-        {permanent: false, direction: 'top', offset: [0, -10], className: 'leaflet-tooltip'});
+    const dr = { id: routeId, polyline, fromMarker, toMarker, stampMarker: null };
+    drawnRoutes.push(dr);
+    styleRoute(dr);
+}
 
-    fromMarker.on('mouseover', function() {
-        this.openTooltip();
-    });
-    fromMarker.on('mouseout', function() {
-        this.closeTooltip();
-    });
+function fitAllRoutes() {
+    if (!map || routes.length === 0) return;
+    const pts = [];
+    routes.forEach(r => { pts.push(getOrCreateCoordinates(r.from)); pts.push(getOrCreateCoordinates(r.to)); });
+    map.invalidateSize();
+    map.fitBounds(L.latLngBounds(pts), { padding: [24, 24], maxZoom: 4 });
+}
 
-    toMarker.bindTooltip(`<strong>${route.to}</strong><br>${route.toCity || ''}<br>${route.toCountry || ''}`,
-        {permanent: false, direction: 'top', offset: [0, -10], className: 'leaflet-tooltip'});
+const NEXT_LEGS_ON_MAP = 10;
 
-    toMarker.on('mouseover', function() {
-        this.openTooltip();
-    });
-    toMarker.on('mouseout', function() {
-        this.closeTooltip();
-    });
-
-    drawnRoutes.push({id: routeId, polyline: polyline, glowPolyline: glowPolyline, fromMarker: fromMarker, toMarker: toMarker});
+function fitNextLegs() {
+    if (!map || routes.length === 0) return;
+    const i = routes.findIndex(r => !completed[r.id]);
+    if (i < 0) { fitAllRoutes(); return; }
+    const pts = [];
+    routes.slice(i, i + NEXT_LEGS_ON_MAP).forEach(r => { pts.push(getOrCreateCoordinates(r.from)); pts.push(getOrCreateCoordinates(r.to)); });
+    map.invalidateSize();
+    map.fitBounds(L.latLngBounds(pts), { padding: [40, 40], maxZoom: 6 });
 }
 
 function zoomToRoute(routeId) {
@@ -1775,129 +1352,175 @@ function zoomToRoute(routeId) {
 
     const from = getOrCreateCoordinates(route.from);
     const to = getOrCreateCoordinates(route.to);
-
     if (!from || !to) return;
 
     selectedRoute = routeId;
 
     drawnRoutes.forEach(r => {
-        if (r.polyline) {
-            r.polyline.setStyle({
-                weight: r.id === routeId ? 6 : 5,
-                opacity: r.id === routeId ? 1 : 0.9
-            });
-        }
-        if (r.glowPolyline) {
-            r.glowPolyline.setStyle({
-                weight: r.id === routeId ? 16 : 12,
-                opacity: r.id === routeId ? 0.4 : 0.15
-            });
-        }
+        styleRoute(r);
+        if (r.id === routeId) r.polyline.setStyle({ weight: 6, opacity: 1 });
     });
 
-    const bounds = L.latLngBounds([from, to]);
-    map.fitBounds(bounds, {padding: [50, 50], maxZoom: 8});
-
+    map.fitBounds(L.latLngBounds([from, to]), { padding: [50, 50], maxZoom: 8 });
     render();
 }
 
 function render() {
-    let list = showDone ? routes : routes.filter(r => !completed[r.id]);
+    const next = routes.find(r => !completed[r.id]);
+    const pages = Math.max(1, Math.ceil(routes.length / ROWS_PER_PAGE));
+    if (page === null) {
+        const i = next ? routes.indexOf(next) : routes.length - 1;
+        page = Math.max(0, Math.floor(i / ROWS_PER_PAGE));
+    }
+    page = Math.min(page, pages - 1);
+    const list = routes.slice(page * ROWS_PER_PAGE, (page + 1) * ROWS_PER_PAGE);
 
-    // Update total routes count
     document.getElementById('totalRoutes').textContent = routes.length;
 
     document.getElementById('routesList').innerHTML = list.map(r => {
         const date = routeDates[r.id]?.date || '';
         const time = routeDates[r.id]?.time || '';
+        const done = !!completed[r.id];
+        const regs = registrations[r.id] || [];
+        const regTitle = regs.length > 0 ? 'רשומים: ' + regs.map((reg, i) => `${i + 1}. ${reg.name}`).join('\n') : 'אין משתתפים';
         return `
-            <div class="route ${completed[r.id] ? 'done' : ''} ${selectedRoute === r.id ? 'active' : ''}" onclick="zoomToRoute(${r.id})">
+            <div class="route ${done ? 'done' : 'todo'} ${selectedRoute === r.id ? 'active' : ''}" onclick="zoomToRoute(${r.id})">
+                ${done ? stampSvg(r, false) : ''}
+                <div class="route-label">
+                    <span class="leg-no" ondblclick="event.stopPropagation(); toggleAdminMode()">LEG ${String(r.num).padStart(2, '0')}</span>
+                    <span class="dur">${r.time} דקות</span>
+                    ${next && next.id === r.id ? '<span class="next">הבאה בתור</span>' : ''}
+                </div>
+                <div class="route-airports">
+                    ${getFlag(r.fromCountry)}
+                    <span>${r.from}</span>
+                    <span class="route-arrow">→</span>
+                    <span>${r.to}</span>
+                    ${getFlag(r.toCountry)}
+                </div>
+                <div class="route-cities">
+                    <span>${r.fromCity || ''}</span>
+                    <span>${r.toCity || ''}</span>
+                </div>
                 <div class="route-left" onclick="event.stopPropagation()">
                     <input type="time" value="${time}" onchange="updateTime(${r.id}, this.value)" ${!isAdmin ? 'disabled' : ''}>
                     <input type="date" value="${date}" onchange="updateDate(${r.id}, this.value)" ${!isAdmin ? 'disabled' : ''}>
                 </div>
-                <div class="route-right">
-                    <div class="route-label">LEG #${r.num}</div>
-                    <div class="route-airports">
-                        ${getFlag(r.fromCountry)}
-                        <span>${r.from}</span>
-                        <span class="route-arrow">➜</span>
-                        <span>${r.to}</span>
-                        ${getFlag(r.toCountry)}
+                <div class="metar-section">
+                    <div class="metar-title">METAR</div>
+                    <div class="metar-row">
+                        <span class="metar-icao">${r.from}</span>
+                        <span class="metar-data">${formatMetar(metarCache[r.from])}</span>
                     </div>
-                    <div class="route-cities">
-                        <span>${r.fromCity || ''}</span>
-                        <span>${r.toCity || ''}</span>
-                    </div>
-                    <div class="route-duration">⏱️ ${r.time} דקות</div>
-                    <div class="metar-section">
-                        <div class="metar-title">📡 METAR</div>
-                        <div class="metar-row">
-                            <span class="metar-icao">${r.from}</span>
-                            <span class="metar-data">${formatMetar(metarCache[r.from])}</span>
-                        </div>
-                        <div class="metar-row">
-                            <span class="metar-icao">${r.to}</span>
-                            <span class="metar-data">${formatMetar(metarCache[r.to])}</span>
-                        </div>
+                    <div class="metar-row">
+                        <span class="metar-icao">${r.to}</span>
+                        <span class="metar-data">${formatMetar(metarCache[r.to])}</span>
                     </div>
                 </div>
                 <div class="route-bottom" onclick="event.stopPropagation()">
-                    <button class="btn-register" onclick="registerForRoute(${r.id})" title="${registrations[r.id] && registrations[r.id].length > 0 ? '👥 רשומים: ' + registrations[r.id].map((reg, i) => `${i + 1}. ${reg.name}`).join('\\n') : '🚫 אין משתתפים'}">👥 הרשם (${registrations[r.id] ? registrations[r.id].length : 0})</button>
-                    <button class="btn-calendar" onclick="downloadICS(${r.id})">📅 הוסף ליומן</button>
-                    ${isAdmin ? `<input type="checkbox" ${completed[r.id] ? 'checked' : ''} onchange="toggleRoute(${r.id})"> <label>סימון בוצע</label>` : ''}
+                    <button class="btn-register" onclick="registerForRoute(${r.id})" title="${regTitle}">הרשמה (${regs.length})</button>
+                    <button class="btn-calendar" onclick="downloadICS(${r.id})">הוסף ליומן</button>
+                    ${isAdmin ? `<input type="checkbox" id="chk${r.id}" ${done ? 'checked' : ''} onchange="toggleRoute(${r.id})"> <label for="chk${r.id}">סימון בוצע</label>` : ''}
                 </div>
             </div>
         `;
     }).join('');
 
+    document.getElementById('pageNo').textContent = 'עמוד ' + (page + 1) + ' מתוך ' + pages;
+    document.getElementById('pagePrev').disabled = page === 0;
+    document.getElementById('pageNext').disabled = page >= pages - 1;
+    document.getElementById('pageToday').disabled = !next || Math.floor(routes.indexOf(next) / ROWS_PER_PAGE) === page;
+
     const count = Object.values(completed).filter(Boolean).length;
     document.getElementById('completed').textContent = count;
+    document.getElementById('progress').style.width = (routes.length ? Math.min(100, count / routes.length * 100) : 0) + '%';
 }
+
+function animatePageTurn() {
+    const el = document.getElementById('routesList');
+    el.classList.remove('turn-in');
+    void el.offsetWidth;
+    el.classList.add('turn-in');
+}
+
+function turnPage(delta) {
+    const pages = Math.max(1, Math.ceil(routes.length / ROWS_PER_PAGE));
+    const target = Math.min(pages - 1, Math.max(0, (page || 0) + delta));
+    if (target === page) return;
+    page = target;
+    render();
+    animatePageTurn();
+}
+
+function goToNext() {
+    const next = routes.find(r => !completed[r.id]);
+    if (!next) return;
+    page = Math.floor(routes.indexOf(next) / ROWS_PER_PAGE);
+    render();
+    animatePageTurn();
+    fitNextLegs();
+}
+
+function toggleAdminMode() {
+    if (isAdmin) {
+        isAdmin = false;
+        updateAdminStatus();
+        showMessage('יצאת ממצב עריכה', 'success');
+        render();
+    } else {
+        showPasswordModal();
+    }
+}
+
+document.addEventListener('keydown', (e) => {
+    const tag = (e.target && e.target.tagName) || '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || document.getElementById('passwordModal').classList.contains('show')) return;
+    if (e.key === 'ArrowLeft') turnPage(1);
+    if (e.key === 'ArrowRight') turnPage(-1);
+});
 
 function initMap() {
     try {
-        console.log(`🗺️ initMap called, routes.length=${routes.length}, map=${map ? 'exists' : 'null'}`);
+        console.log(`initMap called, routes.length=${routes.length}, map=${map ? 'exists' : 'null'}`);
         if (typeof L !== 'undefined') {
             if (map) {
                 refreshMapRoutes();
                 return;
             }
-            map = L.map('map').setView([20, 0], 3);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors',
-                maxZoom: 19
+            map = L.map('map', { worldCopyJump: false, zoomSnap: 0.25 }).setView([20, 0], 2);
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles © Esri',
+                maxNativeZoom: 8,
+                maxZoom: 10
             }).addTo(map);
+            map.on('zoomend', () => drawnRoutes.forEach(dr => {
+                const rt = routes.find(r => r.id === dr.id);
+                if (dr.stampMarker && rt) dr.stampMarker.setIcon(makeStampIcon(rt));
+            }));
 
             drawnRoutes = [];
-            console.log(`🗺️ Drawing ${routes.length} routes on map...`);
-            routes.forEach(route => {
-                const fromCoords = getOrCreateCoordinates(route.from);
-                const toCoords = getOrCreateCoordinates(route.to);
-                console.log(`  Route ${route.id}: ${route.from}${JSON.stringify(fromCoords)} → ${route.to}${JSON.stringify(toCoords)}`);
-                drawMapRoute(route.id);
-            });
-            console.log(`✅ Map initialized with ${drawnRoutes.length} routes drawn`);
+            routes.forEach(route => drawMapRoute(route.id));
+            fitNextLegs();
+            console.log(`Map initialized with ${drawnRoutes.length} routes drawn`);
         } else {
-            console.error('❌ Leaflet (L) is not loaded!');
+            console.error('Leaflet (L) is not loaded!');
         }
-    } catch(e) {
-        console.error('❌ Map initialization failed:', e);
+    } catch (e) {
+        console.error('Map initialization failed:', e);
     }
 }
 
 function refreshMapRoutes() {
     if (!map) return;
-    // Clear existing routes from map
     drawnRoutes.forEach(r => {
         if (r.polyline) map.removeLayer(r.polyline);
         if (r.fromMarker) map.removeLayer(r.fromMarker);
         if (r.toMarker) map.removeLayer(r.toMarker);
+        if (r.stampMarker) map.removeLayer(r.stampMarker);
     });
     drawnRoutes = [];
-    // Redraw all routes with updated data
     routes.forEach(route => drawMapRoute(route.id));
-    console.log('🗺️ Map refreshed with updated airport data');
+    fitNextLegs();
 }
 
 async function loadAllMetar() {
