@@ -139,7 +139,7 @@
         .message.error { border-inline-start: 6px solid var(--red); color: var(--red); }
 
         /* Ledger entries */
-        .routes-list { display: flex; flex-direction: column; border-top: 2px solid var(--red); }
+        .routes-list { display: flex; flex-direction: column; border-top: 2px solid var(--red); padding-block: 8px 2px; container: list / inline-size; }
         .routes-list.turn-in { animation: turnin .38s ease-out; }
         @keyframes turnin { from { opacity: 0; transform: translateX(22px) rotateY(-10deg); } to { opacity: 1; transform: none; } }
         .foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
@@ -149,48 +149,58 @@
         .turn button:hover:not(:disabled), .turn button:focus-visible { background: var(--blue); color: var(--paper-3); outline: none; }
         .turn button:disabled { opacity: .35; cursor: default; }
         .leg-no { cursor: default; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
-        .route {
-            position: relative; display: flex; flex-direction: column; align-items: stretch; gap: 6px;
-            padding: 14px 8px 12px; border-bottom: 1px solid var(--rule); cursor: pointer;
-            background: transparent; transition: background .2s;
-        }
-        .route:hover { background: rgba(158,42,34,.05); }
-        .route.active { background: linear-gradient(90deg, transparent, rgba(158,42,34,.1)); box-shadow: inset -3px 0 0 var(--red); }
-        .route-label { display: flex; gap: 12px; align-items: baseline; font: 400 14px var(--f-type); letter-spacing: .08em; color: var(--mute); direction: ltr; justify-content: flex-end; }
+        /* Leg card: a boarding ticket. Date and time sit on the stub and are the biggest thing on it. */
+        .route { position: relative; display: grid; grid-template-columns: minmax(150px, 36%) minmax(0, 1fr); margin: 8px 4px; background: var(--paper-3); border: 2px solid var(--ink); box-shadow: 3px 4px 0 rgba(42,33,24,.2); cursor: pointer; transition: transform .15s, box-shadow .15s; }
+        .route:hover { transform: translateY(-1px); }
+        .route.active { border-color: var(--red); box-shadow: 3px 4px 0 rgba(158,42,34,.4); }
+        .stub { grid-row: 1 / span 2; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 10px 8px; text-align: center; border-inline-end: 2px dashed var(--ink); min-width: 0; }
+        .stub::before, .stub::after { content: ""; position: absolute; left: -12px; width: 20px; height: 20px; border-radius: 50%; background: var(--paper); border: 2px solid var(--ink); }
+        .stub::before { top: -12px; clip-path: inset(50% 0 0 0); }
+        .stub::after { bottom: -12px; clip-path: inset(0 0 50% 0); }
+        .stub .tag { font: 400 11px var(--f-fell); letter-spacing: .24em; color: var(--mute); }
+        .stub input { width: 100%; min-width: 0; border: 0; border-radius: 0; background: transparent; color: var(--ink); -webkit-text-fill-color: var(--ink); direction: ltr; text-align: center; padding: 0; }
+        .stub input[type="date"] { font: 400 clamp(22px, 2.3vw, 30px)/1.1 var(--f-hand); }
+        .stub input[type="time"] { font: 400 clamp(38px, 3.8vw, 52px)/1 var(--f-hand); }
+        .route.is-next .stub input[type="time"] { color: var(--red); -webkit-text-fill-color: var(--red); }
+        .stub input:disabled { opacity: 1; cursor: pointer; }
+        .stub input:disabled::-webkit-calendar-picker-indicator { display: none; }
+        .stub input:not(:disabled) { cursor: text; border-bottom: 2px dashed var(--red); }
+        .stub input:not(:disabled):hover { background: rgba(158,42,34,.08); }
+        .stub input:not(:disabled):focus { outline: none; background: rgba(158,42,34,.14); }
+        .stub .wk { font: 400 15px var(--f-hand); color: var(--mute); }
+        .stub .when-empty { font: 400 22px/1.2 var(--f-hand); color: var(--pencil); }
+        .main { grid-column: 2; position: relative; display: flex; flex-direction: column; justify-content: center; gap: 5px; min-width: 0; padding: 10px 16px; }
+        .route-label { display: flex; gap: 12px; align-items: baseline; font: 400 14px var(--f-type); letter-spacing: .08em; color: var(--mute); direction: ltr; justify-content: flex-end; flex-wrap: wrap; }
         .route-label .dur { font: 400 18px var(--f-hand); letter-spacing: 0; color: var(--blue); direction: rtl; }
         .route-label .next { font: 400 17px var(--f-hand); color: var(--red); letter-spacing: 0; direction: rtl; }
-        .route-airports { display: flex; align-items: center; justify-content: flex-end; gap: 10px; direction: ltr; font: 400 30px/1.1 var(--f-hand); color: var(--blue); letter-spacing: .03em; }
+        .route-airports { display: flex; align-items: center; justify-content: flex-end; gap: 10px; direction: ltr; font: 400 clamp(24px, 2.4vw, 32px)/1.1 var(--f-hand); color: var(--blue); letter-spacing: .03em; }
         .route-arrow { font: 400 22px var(--f-print); color: var(--mute); }
         .flag-badge { width: 22px; height: 16px; object-fit: cover; border: 1px solid var(--mute); filter: sepia(.55) contrast(.95); }
-        .route-cities { display: flex; justify-content: flex-end; gap: 22px; direction: ltr; font: 400 15px var(--f-hand); color: var(--mute); }
-        .route-left { display: flex; gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
-        .route-left input {
-            width: 138px; background: transparent; border: 0; border-bottom: 1.5px solid var(--mute); border-radius: 0;
-            font: 400 19px var(--f-hand); color: var(--blue); direction: ltr; text-align: center; padding: 2px 4px; min-height: 30px;
-        }
-        .route-left input:disabled { border-bottom-color: transparent; -webkit-text-fill-color: var(--blue); opacity: 1; cursor: pointer; }
-        .route-left input:disabled::-webkit-calendar-picker-indicator { display: none; }
-        .route-left input:not(:disabled):focus { outline: none; border-bottom-color: var(--red); }
-        .route.todo .route-airports, .route.todo .route-left input:disabled { color: var(--pencil); -webkit-text-fill-color: var(--pencil); }
+        .route-cities { display: flex; justify-content: flex-end; gap: 12px; direction: ltr; font: 400 14px var(--f-hand); color: var(--mute); min-width: 0; }
+        .route-cities span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .route.todo .route-airports { color: var(--pencil); }
+        .route.is-next .route-airports { color: var(--blue); }
+        .route-cities .arr { flex: none; color: var(--pencil); }
+        .stub .when-missing { font: 400 20px/1.3 var(--f-hand); color: var(--pencil); }
 
-        .metar-section { direction: ltr; margin-top: 4px; padding: 8px 12px; background: #F4EAC9; border: 1px dashed var(--mute); box-shadow: 0 2px 4px rgba(0,0,0,.18); transform: rotate(-.35deg); }
-        .metar-title { font: 400 11px var(--f-fell); letter-spacing: .22em; color: var(--red); text-transform: uppercase; margin-bottom: 3px; }
-        .metar-row { display: flex; gap: 12px; align-items: center; font: 400 12.5px/1.7 var(--f-type); color: #3A3022; }
+        .metar-section { grid-column: 2; direction: ltr; margin: 0 12px 10px; padding: 5px 12px; background: #F4EAC9; border: 1px dashed var(--mute); box-shadow: 0 2px 4px rgba(0,0,0,.15); display: grid; grid-template-columns: 1fr; column-gap: 18px; min-width: 0; }
+        .metar-title { grid-column: 1 / -1; font: 400 11px var(--f-fell); letter-spacing: .22em; color: var(--red); text-transform: uppercase; }
+        .metar-row { display: flex; gap: 10px; align-items: center; font: 400 12px/1.6 var(--f-type); color: #3A3022; min-width: 0; }
         .metar-icao { min-width: 48px; color: var(--ink); }
-        .metar-data { flex: 1; text-align: end; }
+        .metar-data { flex: 1; min-width: 0; text-align: end; }
         .metar-cat { padding: 0 6px; border: 1px solid currentColor; font-size: 11px; }
         .metar-cat.VFR, .metar-cat.CAVOK { color: #2F6A3E; }
         .metar-cat.MVFR { color: var(--blue); }
         .metar-cat.IFR { color: var(--red); }
         .metar-cat.LIFR { color: #6B1A52; }
 
-        .route-bottom { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; margin-top: 2px; }
+        .route-bottom { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: flex-start; margin-top: 2px; }
         .btn-register, .btn-calendar { font: 400 16px var(--f-hand); color: var(--ink); background: none; border: 0; border-bottom: 1.5px solid var(--ink); padding: 0 2px 1px; }
         .btn-register:hover, .btn-calendar:hover { color: var(--red); border-color: var(--red); }
         .route-bottom input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--red); cursor: pointer; }
         .route-bottom label { font: 400 16px var(--f-hand); color: var(--ink); cursor: pointer; }
 
-        .stamp { position: absolute; inset-inline-end: auto; left: 6px; top: 8px; width: 92px; height: 92px; pointer-events: none; transform: rotate(var(--r)); opacity: .88; animation: thump .5s cubic-bezier(.2,1.4,.4,1) both; }
+        .stamp { position: absolute; left: 6px; bottom: 6px; width: 70px; height: 70px; pointer-events: none; transform: rotate(var(--r)); opacity: .88; animation: thump .5s cubic-bezier(.2,1.4,.4,1) both; }
         @keyframes thump { from { transform: rotate(var(--r)) scale(1.5); opacity: 0; } to { transform: rotate(var(--r)) scale(1); opacity: .88; } }
 
         /* Chart page */
@@ -245,10 +255,66 @@
         }
         @media (max-width: 560px) {
             #map { height: 320px; }
-            .route-airports { font-size: 26px; }
-            .stamp { width: 74px; height: 74px; }
-            .route-left input { width: 120px; }
         }
+
+        /* Toolbar: actions on one side, progress on the other */
+        .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 8px 18px; flex-wrap: wrap; margin-bottom: 10px; }
+        .toolbar .controls { margin-bottom: 0; }
+        .toolbar .stats { margin-bottom: 0; font-size: 20px; min-width: 200px; flex: 1 1 200px; max-width: 320px; }
+        .toolbar .stats b { font-size: 24px; }
+        body { padding-bottom: max(36px, env(safe-area-inset-bottom)); }
+
+        /* Narrow list (phone, or a narrow page): the stub goes on top of the ticket */
+        @container list (min-width: 560px) {
+            .metar-section { grid-template-columns: 1fr 1fr; }
+            .route.done .main { padding-inline-end: 100px; }
+            .stamp { top: 50%; bottom: auto; margin-top: -42px; width: 84px; height: 84px; }
+        }
+        @container list (max-width: 399px) {
+            .route { grid-template-columns: 1fr; }
+            .main, .metar-section { grid-column: 1; }
+            .stub { grid-row: auto; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 0 16px; border-inline-end: 0; border-bottom: 2px dashed var(--ink); padding: 12px 8px 10px; }
+            .stub .tag, .stub .when-empty { flex: 0 0 100%; }
+            .stub .wk { display: none; }
+            .stub input { width: auto; }
+            .stub input[type="date"] { width: 7.2em; }
+            .stub input[type="time"] { width: 3.6em; }
+            .stub::before, .stub::after { top: auto; bottom: -12px; }
+            .stub::before { left: -12px; right: auto; clip-path: inset(0 0 0 50%); }
+            .stub::after { left: auto; right: -12px; clip-path: inset(0 50% 0 0); }
+            .main { padding-block: 12px; }
+        }
+
+        /* Desktop: the whole book fills the screen, no page scroll */
+        @media (min-width: 961px) and (min-height: 560px) {
+            html, body { height: 100%; overflow: hidden; }
+            body { display: flex; flex-direction: column; height: 100vh; height: 100dvh; padding: 48px clamp(8px, 1.4vw, 24px) clamp(8px, 1.4vh, 16px); }
+            .cover { flex: 1; min-height: 0; width: 100%; max-width: 1760px; padding: clamp(8px, 1.4vh, 18px); display: flex; }
+            .spread { flex: 1; min-height: 0; grid-template-rows: minmax(0, 1fr); }
+            .pg { min-height: 0; display: flex; flex-direction: column; padding: clamp(14px, 2.4vh, 30px) clamp(16px, 2vw, 34px); }
+            .pg.l { padding-top: clamp(22px, 3.4vh, 38px); }
+            .ribbon { top: 0; }
+            header.label { padding-block: 6px 5px; margin-bottom: 8px; flex-shrink: 0; gap: 10px; }
+            header .logo { width: 46px; height: 46px; }
+            header .title p { display: none; }
+            h1 { font-size: clamp(26px, 4.6vh, 40px); }
+            .toolbar { flex-shrink: 0; }
+            .routes-list { flex: 1; min-height: 0; overflow-x: hidden; overflow-y: auto; justify-content: space-around; scrollbar-width: thin; scrollbar-color: var(--mute) transparent; }
+            .foot { flex-shrink: 0; margin-top: 8px; }
+            .chart { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+            #map { flex: 1; height: auto; min-height: 0; }
+            .maplay { bottom: 44px; }
+            .key { margin-top: 12px; flex-shrink: 0; }
+            .compass { display: none; }
+        }
+        @media (min-width: 961px) and (min-height: 560px) and (max-height: 820px) {
+            .metar-title, .stub .tag { display: none; }
+            .stub input[type="time"] { font-size: 40px; }
+            .route-label { font-size: 12px; }
+            .stats { font-size: 18px; }
+            .key { font-size: 15px; margin-top: 8px; }
+        }
+
         @media (prefers-reduced-motion: reduce) { .stamp, .routes-list.turn-in { animation: none; } .banner-content { animation-duration: 200s; } .ruler i { transition: none; } }
     </style>
 
@@ -285,6 +351,7 @@
                     <button id="installBtn" style="display:none; white-space:nowrap;">הוסף למסך הבית</button>
                 </header>
 
+                <div class="toolbar">
                 <div class="controls">
                     <button class="btn-success" onclick="saveToServer()">שמור</button>
                     <button class="btn-primary" onclick="location.reload()">רענן</button>
@@ -294,6 +361,7 @@
                 <div class="stats">
                     נחיתות שנחתמו: <b><span id="completed">0</span> / <span id="totalRoutes">0</span></b>
                     <div class="ruler" aria-hidden="true"><i id="progress"></i></div>
+                </div>
                 </div>
 
                 <div id="routesList" class="routes-list"></div>
@@ -314,8 +382,8 @@
                     <div class="cap"><span>Chart of the voyage</span><span class="cap-actions"><button type="button" onclick="fitNextLegs()">10 הטיסות הבאות</button><button type="button" onclick="fitAllRoutes()">כל המסע</button></span></div>
                 </div>
                 <div class="key">
-                    <span><svg viewBox="0 0 36 14"><path d="M1 8 Q10 2 18 8 T35 7" fill="none" stroke="#9E2A22" stroke-width="3" stroke-linecap="round"/></svg>נטוס, בדיו</span>
-                    <span><svg viewBox="0 0 36 14"><line x1="1" x2="35" y1="7" y2="7" stroke="#6A5A3E" stroke-width="3" stroke-dasharray="1 8" stroke-linecap="round"/></svg>עוד בעיפרון</span>
+                    <span><svg viewBox="0 0 36 14"><path d="M1 8 Q10 2 18 8 T35 7" fill="none" stroke="#9E2A22" stroke-width="3" stroke-linecap="round"/></svg>בוצע</span>
+                    <span><svg viewBox="0 0 36 14"><line x1="1" x2="35" y1="7" y2="7" stroke="#6A5A3E" stroke-width="3" stroke-dasharray="1 8" stroke-linecap="round"/></svg>טרם בוצע</span>
                     <span><svg viewBox="0 0 36 14"><circle cx="18" cy="7" r="6" fill="none" stroke="#2F3A82" stroke-width="2"/></svg>חותמת נחיתה</span>
                 </div>
                 <svg class="compass" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="#2A2118" stroke-width="1.2"><circle cx="50" cy="50" r="40"/><circle cx="50" cy="50" r="30" stroke-width=".6"/><path d="M50 4L56 50L50 96L44 50Z" fill="#9E2A22" fill-opacity=".55"/><path d="M4 50L50 44L96 50L50 56Z" fill="#2A2118" fill-opacity=".25"/></g><text x="50" y="14" text-anchor="middle" font-family="IM Fell English SC" font-size="11" fill="#2A2118">N</text></svg>
@@ -874,7 +942,7 @@ async function loadFallbackRoutes() {
 
 let isAdmin = false;
 let page = null;
-const ROWS_PER_PAGE = 3;
+let rowsPerPage = 3;
 let completed = {};
 let routeDates = {};
 let registrations = {};
@@ -1172,7 +1240,7 @@ function updateDate(id, value) {
     if (!routeDates[id]) routeDates[id] = {};
     routeDates[id].date = value;
     saveToServer();
-    addToTeamUp(id);
+    render();
 }
 
 function updateTime(id, value) {
@@ -1180,7 +1248,7 @@ function updateTime(id, value) {
     if (!routeDates[id]) routeDates[id] = {};
     routeDates[id].time = value;
     saveToServer();
-    addToTeamUp(id);
+    render();
 }
 
 function showPasswordModal() {
@@ -1365,15 +1433,23 @@ function zoomToRoute(routeId) {
     render();
 }
 
+const WEEKDAYS = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+
+function weekdayLabel(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr + 'T12:00:00');
+    return isNaN(d) ? '' : 'יום ' + WEEKDAYS[d.getDay()];
+}
+
 function render() {
     const next = routes.find(r => !completed[r.id]);
-    const pages = Math.max(1, Math.ceil(routes.length / ROWS_PER_PAGE));
+    const pages = Math.max(1, Math.ceil(routes.length / rowsPerPage));
     if (page === null) {
         const i = next ? routes.indexOf(next) : routes.length - 1;
-        page = Math.max(0, Math.floor(i / ROWS_PER_PAGE));
+        page = Math.max(0, Math.floor(i / rowsPerPage));
     }
     page = Math.min(page, pages - 1);
-    const list = routes.slice(page * ROWS_PER_PAGE, (page + 1) * ROWS_PER_PAGE);
+    const list = routes.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
 
     document.getElementById('totalRoutes').textContent = routes.length;
 
@@ -1384,27 +1460,38 @@ function render() {
         const regs = registrations[r.id] || [];
         const regTitle = regs.length > 0 ? 'רשומים: ' + regs.map((reg, i) => `${i + 1}. ${reg.name}`).join('\n') : 'אין משתתפים';
         return `
-            <div class="route ${done ? 'done' : 'todo'} ${selectedRoute === r.id ? 'active' : ''}" onclick="zoomToRoute(${r.id})">
-                ${done ? stampSvg(r, false) : ''}
-                <div class="route-label">
-                    <span class="leg-no" ondblclick="event.stopPropagation(); toggleAdminMode()">LEG ${String(r.num).padStart(2, '0')}</span>
-                    <span class="dur">${r.time} דקות</span>
-                    ${next && next.id === r.id ? '<span class="next">הבאה בתור</span>' : ''}
+            <div class="route ${done ? 'done' : 'todo'} ${selectedRoute === r.id ? 'active' : ''} ${next && next.id === r.id ? 'is-next' : ''}" onclick="zoomToRoute(${r.id})">
+                <div class="stub" onclick="event.stopPropagation()">
+                    <div class="tag">יציאה</div>
+                    ${!isAdmin && !date && !time ? '<div class="when-empty">מועד טרם נקבע</div>' : `
+                    ${date || isAdmin ? `<input type="date" value="${date}" onchange="updateDate(${r.id}, this.value)" ${!isAdmin ? 'disabled' : ''}>` : '<div class="when-missing">תאריך טרם נקבע</div>'}
+                    ${time || isAdmin ? `<input type="time" value="${time}" onchange="updateTime(${r.id}, this.value)" ${!isAdmin ? 'disabled' : ''}>` : '<div class="when-missing">שעה טרם נקבעה</div>'}
+                    <div class="wk">${weekdayLabel(date)}</div>`}
                 </div>
-                <div class="route-airports">
-                    ${getFlag(r.fromCountry)}
-                    <span>${r.from}</span>
-                    <span class="route-arrow">→</span>
-                    <span>${r.to}</span>
-                    ${getFlag(r.toCountry)}
-                </div>
-                <div class="route-cities">
-                    <span>${r.fromCity || ''}</span>
-                    <span>${r.toCity || ''}</span>
-                </div>
-                <div class="route-left" onclick="event.stopPropagation()">
-                    <input type="time" value="${time}" onchange="updateTime(${r.id}, this.value)" ${!isAdmin ? 'disabled' : ''}>
-                    <input type="date" value="${date}" onchange="updateDate(${r.id}, this.value)" ${!isAdmin ? 'disabled' : ''}>
+                <div class="main">
+                    ${done ? stampSvg(r, false) : ''}
+                    <div class="route-label">
+                        <span class="leg-no" ondblclick="event.stopPropagation(); toggleAdminMode()">LEG ${String(r.num).padStart(2, '0')}</span>
+                        <span class="dur">${r.time} דקות</span>
+                        ${next && next.id === r.id ? '<span class="next">הבאה בתור</span>' : ''}
+                    </div>
+                    <div class="route-airports">
+                        ${getFlag(r.fromCountry)}
+                        <span>${r.from}</span>
+                        <span class="route-arrow">→</span>
+                        <span>${r.to}</span>
+                        ${getFlag(r.toCountry)}
+                    </div>
+                    <div class="route-cities">
+                        <span>${r.fromCity || ''}</span>
+                        <span class="arr">→</span>
+                        <span>${r.toCity || ''}</span>
+                    </div>
+                    <div class="route-bottom" onclick="event.stopPropagation()">
+                        <button class="btn-register" onclick="registerForRoute(${r.id})" title="${regTitle}">הרשמה (${regs.length})</button>
+                        <button class="btn-calendar" onclick="downloadICS(${r.id})">הוסף ליומן</button>
+                        ${isAdmin ? `<input type="checkbox" id="chk${r.id}" ${done ? 'checked' : ''} onchange="toggleRoute(${r.id})"> <label for="chk${r.id}">סימון בוצע</label>` : ''}
+                    </div>
                 </div>
                 <div class="metar-section">
                     <div class="metar-title">METAR</div>
@@ -1417,11 +1504,6 @@ function render() {
                         <span class="metar-data">${formatMetar(metarCache[r.to])}</span>
                     </div>
                 </div>
-                <div class="route-bottom" onclick="event.stopPropagation()">
-                    <button class="btn-register" onclick="registerForRoute(${r.id})" title="${regTitle}">הרשמה (${regs.length})</button>
-                    <button class="btn-calendar" onclick="downloadICS(${r.id})">הוסף ליומן</button>
-                    ${isAdmin ? `<input type="checkbox" id="chk${r.id}" ${done ? 'checked' : ''} onchange="toggleRoute(${r.id})"> <label for="chk${r.id}">סימון בוצע</label>` : ''}
-                </div>
             </div>
         `;
     }).join('');
@@ -1429,11 +1511,49 @@ function render() {
     document.getElementById('pageNo').textContent = 'עמוד ' + (page + 1) + ' מתוך ' + pages;
     document.getElementById('pagePrev').disabled = page === 0;
     document.getElementById('pageNext').disabled = page >= pages - 1;
-    document.getElementById('pageToday').disabled = !next || Math.floor(routes.indexOf(next) / ROWS_PER_PAGE) === page;
+    document.getElementById('pageToday').disabled = !next || Math.floor(routes.indexOf(next) / rowsPerPage) === page;
 
     const count = Object.values(completed).filter(Boolean).length;
     document.getElementById('completed').textContent = count;
     document.getElementById('progress').style.width = (routes.length ? Math.min(100, count / routes.length * 100) : 0) + '%';
+}
+
+const BOOK_FIT_QUERY = '(min-width: 961px) and (min-height: 560px)';
+
+function isBookFit() {
+    return window.matchMedia(BOOK_FIT_QUERY).matches;
+}
+
+function setRowsPerPage(n) {
+    if (n === rowsPerPage) return;
+    const anchor = (page || 0) * rowsPerPage;
+    rowsPerPage = n;
+    page = Math.floor(anchor / rowsPerPage);
+}
+
+// On desktop the book fills one screen: show as many entries as fit the page height.
+function fitRowsToHeight() {
+    if (!routes.length) return;
+    if (!isBookFit()) {
+        if (rowsPerPage !== 3) { setRowsPerPage(3); render(); }
+        return;
+    }
+    const list = document.getElementById('routesList');
+    setRowsPerPage(4);
+    render();
+    const entryHeight = c => {
+        const cs = getComputedStyle(c);
+        return c.offsetHeight + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom);
+    };
+    const lcs = getComputedStyle(list);
+    const avail = list.clientHeight - parseFloat(lcs.paddingTop) - parseFloat(lcs.paddingBottom);
+    const maxH = Math.max(...[...list.children].map(entryHeight), 1);
+    setRowsPerPage(Math.max(1, Math.min(6, Math.floor(avail / (maxH * 1.02)))));
+    render();
+    if (list.scrollHeight > list.clientHeight + 1 && rowsPerPage > 1) {
+        setRowsPerPage(rowsPerPage - 1);
+        render();
+    }
 }
 
 function animatePageTurn() {
@@ -1444,7 +1564,7 @@ function animatePageTurn() {
 }
 
 function turnPage(delta) {
-    const pages = Math.max(1, Math.ceil(routes.length / ROWS_PER_PAGE));
+    const pages = Math.max(1, Math.ceil(routes.length / rowsPerPage));
     const target = Math.min(pages - 1, Math.max(0, (page || 0) + delta));
     if (target === page) return;
     page = target;
@@ -1455,7 +1575,7 @@ function turnPage(delta) {
 function goToNext() {
     const next = routes.find(r => !completed[r.id]);
     if (!next) return;
-    page = Math.floor(routes.indexOf(next) / ROWS_PER_PAGE);
+    page = Math.floor(routes.indexOf(next) / rowsPerPage);
     render();
     animatePageTurn();
     fitNextLegs();
@@ -1579,9 +1699,27 @@ async function init() {
 
     // Step 5: Render and show map
     render();
+    fitRowsToHeight();
     initMap();
     await loadAllMetar();
+    fitRowsToHeight();
     updateAdminStatus();
+
+    const relayout = () => {
+        fitRowsToHeight();
+        if (map) { map.invalidateSize(); fitNextLegs(); }
+    };
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
+    let lastWidth = window.innerWidth;
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            if (!isBookFit() && window.innerWidth === lastWidth) return;
+            lastWidth = window.innerWidth;
+            relayout();
+        }, 200);
+    });
 
     // Step 6: Register Service Worker for PWA support
     if ('serviceWorker' in navigator) {
